@@ -1,0 +1,57 @@
+Use this page when you need to understand why the SDK can span mobile, browser, and gateway runtimes without changing your application flow.
+
+## Layered architecture
+
+<ArchitectureDiagram />
+
+Read the stack in four layers:
+
+1. App layer: screens, automation jobs, dashboards, and cloud handlers.
+2. Mesh client layer: `createMesh()`, session management, discovery, and device helpers.
+3. Model layer: typed behavior such as `GenericOnOff` and `LightLightness`.
+4. Runtime layer: BLE transport, persistence, logging, and platform adapters.
+
+## Extending models
+
+The SDK keeps the default flow small, then lets you attach typed behavior where you need more control.
+
+```ts
+class VendorSwitchModel {
+  constructor(private model: ReturnType<typeof device.model>) {}
+
+  pulse() {
+    return this.model.send("vendor:pulse")
+  }
+}
+
+const pulse = device.model("vendor-switch").use(VendorSwitchModel)
+await pulse.pulse()
+```
+
+## Vendor models
+
+Vendor models are how you expose device-specific behavior without polluting the common SDK path.
+
+Recommended approach:
+
+- keep vendor extensions small,
+- wrap raw opcodes behind named methods,
+- document fallback behavior when a model is unavailable.
+
+## Logging and debugging
+
+Treat logging as part of the runtime layer, not as scattered app code.
+
+```ts
+const mesh = await createMesh({
+  logger: { level: "debug" },
+})
+```
+
+Log at least these events in development and gateway deployments:
+
+- scan start and stop,
+- connect and disconnect,
+- provisioning state transitions,
+- publish failures,
+- model state changes.

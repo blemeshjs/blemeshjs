@@ -1,0 +1,13 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/crypto" },
+    { "path": "packages/pro" },
+    { "path": "packages/sdk-react-native" },
+    { "path": "packages/sdk-web" },
+    { "path": "packages/utils" },
+    { "path": "apps/mobile" },
+    { "path": "apps/docs" }
+  ]
+}

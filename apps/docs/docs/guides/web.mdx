@@ -1,0 +1,56 @@
+Use Web when you want an in-browser commissioning tool, internal dashboard, or demo app and your target browsers support Web Bluetooth.
+
+## Install
+
+```bash
+yarn add @mesh-link-js/sdk @mesh-link-js/sdk-web
+```
+
+## Browser support
+
+Web Bluetooth is not universal.
+
+Plan for these constraints:
+
+- supported browsers only,
+- secure origins only,
+- direct user gestures for scan or connect,
+- limited background behavior compared with native apps.
+
+## User gesture requirements
+
+Start scan or connect from a click or tap handler.
+
+```ts
+button.addEventListener("click", async () => {
+  const mesh = await createMesh({ platform: "web" })
+  const devices = await mesh.scan({ timeout: 10_000 })
+  const device = await mesh.connect(devices[0].uuid)
+
+  await device.provision()
+  await device.light.on()
+})
+```
+
+## Create the client
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh({ platform: "web" })
+```
+
+## Best use cases
+
+- internal tooling,
+- technician dashboards,
+- guided provisioning flows,
+- demos and support tooling.
+
+For unattended or long-running control, prefer React Native or Node.js.
+
+## What to read next
+
+1. [Quick Start](/docs/quick-start) for the core workflow.
+2. [Examples](/docs/examples) for dashboard patterns.
+3. [Troubleshooting](/docs/troubleshooting) for browser-specific issues.

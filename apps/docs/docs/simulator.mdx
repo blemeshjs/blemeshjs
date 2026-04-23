@@ -1,0 +1,45 @@
+The simulator lets you build flows without hardware on your desk.
+
+## Why use the simulator
+
+Use it when you want to:
+
+- prototype UI quickly,
+- test onboarding flows,
+- demo features in CI or local development,
+- reproduce state changes without a live mesh network.
+
+## Create a simulator mesh
+
+```ts
+import { createSimulatorMesh } from "@mesh-link-js/sdk"
+
+const mesh = createSimulatorMesh()
+```
+
+## Example workflow
+
+```ts
+const mesh = createSimulatorMesh()
+
+const lamp = await mesh.simulator.addLight({
+  uuid: "sim-light-1",
+  name: "Desk Lamp",
+})
+
+await mesh.scan()
+
+const device = await mesh.connect(lamp.uuid)
+await device.provision({ appKey: "home-app" })
+await device.light.on()
+```
+
+Expected behavior:
+
+- the simulator returns deterministic devices,
+- provisioning completes without radio hardware,
+- state updates still flow through the same app code.
+
+## Best practice
+
+Keep simulator fixtures close to the UI or gateway code they exercise. That makes demos and tests easier to maintain.

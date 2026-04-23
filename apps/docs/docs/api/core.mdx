@@ -1,0 +1,59 @@
+The core package contains the reusable mesh engine. Platform packages and runtime adapters build on top of it rather than replacing it.
+
+## Package scope
+
+The top-level export currently re-exports:
+
+- Bearer abstractions and GATT bearers
+- Layers and network parameters
+- Mesh message classes
+- Mesh models and mesh model collections
+- Provisioning types and managers
+- Shared types used by the core runtime
+
+## Mesh object model
+
+| Class | Role |
+| --- | --- |
+| `MeshNetwork` | Mesh configuration database with keys, nodes, groups, scenes, provisioners, and IV index |
+| `Node` | Represents a device with a primary unicast address and elements |
+| `Element` | Represents an addressable part of a node |
+| `Model` | Represents a SIG or vendor model attached to an element |
+| `Provisioner` | Represents an entity allowed to allocate addresses and provision nodes |
+
+## Provisioning
+
+| Class / type | Role |
+| --- | --- |
+| `ProvisioningManager` | State machine that drives provisioning, capability handling, and authentication selection |
+| `UnprovisionedDevice` | Parsed representation of a discovered unprovisioned device |
+| `ProvisioningCapabilities` | Capabilities reported during provisioning identify flow |
+| `ProvisioningState` | Discrete provisioning states such as capabilities received, complete, or failed |
+| `PublicKey`, `AuthenticationMethod` | Inputs used to start provisioning |
+
+## Messages
+
+The core package defines the mesh message classes used by both application code and higher-level extensions.
+
+<SourceFile path="examples/docs/generic-onoff-messages.ts" />
+
+For the Generic OnOff path, the repository currently exposes:
+
+| Message | Purpose |
+| --- | --- |
+| `GenericOnOffGet` | Requests current Generic OnOff state |
+| `GenericOnOffSet` | Sends a target state with optional transition values |
+| `GenericOnOffStatus` | Reports the current OnOff state |
+
+## Transport and bearers
+
+| Export | Purpose |
+| --- | --- |
+| `Bearer` | Base transport abstraction with open/close lifecycle |
+| `BearerHandler` | Lifecycle callbacks for bearer state |
+| `GattBearer` | Proxy bearer used for mesh proxy communication |
+| `PBGattBearer` | Provisioning bearer used for PB-GATT |
+
+## When to use the core package directly
+
+Use the core package directly when you need lower-level control over message construction, provisioning internals, or mesh object manipulation that a higher-level adapter does not wrap yet.

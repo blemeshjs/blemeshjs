@@ -1,0 +1,54 @@
+Use Node.js as the gateway layer between local mesh traffic and cloud systems.
+
+## Node.js gateway setup
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh({
+  platform: "node",
+  transport: { adapter: "usb-dongle" },
+  storage: { driver: "file", path: "./mesh-state.json" },
+})
+```
+
+Keep the gateway close to the deployment site and expose a smaller remote API to the rest of your system.
+
+## Forwarding events to the cloud
+
+```ts
+mesh.on("state", async (event) => {
+  await cloud.publish("mesh/state", event)
+})
+```
+
+Useful cloud-bound events:
+
+- device state updates,
+- provisioning success or failure,
+- health and connectivity changes,
+- scene recalls and group commands.
+
+## WebSocket and MQTT patterns
+
+WebSocket works well when a dashboard needs low-latency state streams.
+
+```ts
+mesh.on("state", (event) => {
+  websocketServer.broadcast(JSON.stringify(event))
+})
+```
+
+MQTT works well when you need decoupled consumers and durable event fan-out.
+
+```ts
+mesh.on("state", async (event) => {
+  await mqtt.publish("mesh/rooms/living-room/state", JSON.stringify(event))
+})
+```
+
+## Recommended architecture
+
+1. Mesh Link JS handles local radio and topology state.
+2. The gateway normalizes events into your cloud contract.
+3. Downstream services subscribe to WebSocket or MQTT, not directly to BLE.

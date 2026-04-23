@@ -1,0 +1,32 @@
+{
+  "packageManager": "yarn@4.9.2",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "name": "mesh-link-js",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "turbo run build --filter=!./packages/sdk-web --filter=!./apps/mobile --filter=!./apps/docs",
+    "lint": "turbo run lint --filter=!./packages/sdk-web --filter=!./apps/mobile --filter=!./apps/docs",
+    "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
+    "clean": "turbo run clean --filter=!./packages/sdk-web",
+    "test": "vitest run",
+    "coverage": "vitest --ui --coverage",
+    "sync:pro": "git subtree split --prefix=packages/pro -b pro-branch && git push pro pro-branch:main",
+    "sync:sdk-pro": "git subtree split --prefix=packages/sdk-pro -b sdk-pro-branch && git push sdk-pro sdk-pro-branch:main"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9.25.0",
+    "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^29.0.0",
+    "prettier": "^3.8.1",
+    "turbo": "^2.5.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.2.4"
+  }
+}

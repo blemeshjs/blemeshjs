@@ -1,0 +1,50 @@
+Use state updates to keep your UI, logs, and automation rules aligned with what the mesh actually reports.
+
+## 1. Connect to a device
+
+```ts
+const mesh = await createMesh()
+const device = await mesh.connect("desk-lamp")
+```
+
+## 2. Subscribe to updates
+
+```ts
+const stop = device.light.onStateChange((state) => {
+  console.log("Light state changed", state)
+})
+```
+
+Hold on to the unsubscribe function for cleanup.
+
+## 3. Handle state changes
+
+```ts
+await device.light.on()
+await device.light.setLevel(70)
+```
+
+You can feed those updates directly into React state, logs, or a metrics pipeline.
+
+## Expected behavior
+
+- local UI reflects the last confirmed state,
+- out-of-band changes still appear in your app,
+- subscriptions are cleaned up when a screen unmounts or a service shuts down.
+
+## Full example
+
+```ts
+const stop = device.light.onStateChange((state) => {
+  renderLightState(state)
+})
+
+await device.light.on()
+
+// Later
+stop()
+```
+
+## When to subscribe higher in the stack
+
+Use device-level subscriptions for UI work. Use mesh-level event streams when you want analytics, auditing, or gateway fan-out.

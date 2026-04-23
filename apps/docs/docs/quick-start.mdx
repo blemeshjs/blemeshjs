@@ -1,0 +1,143 @@
+Turn on a light in under three minutes.
+
+<Callout>
+  Use this page for first success. It keeps the flow intentionally small: install, create a client, scan, connect, provision, and send one command.
+</Callout>
+
+## Install
+
+<Tabs defaultValue="react-native">
+  <Tab value="react-native" label="React Native">
+
+```bash
+yarn add @mesh-link-js/sdk @mesh-link-js/sdk-react-native
+```
+
+  </Tab>
+  <Tab value="node" label="Node.js">
+
+```bash
+yarn add @mesh-link-js/sdk
+```
+
+  </Tab>
+  <Tab value="web" label="Web">
+
+```bash
+yarn add @mesh-link-js/sdk @mesh-link-js/sdk-web
+```
+
+  </Tab>
+</Tabs>
+
+## Create a mesh client
+
+<Tabs defaultValue="react-native">
+  <Tab value="react-native" label="React Native">
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh({ platform: "react-native" })
+```
+
+  </Tab>
+  <Tab value="node" label="Node.js">
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh({
+  platform: "node",
+  transport: { adapter: "usb-dongle" },
+})
+```
+
+  </Tab>
+  <Tab value="web" label="Web">
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh({ platform: "web" })
+```
+
+<Callout tone="warn">
+  Web Bluetooth only works in supported browsers and usually requires a direct user gesture before scanning or connecting.
+</Callout>
+
+  </Tab>
+</Tabs>
+
+## Scan for devices
+
+```ts
+const devices = await mesh.scan({ timeout: 10_000 })
+
+if (devices.length === 0) {
+  throw new Error("No mesh devices found")
+}
+```
+
+You should get back a list of discovered devices with identifiers such as `uuid`, `name`, `rssi`, and provisioning status.
+
+## Connect and provision
+
+```ts
+const device = await mesh.connect(devices[0].uuid)
+
+await device.provision({
+  appKey: "home-app",
+  networkKey: "default-network",
+})
+```
+
+If the device is already provisioned, `device.provision()` is usually a no-op and the SDK continues with the active session.
+
+## Turn the light on
+
+```ts
+await device.light.on()
+```
+
+To switch it back off:
+
+```ts
+await device.light.off()
+```
+
+## Expected output
+
+```txt
+mesh ready
+scanning for 10s
+found 1 device: Desk Lamp
+connected to Desk Lamp
+provisioning complete
+light state: on
+```
+
+## Full quick start
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+async function quickStart() {
+  const mesh = await createMesh()
+  const devices = await mesh.scan({ timeout: 10_000 })
+  const device = await mesh.connect(devices[0].uuid)
+
+  await device.provision({ appKey: "home-app" })
+  await device.light.on()
+
+  return device
+}
+
+await quickStart()
+```
+
+## Next steps
+
+1. Read [Core Concepts](/docs/concepts) if you want the vocabulary behind this flow.
+2. Open [Platform Setup](/docs/guides/react-native) for runtime details.
+3. Move to [Turn a Light On Or Off](/docs/guides/light-on-off) or [Provision a New Device](/docs/guides/provisioning) for production workflows.

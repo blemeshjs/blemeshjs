@@ -1,0 +1,59 @@
+Most Bluetooth Mesh problems are one of four things: discovery, connection, provisioning, or platform behavior.
+
+## Device not showing up
+
+Check these first:
+
+- the device is powered and advertising,
+- the app has Bluetooth permissions,
+- the scan mode matches the device state,
+- your phone, browser, or dongle is physically close enough.
+
+If you are onboarding a fresh device, scan with `mode: "unprovisioned"`.
+
+## Device not connecting
+
+Common causes:
+
+- another app already holds the BLE connection,
+- the platform adapter is not initialized,
+- the browser session lost its user gesture context,
+- the gateway adapter is unstable or in use by another process.
+
+Try this recovery path:
+
+```ts
+await device.disconnect()
+await mesh.scan({ timeout: 5_000 })
+const deviceAgain = await mesh.connect(uuid)
+```
+
+## Provisioning failure
+
+Provisioning usually fails because of timeouts, interrupted sessions, or stale local state.
+
+Use this recovery sequence:
+
+```ts
+await device.disconnect()
+await mesh.provisioning.reset(device.uuid)
+await mesh.provisioning.retry(device.uuid, { attempts: 3, backoffMs: 2_000 })
+```
+
+If failures persist, place the device back into provisioning mode and try again.
+
+## Platform-specific issues
+
+| Platform | Common issue | What to verify |
+| --- | --- | --- |
+| React Native | Empty scan results | Bluetooth permissions, native BLE initialization, background restrictions |
+| Node.js | Unstable gateway session | Dongle access, serial path, adapter ownership |
+| Web | Scan or connect never opens | Supported browser, secure origin, direct user gesture |
+
+## Debug checklist
+
+1. Confirm the expected platform permissions.
+2. Confirm the device state: unprovisioned or already provisioned.
+3. Disconnect before retrying.
+4. Turn on debug logging for the session.
+5. Persist or reset state intentionally instead of letting partial state linger.

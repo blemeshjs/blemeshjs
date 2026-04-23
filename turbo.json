@@ -1,0 +1,34 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+    "globalDependencies": ["eslint.config.mjs", "prettier.config.mjs"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.ts", "tsconfig*.json"],
+      "outputs": ["dist/**"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["src/**/*.ts", "eslint.config.*", ".eslintrc*"],
+      "outputs": []
+    },
+    "format": {
+      "inputs": ["src/**/*.ts", "tests/**/*.ts"],
+      "outputs": []
+    },
+    "coverage": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts"],
+      "outputs": ["coverage/**"]
+    },
+    "clean": {
+      "cache": false,
+      "outputs": []
+    }
+  }
+}

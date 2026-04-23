@@ -1,0 +1,24 @@
+The web package is currently a transport package, not a full all-in-one SDK surface for every Mesh Link JS use case.
+
+## Current role
+
+`@mesh-link-js/sdk-web` re-exports its `transport` module and gives you browser-side primitives for talking to BLE transport layers.
+
+## Exported transport building blocks
+
+| Export file | What it provides |
+| --- | --- |
+| `central-manager` | Browser central manager abstraction |
+| `peripheral` | Peripheral wrapper |
+| `service` | Service wrapper |
+| `characteristic` | Characteristic wrapper |
+
+## What the web package does not provide yet
+
+The current repository does not expose a single browser mesh manager that hides every transport and storage detail. That means the web package is best understood as a transport-oriented layer rather than the primary integration entrypoint.
+
+## How to think about it
+
+- Use the integration and concepts pages to understand the higher-level package flow.
+- Use the core package to understand the shared mesh logic.
+- Use the web package when you need browser transport primitives that can eventually be composed into a higher-level SDK.

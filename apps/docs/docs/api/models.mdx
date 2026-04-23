@@ -1,0 +1,60 @@
+Use models when you want typed, reusable behavior beyond the built-in convenience helpers.
+
+## model.use
+
+<ApiSignature
+  name="model.use"
+  signature={'model.use<T>(extension: ModelExtension<T>): T'}
+  returns="A typed extension bound to the current model"
+>
+  <p>Attach an extension to a model so your code reads like the behavior you want instead of raw message construction.</p>
+
+```ts
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+```
+
+</ApiSignature>
+
+## GenericOnOff
+
+<ApiSignature
+  name="GenericOnOff"
+  signature={'GenericOnOff: ModelExtension<{ on(): Promise<void>; off(): Promise<void>; toggle(): Promise<void> }>'}
+  returns="An on or off control surface"
+>
+  <p>Use `GenericOnOff` for binary state changes such as switch or light power state.</p>
+
+```ts
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+await onOff.on()
+```
+
+</ApiSignature>
+
+## LightLightness
+
+<ApiSignature
+  name="LightLightness"
+  signature={'LightLightness: ModelExtension<{ set(level: number): Promise<void>; get(): Promise<number> }>'}
+  returns="A brightness control surface"
+>
+  <p>Use `LightLightness` when you need dimming or normalized brightness values.</p>
+
+```ts
+const lightness = device.model("light-lightness").use(LightLightness)
+await lightness.set(60)
+```
+
+</ApiSignature>
+
+## Example
+
+```ts
+import { GenericOnOff, LightLightness } from "@mesh-link-js/sdk"
+
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+const lightness = device.model("light-lightness").use(LightLightness)
+
+await onOff.on()
+await lightness.set(55)
+```

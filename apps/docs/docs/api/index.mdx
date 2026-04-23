@@ -1,0 +1,36 @@
+Start the reference from the objects you touch most often.
+
+## Reference map
+
+| Page | What it covers |
+| --- | --- |
+| [Mesh API](/docs/api/mesh) | Create a client, scan, and connect |
+| [Device API](/docs/api/device) | Provision, disconnect, and device-level helpers |
+| [Models API](/docs/api/models) | `model.use(...)`, `GenericOnOff`, and `LightLightness` |
+
+## Object model
+
+```ts
+const mesh = await createMesh()
+const device = await mesh.connect(uuid)
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+```
+
+Read the reference in that order:
+
+1. Mesh creates sessions and discovers devices.
+2. Device manages provisioning and connected behavior.
+3. Models add typed capabilities on top of the device surface.
+
+## Example flow
+
+```ts
+import { createMesh, GenericOnOff } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh()
+const device = await mesh.connect("f47ac10b-58cc-4372-a567-0e02b2c3d479")
+await device.provision()
+
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+await onOff.on()
+```

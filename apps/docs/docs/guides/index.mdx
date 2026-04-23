@@ -1,0 +1,37 @@
+Use these recipes when you already know the basics and need a concrete workflow.
+
+## Recipes
+
+<div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+  <a href="/docs/guides/light-on-off" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Turn a Light On Or Off</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Start from a provisioned device and send your first reliable model command.</p>
+  </a>
+  <a href="/docs/guides/provisioning" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Provision a New Device</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Bring a fresh node into the network and save its state.</p>
+  </a>
+  <a href="/docs/guides/groups" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Control Multiple Devices</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Use group addresses to control rooms instead of one device at a time.</p>
+  </a>
+  <a href="/docs/guides/scenes" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Create a Scene</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Capture a known state and recall it later with one action.</p>
+  </a>
+  <a href="/docs/guides/retry-provisioning" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Retry Failed Provisioning</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Recover from timeouts and partial onboarding without corrupting local state.</p>
+  </a>
+  <a href="/docs/guides/state-updates" className="rounded-[1.5rem] border border-border/80 bg-card/70 p-5 transition-transform hover:-translate-y-0.5 hover:border-primary/30">
+    <p className="font-medium text-foreground">Listen to State Updates</p>
+    <p className="mt-2 text-sm leading-6 text-muted-foreground">Keep your UI, telemetry pipeline, or automations synchronized with mesh state.</p>
+  </a>
+</div>
+
+## Pick the next workflow
+
+- Start with [Turn a Light On Or Off](/docs/guides/light-on-off) if you need the smallest useful control path.
+- Read [Provision a New Device](/docs/guides/provisioning) if your app brings new hardware online.
+- Move to [Control Multiple Devices](/docs/guides/groups) and [Create a Scene](/docs/guides/scenes) once one-device control stops scaling.
+- Use [Retry Failed Provisioning](/docs/guides/retry-provisioning) and [Listen to State Updates](/docs/guides/state-updates) for production hardening.

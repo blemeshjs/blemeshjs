@@ -1,0 +1,53 @@
+Provisioning failures happen. The important part is recovering without leaving local state and device state out of sync.
+
+## 1. Detect the failure
+
+```ts
+try {
+  await device.provision({ appKey: "home-app" })
+} catch (error) {
+  console.error("Provisioning failed", error)
+}
+```
+
+Treat timeouts, dropped BLE sessions, and rejected security steps as recoverable by default.
+
+## 2. Reset local state
+
+```ts
+await device.disconnect()
+await mesh.provisioning.reset(device.uuid)
+```
+
+Do this before a retry so your next attempt starts from a known state.
+
+## 3. Retry with backoff
+
+```ts
+await mesh.provisioning.retry(device.uuid, {
+  attempts: 3,
+  backoffMs: 2_000,
+})
+```
+
+If retries still fail, ask the user to power-cycle the device or re-enter provisioning mode.
+
+## Expected behavior
+
+- failed sessions are disconnected cleanly,
+- incomplete local state is discarded,
+- the retry path does not duplicate addresses or keys.
+
+## Full example
+
+```ts
+async function provisionWithRetry(device: Awaited<ReturnType<typeof mesh.connect>>) {
+  try {
+    await device.provision({ appKey: "home-app" })
+  } catch {
+    await device.disconnect()
+    await mesh.provisioning.reset(device.uuid)
+    await mesh.provisioning.retry(device.uuid, { attempts: 3, backoffMs: 2_000 })
+  }
+}
+```

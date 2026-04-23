@@ -1,0 +1,51 @@
+This page collects the package surfaces you are most likely to wire together first when integrating Mesh Link JS into a JavaScript or TypeScript codebase.
+
+## Primary package entrypoints
+
+| Package / surface | Kind | Notes |
+| --- | --- | --- |
+| `@mesh-link-js/core` | package | Shared mesh state, messages, bearers, provisioning, and model types |
+| `@mesh-link-js/sdk-web` | package | Browser transport exports and related runtime-specific helpers |
+| `@mesh-link-js/utils` | package | Storage, identifiers, event helpers, and shared support types |
+| Runtime adapters | composition layer | Environment-specific wrappers that bundle transport, persistence, and convenience APIs |
+
+## Integration building blocks
+
+### Core state and messages
+
+| Surface | What it gives you |
+| --- | --- |
+| `MeshNetwork`, `Node`, `Element`, `Model` | The object model for the mesh configuration database |
+| Provisioning classes | The state machine and data types used to onboard devices |
+| Message classes such as `GenericOnOffSet` | Low-level typed access to mesh opcodes and payloads |
+| Bearer abstractions | The transport seam that runtime layers plug into |
+
+### Transport and storage seams
+
+| Surface | What it does |
+| --- | --- |
+| `@mesh-link-js/sdk-web` transport exports | Browser-facing transport primitives for BLE work in web contexts |
+| `Storage` from `@mesh-link-js/utils` | The persistence abstraction used by the core |
+| `BrowserStorage` from `@mesh-link-js/utils` | A browser-friendly storage implementation |
+| Runtime-specific storage adapters | The layer that persists mesh data in non-browser environments |
+
+### Runtime adapters
+
+Runtime adapters are where a specific environment can add higher-level convenience around the shared packages. They may expose scanning, connection orchestration, provisioning helpers, model wrappers, or event emitters, but those sit on top of the same core mesh model.
+| --- | --- |
+## How to inspect the surface area
+
+- Start with [Core API](/docs/api/core) when you need the mesh model, messages, provisioning state, or bearers.
+- Open [Web Transport API](/docs/api/web) when your runtime is the browser and transport behavior is the focus.
+- Open [Utilities API](/docs/api/utils) when persistence, identifiers, or event helpers are part of the question.
+- Use [Concepts](/docs/concepts) when you need the mental model behind those exports instead of a package-by-package reference view.
+
+## Typical integration questions
+
+| Question | Best next page |
+| --- | --- |
+| Which package owns the mesh state? | [Core API](/docs/api/core) |
+| How do I persist a mesh configuration? | [Utilities API](/docs/api/utils) |
+| What browser transport exports exist today? | [Web Transport API](/docs/api/web) |
+| What concepts should I understand before choosing an adapter? | [Concepts](/docs/concepts) |
+| How do the layers fit together? | [Architecture](/docs/architecture) |

@@ -1,0 +1,58 @@
+Use this recipe when the device is already provisioned and you need the fastest control path.
+
+## 1. Create a mesh client
+
+```ts
+import { createMesh } from "@mesh-link-js/sdk"
+
+const mesh = await createMesh()
+```
+
+## 2. Find the target device
+
+```ts
+const devices = await mesh.scan({ timeout: 10_000 })
+const device = await mesh.connect(devices[0].uuid)
+```
+
+If you already know the UUID, skip the scan step and connect directly.
+
+## 3. Turn it on
+
+```ts
+await device.light.on()
+```
+
+## 4. Turn it off
+
+```ts
+await device.light.off()
+```
+
+## Expected behavior
+
+- the SDK opens a session to the device,
+- the light changes state immediately,
+- your UI can reflect the new state from an acknowledgement or state update callback.
+
+## Full example
+
+```ts
+const mesh = await createMesh()
+const devices = await mesh.scan({ timeout: 10_000 })
+const device = await mesh.connect(devices[0].uuid)
+
+await device.light.on()
+await device.light.off()
+```
+
+## When to use models directly
+
+If you need lower-level control, work through the model API:
+
+```ts
+import { GenericOnOff } from "@mesh-link-js/sdk"
+
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+await onOff.on()
+```

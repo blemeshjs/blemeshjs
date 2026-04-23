@@ -1,0 +1,117 @@
+Bluetooth Mesh becomes easier once you keep five terms straight: node, element, model, provisioning, and publish or subscribe.
+
+## The mental model
+
+Think about a device as a small tree:
+
+- A physical device is a node.
+- A node contains one or more elements.
+- Each element contains one or more models.
+- Models send and receive the messages that actually do the work.
+
+If you can picture that, the rest of the SDK API reads naturally.
+
+## Node
+
+A node is one physical mesh device, such as a lamp, switch, sensor, or gateway.
+
+In Mesh Link JS, you usually reach it like this:
+
+```ts
+const device = await mesh.connect(uuid)
+```
+
+After you connect, the device object gives you provisioning helpers, model access, and convenience APIs like `device.light.on()`.
+
+## Element
+
+An element is a functional part inside the node. A simple bulb may expose one element. A wall switch with two rockers may expose more than one.
+
+Use elements when different parts of the same device need different addresses or model sets.
+
+```ts
+const primary = device.elements[0]
+```
+
+## Model
+
+A model is the behavior unit. It defines what a device can do or report.
+
+Examples:
+
+- `GenericOnOff` controls on and off state.
+- `LightLightness` controls brightness.
+- Sensor models report measured values.
+
+You can attach typed behavior to a model with `model.use(...)`:
+
+```ts
+import { GenericOnOff } from "@mesh-link-js/sdk"
+
+const onOff = device.model("generic-onoff").use(GenericOnOff)
+
+await onOff.on()
+```
+
+## Provisioning
+
+Provisioning is how a new device joins your mesh network. Before provisioning, the device can advertise itself but it is not trusted or usable as part of the network.
+
+Provisioning usually includes:
+
+1. Discover the unprovisioned device.
+2. Connect to it.
+3. Exchange security data.
+4. Assign addresses and keys.
+5. Save the resulting network state.
+
+In the SDK, that typically looks like this:
+
+```ts
+const device = await mesh.connect(uuid)
+await device.provision({ appKey: "home-app" })
+```
+
+## Publish and subscribe
+
+Publish means a model sends messages to an address. Subscribe means a model listens for messages sent to an address.
+
+That address can point to:
+
+- one device,
+- one element,
+- a group of devices,
+- or a virtual address.
+
+This is how one wall panel can control many lights at once.
+
+```ts
+const livingRoom = await mesh.groups.create({
+  name: "Living Room",
+  address: "c000",
+})
+
+await livingRoom.light.on()
+```
+
+## Diagram
+
+<ArchitectureDiagram />
+
+Read the diagram from top to bottom:
+
+- your app creates a mesh client,
+- the client connects through a platform transport,
+- devices expose elements and models,
+- storage keeps keys and topology safe between sessions.
+
+## Keep it practical
+
+When you are building features, you usually only need these rules:
+
+- Connect to a device through the mesh client.
+- Provision it once.
+- Use a device helper or model extension to send commands.
+- Use groups and scenes when one device at a time stops scaling.
+
+Next: [React Native Setup](/docs/guides/react-native), [Node.js Setup](/docs/guides/node), or [Web Setup](/docs/guides/web).

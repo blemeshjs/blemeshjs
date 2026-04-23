@@ -1,0 +1,31 @@
+{
+  "name": "@mesh-link-js/sdk-web",
+  "packageManager": "yarn@4.9.2",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "format": "prettier --ignore-path ../../.prettierignore --write .",
+    "lint": "eslint --config ./eslint.config.mjs . --fix",
+    "coverage": "vitest --ui --coverage",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@mesh-link-js/sdk": "workspace:^",
+    "@mesh-link-js/crypto": "workspace:^",
+    "long": "^5.3.2",
+    "uint8array-extras": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/web-bluetooth": "^0.0.21",
+    "eslint": "^10.2.0",
+    "prettier": "^3.8.2",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

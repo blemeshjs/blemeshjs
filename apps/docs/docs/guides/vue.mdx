@@ -1,0 +1,28 @@
+Vue is a platform layer on top of the JavaScript and TypeScript base. Use it to present mesh state and workflows, while keeping the core mesh behavior in shared packages and plain TypeScript services.
+
+## What this platform is for
+
+Use the Vue platform route when you want to:
+
+- build a browser UI around Mesh Link JS,
+- wrap transport and mesh services in composables or stores,
+- and keep the base layer reusable outside Vue-specific code.
+
+## Recommended composition
+
+A typical Vue setup looks like this:
+
+- `@mesh-link-js/core` owns mesh state, provisioning, and messages.
+- `@mesh-link-js/utils` owns shared helper types and persistence abstractions.
+- `@mesh-link-js/sdk-web` provides browser transport primitives.
+- Vue owns composables, stores, and UI flows that sit on top of those services.
+
+## Practical guidance
+
+Keep browser transport, provisioning orchestration, and message helpers in plain TypeScript modules first. Then expose them through Vue composables or stores instead of mixing mesh logic directly into component files.
+
+## What to read next
+
+1. Read [Base](/docs/base) for the shared package model.
+2. Read [Browser Transport](/docs/guides/web) if browser transport is the current focus.
+3. Read [Reference](/docs/api) when you need exact exports and package boundaries.
