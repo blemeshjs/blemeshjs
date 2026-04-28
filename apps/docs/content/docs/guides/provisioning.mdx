@@ -1,0 +1,55 @@
+---
+title: Provision a New Device
+description: Bring an unprovisioned node into the network using the current provisioning manager flow in the supported web runtime.
+icon: ListPlus
+---
+
+Provisioning is the moment a device becomes part of your network instead of just a nearby BLE target.
+
+## 1. Scan for unprovisioned devices
+
+<Tabs items={["Web", "React Native", "Node"]}>
+  <Tab value="Web">
+    ```ts
+    mesh.provision.on("scan:new-peripheral", (peripheral) => {
+      console.log("Found unprovisioned peripheral", peripheral);
+    });
+
+    mesh.provision.scan({ timeout: 15_000 });
+    ```
+    <Callout>
+      On the web you can't scan and see get a list of devices like on other platforms due to [this limitation](https://github.com/WebBluetoothCG/web-bluetooth/blob/main/implementation-status.md#scanning-api).
+      You'd rather get a sub window showing scanned devices and the device you select would emit a `scan:new-peripheral` event.
+    </Callout>
+
+  </Tab>
+  <Tab value="React Native">Coming soon!</Tab>
+  <Tab value="Node">Coming soon!</Tab>
+</Tabs>
+
+## 2. Connect to unprovisioned device
+
+```ts
+mesh.provision.connect(candidate);
+```
+
+<Callout>
+Use identify when you need the user to confirm which physical device is about to join the network after connecting.
+
+```ts
+mesh.provision.identity(5)
+```
+</Callout>
+
+## 3. Quickly provision unprovisioned device
+```ts
+mesh.provision.quick(candidate);
+````
+
+After provisioning completes, you should now be able to configure and control the node.
+
+## What to do if it fails
+
+1. Disconnect cleanly.
+2. Re-scan so you are working from a fresh discovered peripheral.
+3. Retry only after the device is back in the expected state.

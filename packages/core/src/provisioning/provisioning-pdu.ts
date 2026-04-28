@@ -1,4 +1,4 @@
-import { Algorithm, Data, isEnumCase } from "@mesh-link-js/utils";
+import { Algorithm, Data, isEnumCase } from "@blemeshjs/utils";
 import { AuthenticationMethod } from "./oob.js";
 import { PublicKeyMethod } from "./public-key.js";
 import { ProvisioningError, RemoteProvisioningError } from "./provisioning-state.js";

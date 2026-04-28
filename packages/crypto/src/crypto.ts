@@ -15,7 +15,7 @@ import {
   UUID,
   UInt8,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import {
   areUint8ArraysEqual,
   concatUint8Arrays,

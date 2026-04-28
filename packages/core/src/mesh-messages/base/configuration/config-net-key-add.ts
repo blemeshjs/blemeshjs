@@ -5,7 +5,7 @@ import {
   Data,
   KeyIndex,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { ConfigNetKeyStatus } from "./config-net-key-status.js";
 import { concatUint8Arrays } from "uint8array-extras";
 import { NetworkKey } from "../../../mesh-models/index.js";

@@ -7,7 +7,7 @@ import {
   readUInt16BE,
   UInt16,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { ProvisioningPdu } from "./provisioning-pdu.js";
 
 /**

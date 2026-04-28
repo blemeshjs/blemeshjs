@@ -16,7 +16,7 @@ import { DialogBlurBackdrop } from "@/components/dialog-blur-view";
 import { ListGroup } from "heroui-native/list-group";
 import { uint8ArrayToHex } from "uint8array-extras";
 import { Separator } from "heroui-native/separator";
-import { ApplicationKey } from "@mesh-link-js/core";
+import { ApplicationKey } from "@blemeshjs/core";
 
 const StyledKeyIcon = withUniwind(KeyIcon);
 const StyledTrashIcon = withUniwind(TrashIcon);

@@ -9,13 +9,13 @@ import {
   Text,
   toast,
 } from "@heroui/react";
-import { Crypto, NewKey } from "@mesh-link-js/sdk-web";
+import { Crypto, NewKey } from "@blemeshjs/sdk-web";
 import { KeyIcon, Trash2, Plus } from "lucide-react";
 import { useMemo, useEffect } from "react";
 import { uint8ArrayToHex, hexToUint8Array } from "uint8array-extras";
 import { useImmer } from "use-immer";
 import { useMesh } from "./mesh-provider";
-import { Key } from "@mesh-link-js/utils";
+import { Key } from "@blemeshjs/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toastError } from "../helpers/error";
 

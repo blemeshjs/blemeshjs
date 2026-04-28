@@ -6,7 +6,7 @@ import {
   MeshMessage,
   MeshResponse,
   UnacknowledgedMeshMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshAddress, MeshNetwork } from "../../mesh-models/index.js";
 import { ConfigNetKeyDelete } from "../../mesh-messages/index.js";
 import { Model } from "../../mesh-models/model.js";

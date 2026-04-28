@@ -1,7 +1,7 @@
 import { AppText } from "@/components/app-text";
 import { Alert } from "@/components/my-alert";
-import { GenericOnOff } from "@mesh-link-js/sdk-react-native";
-import { RNModel } from "@mesh-link-js/sdk-react-native/dist/src/model";
+import { GenericOnOff } from "@blemeshjs/sdk-react-native";
+import { RNModel } from "@blemeshjs/sdk-react-native/dist/src/model";
 import { Button } from "heroui-native/button";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";

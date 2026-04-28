@@ -33,7 +33,7 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="wizard"
         options={{
-          title: "Mesh Link JS",
+          title: "BLEMeshJS",
           presentation: "modal",
           gestureEnabled: false,
           headerTransparent: true,

@@ -1,4 +1,4 @@
-import { Data, isEnumCase } from "@mesh-link-js/utils";
+import { Data, isEnumCase } from "@blemeshjs/utils";
 import { MeshNetwork } from "../../mesh-models/mesh-network.js";
 import { BeaconType } from "./beacon-pdu.js";
 import { NetworkBeaconPdu } from "./network-beacon-pdu.js";

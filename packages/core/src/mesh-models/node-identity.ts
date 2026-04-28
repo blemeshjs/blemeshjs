@@ -1,4 +1,4 @@
-import { Data, MeshProxyService } from "@mesh-link-js/utils";
+import { Data, MeshProxyService } from "@blemeshjs/utils";
 import {
   areUint8ArraysEqual,
   base64ToUint8Array,
@@ -6,7 +6,7 @@ import {
   uint8ArrayToHex,
 } from "uint8array-extras";
 import { Node } from "./node.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import z from "zod";
 
 /**

@@ -1,4 +1,4 @@
-import { MeshNetworkManager, SharedMeshNetworkManager } from "@mesh-link-js/sdk";
+import { MeshNetworkManager, SharedMeshNetworkManager } from "@blemeshjs/sdk";
 import { RNCBCentralManager } from "./transport/central-manager.js";
 import { RNAsyncStorage } from "./storage.js";
 

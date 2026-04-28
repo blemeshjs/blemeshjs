@@ -1,7 +1,7 @@
-import { KeyIndex, Data, MeshNetworkError, UInt8, Key, MeshCDB } from "@mesh-link-js/utils";
+import { KeyIndex, Data, MeshNetworkError, UInt8, Key, MeshCDB } from "@blemeshjs/utils";
 import { MeshNetwork } from "./mesh-network.js";
 import { NetworkKey } from "./network-key.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { areUint8ArraysEqual, hexToUint8Array, uint8ArrayToHex } from "uint8array-extras";
 import { Model } from "./model.js";
 import { alias, createModelSchema, custom, SKIP } from "serializr";

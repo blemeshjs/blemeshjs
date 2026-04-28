@@ -1,5 +1,5 @@
 {
-  "name": "@mesh-link-js/sdk-web",
+  "name": "@blemeshjs/sdk-web",
   "packageManager": "yarn@4.9.2",
   "type": "module",
   "main": "./dist/src/index.js",
@@ -16,8 +16,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@mesh-link-js/sdk": "workspace:^",
-    "@mesh-link-js/crypto": "workspace:^",
+    "@blemeshjs/crypto": "workspace:^",
+    "@blemeshjs/sdk": "workspace:^",
     "long": "^5.3.2",
     "uint8array-extras": "^1.5.0"
   },

@@ -1,6 +1,6 @@
 import { toastError } from "@/app/helpers/error";
 import { Select, ListBox, Button, Label, Surface, Spinner } from "@heroui/react";
-import { Key } from "@mesh-link-js/utils";
+import { Key } from "@blemeshjs/utils";
 import { useMutation } from "@tanstack/react-query";
 import { RefreshCcw, Plus, KeyIcon, Trash2 } from "lucide-react";
 import { uint8ArrayToHex } from "uint8array-extras";

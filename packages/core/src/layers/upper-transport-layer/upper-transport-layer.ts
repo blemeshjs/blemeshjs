@@ -5,7 +5,7 @@ import {
   LogCategory,
   LoggerHandler,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshNetwork, MessageHandle } from "../../mesh-models/index.js";
 import { NetworkManager } from "../network-manager.js";
 import { NetworkKey } from "../../mesh-models/index.js";

@@ -1,5 +1,5 @@
 import { NetworkKey } from "./network-key.js";
-import { Data, KeyRefreshPhase, KeySet, UInt8 } from "@mesh-link-js/utils";
+import { Data, KeyRefreshPhase, KeySet, UInt8 } from "@blemeshjs/utils";
 import { ApplicationKey } from "./application-key.js";
 import { Node } from "./node.js";
 

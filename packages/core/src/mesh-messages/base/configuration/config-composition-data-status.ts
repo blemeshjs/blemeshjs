@@ -7,7 +7,7 @@ import {
   UInt16,
   UInt32,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { NodeFeaturesState } from "../../../mesh-models/node-features.js";
 import { ElementData, Elements } from "../../../mesh-models-array/elements.js";
 import { concatUint8Arrays } from "uint8array-extras";

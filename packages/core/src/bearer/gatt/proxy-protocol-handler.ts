@@ -1,4 +1,4 @@
-import { Data, Int64, UInt8 } from "@mesh-link-js/utils";
+import { Data, Int64, UInt8 } from "@blemeshjs/utils";
 import { PduType } from "../bearer.js";
 import { concatUint8Arrays } from "uint8array-extras";
 

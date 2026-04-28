@@ -1,4 +1,4 @@
-import { AcknowledgedConfigMessage, Data, UInt32 } from "@mesh-link-js/utils";
+import { AcknowledgedConfigMessage, Data, UInt32 } from "@blemeshjs/utils";
 import { ConfigDefaultTtlStatus } from "./config-default-ttl-status.js";
 
 export class ConfigDefaultTtlGet extends AcknowledgedConfigMessage {

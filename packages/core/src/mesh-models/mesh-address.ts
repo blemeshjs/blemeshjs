@@ -1,5 +1,5 @@
-import { Crypto } from "@mesh-link-js/crypto";
-import { UUID, Address } from "@mesh-link-js/utils";
+import { Crypto } from "@blemeshjs/crypto";
+import { UUID, Address } from "@blemeshjs/utils";
 
 export class MeshAddress {
   public get hex(): string {

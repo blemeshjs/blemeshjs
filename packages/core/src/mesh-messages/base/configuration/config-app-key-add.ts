@@ -5,7 +5,7 @@ import {
   Data,
   KeyIndex,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { concatUint8Arrays } from "uint8array-extras";
 import { ApplicationKey } from "../../../mesh-models/index.js";
 import { ConfigAppKeyStatus } from "./config-app-key-status.js";

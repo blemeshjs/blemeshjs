@@ -12,7 +12,7 @@ import {
   UInt64,
   UInt8,
   UserDefaults,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { NetworkManager } from "../network-manager.js";
 import { MeshAddress, MeshNetwork } from "../../mesh-models/index.js";
 import { SegmentedMessage } from "./segmented-message.js";

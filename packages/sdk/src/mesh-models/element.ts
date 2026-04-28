@@ -1,4 +1,4 @@
-import { Element as $Element } from "@mesh-link-js/core";
+import { Element as $Element } from "@blemeshjs/core";
 import { makeAutoObservable } from "mobx";
 import { InternalModel } from "./model.js";
 import { createProxy, keysOf } from "../types";

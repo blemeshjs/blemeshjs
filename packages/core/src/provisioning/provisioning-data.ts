@@ -8,10 +8,10 @@ import {
   OptionSet,
   packUInt32BE,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { areUint8ArraysEqual, concatUint8Arrays, hexToUint8Array } from "uint8array-extras";
 import { ProvisioningError } from "./provisioning-state.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { NetworkKey } from "../mesh-models/network-key.js";
 import { Security } from "../mesh-models/security.js";
 import { MeshNetwork } from "../mesh-models/mesh-network.js";

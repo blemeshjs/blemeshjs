@@ -1,5 +1,5 @@
 import { makeObservable, observable } from "mobx";
-import { Storage } from "@mesh-link-js/utils";
+import { Storage } from "@blemeshjs/utils";
 import z from "zod";
 import { serialize } from "serializr";
 import { Serialized } from "serializr/lib/core/serialize.js";

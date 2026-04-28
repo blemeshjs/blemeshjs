@@ -1,4 +1,4 @@
-import { Address, Data, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { Address, Data, UInt32, UInt8 } from "@blemeshjs/utils";
 import { ControlMessage } from "./control-message.js";
 import { NodeFeatures } from "../../mesh-models/node-features.js";
 

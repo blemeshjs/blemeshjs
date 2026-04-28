@@ -1,4 +1,4 @@
-import { GenericOnOffStatus, MeshAddress, Model, ModelHandler } from "@mesh-link-js/core";
+import { GenericOnOffStatus, MeshAddress, Model, ModelHandler } from "@blemeshjs/core";
 import {
   MeshResponse,
   Data,
@@ -6,7 +6,7 @@ import {
   Address,
   MeshMessage,
   AcknowledgedMeshMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager";
 
 export class GenericOnOffClientHandler extends ModelHandler {

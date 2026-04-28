@@ -14,7 +14,7 @@ import {
   UInt32,
   BackgroundTimer,
   ProxyConfigurationMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshNetwork, NetworkKey } from "../../mesh-models/index.js";
 import { NetworkManager } from "../network-manager.js";
 import { LRUCache } from "lru-cache";

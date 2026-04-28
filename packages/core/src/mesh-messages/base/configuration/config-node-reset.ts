@@ -1,4 +1,4 @@
-import { AcknowledgedConfigMessage, Data, UInt32 } from "@mesh-link-js/utils";
+import { AcknowledgedConfigMessage, Data, UInt32 } from "@blemeshjs/utils";
 import { ConfigNodeResetStatus } from "./config-node-reset-status.js";
 
 export class ConfigNodeReset extends AcknowledgedConfigMessage {

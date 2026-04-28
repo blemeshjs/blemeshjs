@@ -5,7 +5,7 @@ import {
   CBCharacteristicProperties,
   MeshProvisioningService,
   MeshProxyService,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { BleError, Characteristic, Subscription } from "react-native-ble-plx";
 import { base64ToUint8Array, uint8ArrayToString } from "uint8array-extras";
 

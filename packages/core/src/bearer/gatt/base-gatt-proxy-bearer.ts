@@ -20,7 +20,7 @@ import {
   MeshProvisioningService,
   MeshProxyService,
   UUID,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { BearerError } from "../bearer-error.js";
 import { uint8ArrayToHex } from "uint8array-extras";
 import { GattBearerHandler } from "./gatt-bearer-handler.js";

@@ -18,7 +18,7 @@ export const useSettingsStore = create<SettingsStore>()(
         }),
     })),
     {
-      name: "mesh-link-js-settings",
+      name: "blemeshjs-settings",
     },
   ),
 );

@@ -4,7 +4,7 @@ import {
   Data,
   KeyIndex,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Mixin } from "ts-mixer";
 import { ConfigAppKeyList } from "./config-app-key-list.js";
 import { NetworkKey } from "../../../mesh-models/index.js";

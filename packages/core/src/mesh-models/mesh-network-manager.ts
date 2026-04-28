@@ -22,7 +22,7 @@ import {
   UnacknowledgedMeshMessage,
   AcknowledgedConfigMessage,
   ConfigResponse,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { NetworkManagerHandler } from "../layers/network-manager-handler.js";
 import { MeshNetworkHandler } from "./mesh-network-handler.js";
 import { MeshData } from "./mesh-data.js";

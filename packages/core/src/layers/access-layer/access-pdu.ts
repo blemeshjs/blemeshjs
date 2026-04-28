@@ -1,8 +1,8 @@
-import { Address, Data, Int64, MeshMessageSecurity, UInt32 } from "@mesh-link-js/utils";
+import { Address, Data, Int64, MeshMessageSecurity, UInt32 } from "@blemeshjs/utils";
 import { concatUint8Arrays, uint8ArrayToHex } from "uint8array-extras";
 import Long from "long";
 import { UpperTransportPdu } from "../upper-transport-layer/upper-transport-pdu.js";
-import { MeshMessage } from "@mesh-link-js/utils";
+import { MeshMessage } from "@blemeshjs/utils";
 import { MeshAddress } from "../../mesh-models/mesh-address.js";
 
 export class AccessPdu {

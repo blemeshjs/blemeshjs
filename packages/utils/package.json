@@ -1,5 +1,5 @@
 {
-  "name": "@mesh-link-js/utils",
+  "name": "@blemeshjs/utils",
   "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",

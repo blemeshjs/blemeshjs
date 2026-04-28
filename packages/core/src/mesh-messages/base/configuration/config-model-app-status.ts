@@ -15,7 +15,7 @@ import {
   readUInt16LE,
   UInt16,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 
 export class ConfigModelAppStatus extends Mixin(
   ConfigResponse,

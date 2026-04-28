@@ -6,7 +6,7 @@ import {
   LogCategory,
   LoggerHandler,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 
 import { textEncode } from "@borewit/text-codec";
 import { Bearer, PduType, ProvisioningBearer } from "../bearer/bearer.js";

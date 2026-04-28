@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { GenericOnOff } from "./generic-on-off.js";
-import { AccessError } from "@mesh-link-js/utils";
-import type { Model } from "@mesh-link-js/core";
+import { AccessError } from "@blemeshjs/utils";
+import type { Model } from "@blemeshjs/core";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager.js";
 
 function makeModel(boundAppKeyCount = 0): Model {

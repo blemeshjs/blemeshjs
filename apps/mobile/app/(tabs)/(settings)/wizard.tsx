@@ -60,7 +60,7 @@ export default function Wizard() {
       {errorAlert && <ErrorAlert {...errorAlert} />}
       <AppText className="text-accent font-bold text-md">Welcome</AppText>
       <AppText className="text-center text-muted">
-        Mesh Link JS allows to provision, configure and control Bluetooth mesh
+        BLEMeshJS allows to provision, configure and control Bluetooth mesh
         devices.
       </AppText>
       <AppText className="text-muted">

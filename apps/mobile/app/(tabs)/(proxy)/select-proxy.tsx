@@ -2,7 +2,7 @@ import { AppText } from "@/components/app-text";
 import { useMesh } from "@/components/mesh-provider";
 import { Alert, AlertDialog } from "@/components/my-alert";
 import { MySafeAreaView } from "@/components/my-safe-area-view";
-import { DiscoveredProxyPeripheral } from "@mesh-link-js/sdk-react-native";
+import { DiscoveredProxyPeripheral } from "@blemeshjs/sdk-react-native";
 import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import { ListGroup, Separator } from "heroui-native";
 import { enableMapSet } from "immer";

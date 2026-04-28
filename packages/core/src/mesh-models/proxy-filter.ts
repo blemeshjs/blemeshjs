@@ -11,7 +11,7 @@ import {
   ProxyFilterSetup,
   ProxyFilterSetupType,
   ProxyFilterType,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshNetworkManager } from "./mesh-network-manager.js";
 import { SetFilterType } from "../mesh-messages/proxy-configuration/filter-type.js";
 import { AddAddressesToFilter } from "../mesh-messages/proxy-configuration/add-addresses-to-filter.js";

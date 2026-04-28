@@ -8,7 +8,7 @@ import {
   KeyIndex,
   Int64,
   toPaddedHex64Signed,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 
 /**
  * The Publishing Period state determines the interval at which status messages

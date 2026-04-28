@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { NetworkKey } from "../src/mesh-models/network-key.js";
 import { hexToUint8Array } from "uint8array-extras";
-import { IvIndex, KeyIndex } from "@mesh-link-js/utils";
+import { IvIndex, KeyIndex } from "@blemeshjs/utils";
 import { NetworkPdu } from "../src/layers/network-layer/network-pdu.js";
 import { PduType } from "../src/bearer/bearer.js";
 import { LowerTransportPduType } from "../src/layers/lower-transport-layer/lower-transport-pdu.js";

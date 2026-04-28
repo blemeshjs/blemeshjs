@@ -5,7 +5,7 @@ import {
   CBCharacteristicProperties,
   MeshProvisioningService,
   MeshProxyService,
-} from "@mesh-link-js/sdk";
+} from "@blemeshjs/sdk";
 
 export class WebCBCharacteristic extends CBCharacteristic {
   public uuid: CBUUID;

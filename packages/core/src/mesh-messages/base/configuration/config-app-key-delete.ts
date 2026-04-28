@@ -5,7 +5,7 @@ import {
   Data,
   KeyIndex,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { ConfigAppKeyStatus } from "./config-app-key-status.js";
 import { ApplicationKey } from "../../../mesh-models/index.js";
 

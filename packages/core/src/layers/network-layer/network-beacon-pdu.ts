@@ -1,4 +1,4 @@
-import { Data, IvIndex, timeIntervalSinceNow } from "@mesh-link-js/utils";
+import { Data, IvIndex, timeIntervalSinceNow } from "@blemeshjs/utils";
 import { BeaconPdu } from "./beacon-pdu.js";
 import { NetworkKey } from "../../mesh-models/network-key.js";
 import Long from "long";

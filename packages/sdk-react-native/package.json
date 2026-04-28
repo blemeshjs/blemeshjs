@@ -1,5 +1,5 @@
 {
-  "name": "@mesh-link-js/sdk-react-native",
+  "name": "@blemeshjs/sdk-react-native",
   "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -16,8 +16,8 @@
     "coverage": "vitest --ui --coverage"
   },
   "dependencies": {
-    "@mesh-link-js/sdk": "workspace:^",
-    "@mesh-link-js/utils": "workspace:^"
+    "@blemeshjs/sdk": "workspace:^",
+    "@blemeshjs/utils": "workspace:^"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "~2.2.0",

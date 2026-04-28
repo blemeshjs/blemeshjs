@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { concatUint8Arrays, hexToUint8Array } from "uint8array-extras";
-import { Algorithm, packUInt16BE, packUInt32BE, UUID } from "@mesh-link-js/utils";
+import { Algorithm, packUInt16BE, packUInt32BE, UUID } from "@blemeshjs/utils";
 import { Crypto } from "./crypto.js";
 
 describe("Crypto", () => {

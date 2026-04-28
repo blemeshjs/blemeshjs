@@ -1,5 +1,5 @@
-import { GattBearer, ProvisioningBearer, UnprovisionedDevice } from "@mesh-link-js/core";
-import { Int32 } from "@mesh-link-js/utils";
+import { GattBearer, ProvisioningBearer, UnprovisionedDevice } from "@blemeshjs/core";
+import { Int32 } from "@blemeshjs/utils";
 
 export type ScanOptions = {
   timeout?: number;

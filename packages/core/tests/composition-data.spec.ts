@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { ConfigCompositionDataStatus, Page0 } from "../src/index.js";
 import { hasMixin } from "ts-mixer";
 import { NodeFeatureState } from "../src/mesh-models/node-features.js";
-import { Location } from "@mesh-link-js/utils";
+import { Location } from "@blemeshjs/utils";
 
 describe("Parsing", () => {
   it("parses composition data", () => {

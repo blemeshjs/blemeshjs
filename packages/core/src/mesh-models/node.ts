@@ -15,11 +15,11 @@ import {
   UUID,
   Location,
   MeshCDB,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { AddressRange } from "./address-range.js";
 import { Element } from "./element.js";
 import { MeshNetwork } from "./mesh-network.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { Security } from "./security.js";
 import { Provisioner } from "./provisioner.js";
 import { NodeFeaturesState, NodeFeatureState } from "./node-features.js";

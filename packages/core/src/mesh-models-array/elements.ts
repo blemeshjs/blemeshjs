@@ -8,7 +8,7 @@ import {
   UInt32,
   UInt8,
   Location,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Element } from "../mesh-models/element.js";
 import { concatUint8Arrays } from "uint8array-extras";
 import { Model } from "../mesh-models/model.js";

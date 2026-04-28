@@ -1,4 +1,4 @@
-import { Data, MeshMessage, UInt32 } from "@mesh-link-js/utils";
+import { Data, MeshMessage, UInt32 } from "@blemeshjs/utils";
 import { uint8ArrayToHex } from "uint8array-extras";
 
 /**

@@ -1,9 +1,10 @@
-import { DiscoveredUnprovisionedPeripheral } from "@mesh-link-js/sdk-web";
+import { DiscoveredUnprovisionedPeripheral } from "@blemeshjs/sdk-web";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 export type ProvisioningStatus =
   | "idle"
+  | "ready"
   | "provisioning-scan"
   | "provisioning"
   | "provisioning-done"

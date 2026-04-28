@@ -1,4 +1,4 @@
-import { Data, StaticAcknowledgedMeshMessage, UInt32 } from "@mesh-link-js/utils";
+import { Data, StaticAcknowledgedMeshMessage, UInt32 } from "@blemeshjs/utils";
 import { GenericOnOffStatus } from "./generic-on-off-status.js";
 
 export class GenericOnOffGet extends StaticAcknowledgedMeshMessage {

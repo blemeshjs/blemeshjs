@@ -1,4 +1,4 @@
-import { Algorithm, Data, Int32, OptionSet, readUInt16BE, UInt16 } from "@mesh-link-js/utils";
+import { Algorithm, Data, Int32, OptionSet, readUInt16BE, UInt16 } from "@blemeshjs/utils";
 
 /**
  * A set of algorithms supported by the Unprovisioned Device.

@@ -1,4 +1,4 @@
-import { LogCategory, LoggerHandler, LogLevel } from "@mesh-link-js/utils";
+import { LogCategory, LoggerHandler, LogLevel } from "@blemeshjs/utils";
 
 export class ConsoleLogger extends LoggerHandler {
   private minLevel: LogLevel;

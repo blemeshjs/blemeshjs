@@ -1,0 +1,3979 @@
+---
+title: Utils Package
+description: Shared identifiers, storage abstractions, enums, message helpers, and low-level support types.
+icon: Wrench
+---
+
+This page is auto-generated from `packages/utils/src/**` and the public exports exposed by `@blemeshjs/utils`.
+
+> Update TSDoc comments in source, then run `yarn workspace docs api:generate`. Normal docs `dev`, `build`, and `types:check` runs regenerate these pages automatically.
+
+## Package overview
+
+| Field | Value |
+| --- | --- |
+| Package | `@blemeshjs/utils` |
+| Entry point | `packages/utils/src/index.ts` |
+| Source tree | `packages/utils/src/**` |
+
+
+## Export map
+
+| Export | Kind | Summary |
+| --- | --- | --- |
+| [AccessError](#accesserror) | Class | A set of errors originating from the access layer. |
+| [AcknowledgedConfigMessage](#acknowledgedconfigmessage) | Class | A base protocol for acknowledged Configuration messages. Acknowledged messages will be responded with a status message. |
+| [AcknowledgedMeshMessage](#acknowledgedmeshmessage) | Class | The base class for acknowledged messages. An acknowledged message is transmitted and acknowledged by each receiving element by responding to that message. The response is typically a status message. If a response is not received within an arbitrary time period, the message will be retransmitted automatically until the timeout occurs. Acknowledged messages are expected to be replied with a status message with a message of type set as `AcknowledgedMeshMessage.responseOpCode`. Access Layer timer will wait for `NetworkParameters.acknowledgmentMessageTimeout` seconds before throwing a timeout. |
+| [AcknowledgedProxyConfigurationMessage](#acknowledgedproxyconfigurationmessage) | Class | A base class for acknowledged proxy configuration messages. An acknowledged message is transmitted and acknowledged by each receiving element by responding to that message. The response is typically a status message. If a response is not received within an arbitrary time period, the message will be retransmitted automatically until the timeout occurs. |
+| [Address](#address) | Class | Bluetooth Mesh address type. Type alias for `UInt16`. In Bluetooth mesh addresses are divided into several categories: - Unassigned Address - address 0x0000. - Unicast Addresses - a unique address of an `Element`. - Group Address - a group address allows sending messages to multiple receivers. - Virtual Group Address - each virtual address is a hash of a Virtual Label (UUID). - Fixed Group Addresses - set of predefined group addresses. |
+| [Algorithm](#algorithm) | Unknown | No description yet. |
+| [assertArray](#assertarray) | Function | No description yet. |
+| [assertBoolean](#assertboolean) | Function | No description yet. |
+| [assertDirectInstanceOf](#assertdirectinstanceof) | Function | No description yet. |
+| [assertEnumCase](#assertenumcase) | Function | No description yet. |
+| [AssertionTypeDescription](#assertiontypedescription) | Type alias | No description yet. |
+| [assertNumber](#assertnumber) | Function | No description yet. |
+| [assertObject](#assertobject) | Function | No description yet. |
+| [assertString](#assertstring) | Function | No description yet. |
+| [AttentionTimerHandler](#attentiontimerhandler) | Class | An Attention Timer Handler is used to notify the app about the Attention Timer state. The Attention Timer is used to attract the user's attention to the device. It may only be started and stopped by sending a `HealthAttentionSet` or `HealthAttentionSetUnacknowledged` message to the main Element of the local Node. |
+| [BackgroundTimer](#backgroundtimer) | Class | No description yet. |
+| [BaseMeshMessage](#basemeshmessage) | Class | The base interface of every mesh message. Mesh messages can be sent to and received from a mesh network. |
+| [BigUInt](#biguint) | Class | No description yet. |
+| [BindableTinyEmitter](#bindabletinyemitter) | Class | No description yet. |
+| [bitArrayToUint8Array](#bitarraytouint8array) | Function | No description yet. |
+| [BleError](#bleerror) | Class | No description yet. |
+| [calculateHMAC_SHA256](#calculatehmac-sha256) | Function | No description yet. |
+| [calculateSharedSecret](#calculatesharedsecret) | Function | No description yet. |
+| [CancellationError](#cancellationerror) | Class | No description yet. |
+| [CBCentralManager](#cbcentralmanager) | Class | Abstract class representing a Bluetooth Central Manager. Subclasses must implement scanning, connection, and state management logic. |
+| [CBCentralManagerHandler](#cbcentralmanagerhandler) | Class | Abstract base class representing the handler of a central Bluetooth manager. Use this class to respond to central manager events such as state updates and peripheral discovery. |
+| [CBCentralManagerState](#cbcentralmanagerstate) | Enumeration | No description yet. |
+| [CBCharacteristic](#cbcharacteristic) | Class | No description yet. |
+| [CBCharacteristicProperties](#cbcharacteristicproperties) | Enumeration | No description yet. |
+| [CBCharacteristicWriteType](#cbcharacteristicwritetype) | Enumeration | No description yet. |
+| [CBPeripheral](#cbperipheral) | Class | No description yet. |
+| [CBPeripheralHandler](#cbperipheralhandler) | Class | Abstract base class representing the handler of a Bluetooth peripheral. Use this class to respond to events such as service discovery and characteristic updates. |
+| [CBPeripheralState](#cbperipheralstate) | Enumeration | No description yet. |
+| [CBService](#cbservice) | Class | No description yet. |
+| [CBUUID](#cbuuid) | Class | Represents a Core Bluetooth UUID. Can be constructed from a string, number, or Uint8Array. Provides utility methods for comparison and string representation. |
+| [chunkedMap](#chunkedmap) | Function | No description yet. |
+| [Class](#class) | Type alias | Matches a [`class`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes). |
+| [ClosedRange](#closedrange) | Class | No description yet. |
+| [CompanyIdentifier](#companyidentifier) | Unknown | Source: https://www.bluetooth.com/specifications/assigned-numbers/ Last update date: 7 June 2023 |
+| [ConfigAnyModelMessage](#configanymodelmessage) | Class | A base protocol for config messages related to Models, where the Model can be a vendor model. |
+| [ConfigAppKeyMessage](#configappkeymessage) | Class | A base protocol for config messages related to Application Keys. |
+| [ConfigElementMessage](#configelementmessage) | Class | A base protocol for config messages related to Elements. |
+| [ConfigMessage](#configmessage) | Class | A base protocol for all Configuration messages. Configuration messages are used to configure Nodes. They are sent between Configuration Client model on the Configuration Manager and Configuration Server model on the device, which is being configured. All Config messages are encrypted using target Node's Device Key. |
+| [ConfigMessageStatus](#configmessagestatus) | Unknown | No description yet. |
+| [ConfigModelMessage](#configmodelmessage) | Class | A base protocol for config messages related to Models. |
+| [ConfigNetAndAppKeyMessage](#confignetandappkeymessage) | Class | A base protocol for config messages related to Network Key and Application Key. |
+| [ConfigNetKeyMessage](#confignetkeymessage) | Class | A base protocol for config messages related to Network Keys. |
+| [ConfigResponse](#configresponse) | Class | The base class for response messages. |
+| [ConfigStatusMessage](#configstatusmessage) | Class | A base protocol for config status messages. |
+| [Data](#data) | Type alias | No description yet. |
+| [dataViewToUint8Array](#dataviewtouint8array) | Function | No description yet. |
+| [DecodingError](#decodingerror) | Class | No description yet. |
+| [decryptAesCcm](#decryptaesccm) | Function | No description yet. |
+| [DispatchQueue](#dispatchqueue) | Class | No description yet. |
+| [Double](#double) | Type alias | Represents a 64-bit IEEE‑754 double-precision floating-point (the same as JavaScript's built-in `number` type). |
+| [encryptAesCcm](#encryptaesccm) | Function | No description yet. |
+| [encryptAesEcb](#encryptaesecb) | Function | No description yet. |
+| [ExportConfiguration](#exportconfiguration) | Enumeration | configuration allows to narrow down the exported configuration to a required minimum. When sharing a mesh network configuration a care must be taken not to share sensitive information to prevent unauthorized use. When sharing a configuration with a guest, a separate Network Key and set of Application Keys should be created. The Nodes given to the guest under control should be configured to use the keys. The guest can be given only the part of the network related to the guest Network Key, with all other data excluded. Also, to prevent reconfiguration of the Nodes, only partial Nodes configuration can be shared, which excludes the Device Keys of those Nodes. |
+| [Failure](#failure) | Class | No description yet. |
+| [generateElGamalKeyPair](#generateelgamalkeypair) | Function | No description yet. |
+| [getEnumKeys](#getenumkeys) | Function | No description yet. |
+| [getEnumValues](#getenumvalues) | Function | No description yet. |
+| [getSecureRandomBytes](#getsecurerandombytes) | Function | No description yet. |
+| [HeartbeatSubscription](#heartbeatsubscription) | Class | No description yet. |
+| [Hex](#hex) | Type alias | Represents a hexadecimal string (e.g., color codes, hashes). |
+| [hexToUuid](#hextouuid) | Function | No description yet. |
+| [importKeyFromPrivate](#importkeyfromprivate) | Function | No description yet. |
+| [Int16](#int16) | Type alias | Represents a signed 16-bit integer. |
+| [Int32](#int32) | Type alias | Represents a signed 32-bit integer. |
+| [Int64](#int64) | Type alias | Represents a signed 64-bit integer using Long. |
+| [Int8](#int8) | Type alias | Represents a signed 8-bit integer. |
+| [isArray](#isarray) | Function | No description yet. |
+| [isDirectInstanceOf](#isdirectinstanceof) | Function | No description yet. |
+| [isEnumCase](#isenumcase) | Function | No description yet. |
+| [isFunction](#isfunction) | Function | No description yet. |
+| [isNull](#isnull) | Function | No description yet. |
+| [isNumber](#isnumber) | Function | No description yet. |
+| [isObject](#isobject) | Function | No description yet. |
+| [isValidUuid](#isvaliduuid) | Function | No description yet. |
+| [IvIndex](#ivindex) | Class | No description yet. |
+| [Key](#key) | Class | Base protocol for Network and Application Keys. |
+| [KeyIndex](#keyindex) | Class | The key index is a 12-bit unsigned integer identifying a Network or an Application Key. The key indexes within Network Keys and Application Keys must be distinct. This type is an alias for `UInt16`. To check the range, use `isValidKeyIndex`. |
+| [KeyRefreshPhase](#keyrefreshphase) | Unknown | Safely parses numeric input into a KeyRefreshPhase. |
+| [KeySet](#keyset) | Class | No description yet. |
+| [LocalProvisionerUuidKey](#localprovisioneruuidkey) | Variable | The key used in `UserDefaults` to store the UUID of the local Provisioner for each loaded mesh network. The intent is to restore the same instance (move to index 0) whenever the same mesh network configuration is imported. Local Provisioner UUID is saved whenever a new Provisioner is added or moved to index 0 in the `MeshNetwork.provisioners` array in mesh network object. Use `MeshNetwork.restoreLocalProvisioner()` to restore the Provisioner instance. |
+| [Location](#location) | Unknown | No description yet. |
+| [LogCategory](#logcategory) | Enumeration | The log category indicates the component that created the log entry. |
+| [LoggerHandler](#loggerhandler) | Class | No description yet. |
+| [LogLevel](#loglevel) | Class | Log level, which allows filtering logs by importance. |
+| [longMin](#longmin) | Function | No description yet. |
+| [MeshCDB](#meshcdb) | Unknown | A namespace for Mesh Configuration Database Zod schemas. This provides a clean, organized, and properly typed structure for validation. |
+| [MeshMessage](#meshmessage) | Class | The base class of every mesh message. Mesh messages can be sent to and received from the mesh network. For messages with the Op Code known during compilation a `StaticMeshMessage` protocol should be preferred. Parameters `MeshMessage.security` and `MeshMessage.isSegmented` are checked and should be set only for outgoing messages. |
+| [MeshMessageSecurity](#meshmessagesecurity) | Enumeration | The mesh message security enum determines authentication level which shall be used when encrypting a segmented mesh message. This filed is used to determine the TransMIC. The Message Integrity Check for Transport (TransMIC) is a 32-bit or 64-bit field that authenticates that the Access payload has not been changed. For a segmented message, where SEG is set to 1, the size of the TransMIC is determined by the value of the SZMIC field in the Lower Transport PDU. For unsegmented messages, the size of the TransMIC is 32 bits for data messages. Control messages do not have a TransMIC. |
+| [MeshNetworkError](#meshnetworkerror) | Class | A set of generic mesh errors. |
+| [MeshProvisioningService](#meshprovisioningservice) | Class | A structure defining Mesh Provisioning service, which shall be present on unprovisioned devices. It allows sending provisioning messages. When provisioning is complete, the service shall be replaced with Mesh Proxy service. |
+| [MeshProxyService](#meshproxyservice) | Class | A structure defining Mesh Proxy service, which shall be present on provisioned Nodes. The Mesh Proxy service is used to send mesh messages over GATT. |
+| [MeshResponse](#meshresponse) | Class | The base class for response messages. |
+| [MeshService](#meshservice) | Class | A base class for mesh service objects. |
+| [meshTimestamp](#meshtimestamp) | Function | No description yet. |
+| [NSNull](#nsnull) | Type alias | Unique symbol used to represent a special "null" value within the namespace. Useful for distinguishing between JavaScript's native `null` and a custom sentinel value. |
+| [OobInformation](#oobinformation) | Class | Information that points to Out-Of-Band (OOB) information needed for provisioning. |
+| [OptionSet](#optionset) | Class | No description yet. |
+| [packInt16BE](#packint16be) | Function | No description yet. |
+| [packInt16LE](#packint16le) | Function | No description yet. |
+| [packInt32BE](#packint32be) | Function | No description yet. |
+| [packInt32LE](#packint32le) | Function | No description yet. |
+| [packUInt16BE](#packuint16be) | Function | No description yet. |
+| [packUInt16LE](#packuint16le) | Function | No description yet. |
+| [packUInt32BE](#packuint32be) | Function | No description yet. |
+| [packUInt32LE](#packuint32le) | Function | No description yet. |
+| [ProxyConfigurationMessage](#proxyconfigurationmessage) | Class | A base class for Proxy configuration messages. |
+| [ProxyFilterEventHandler](#proxyfiltereventhandler) | Interface | No description yet. |
+| [ProxyFilterHandler](#proxyfilterhandler) | Class | The delegate that will be notified about changes of the Proxy Filter. |
+| [ProxyFilterSetup](#proxyfiltersetup) | Unknown | No description yet. |
+| [ProxyFilterSetupType](#proxyfiltersetuptype) | Enumeration | An enumeration for different initial configurations of the Proxy Filter. |
+| [ProxyFilterType](#proxyfiltertype) | Unknown | No description yet. |
+| [RangeObject](#rangeobject) | Class | A base class for an address or scene range. Ranges are assigned to `Provisioner` objects. Each Provisioner may provision new Nodes, create Groups and Scenes using only values from assigned ranges. The assigned ranges may not overlap with the ranges of other Provisioners, otherwise different instances could reuse the same values leading to collisions. |
+| [readUInt16BE](#readuint16be) | Function | No description yet. |
+| [readUInt16LE](#readuint16le) | Function | No description yet. |
+| [readUInt32BE](#readuint32be) | Function | No description yet. |
+| [readUInt32LE](#readuint32le) | Function | No description yet. |
+| [Result](#result) | Type alias | No description yet. |
+| [SceneNumber](#scenenumber) | Class | Scene number enum type. |
+| [SigModelId](#sigmodelid) | Enumeration | No description yet. |
+| [StaticAcknowledgedMeshMessage](#staticacknowledgedmeshmessage) | Class | A base class for acknowledged messages which opcode and the type of the response message are known during compilation time. The message must have the ``StaticAcknowledgedMeshMessage/responseType`` specified. |
+| [StaticAcknowledgedProxyConfigurationMessage](#staticacknowledgedproxyconfigurationmessage) | Class | A base class static acknowledged proxy configuration messages. |
+| [StaticMeshMessage](#staticmeshmessage) | Class | A type of a mesh message which opcode is known during compilation time. |
+| [StaticMeshResponse](#staticmeshresponse) | Class | The base class for response messages with an opcode known at the compilation time. |
+| [StaticProxyConfigurationMessage](#staticproxyconfigurationmessage) | Class | A type of Proxy Configuration message which opcode is known during compilation time. |
+| [StaticUnacknowledgedMeshMessage](#staticunacknowledgedmeshmessage) | Class | The base class for unacknowledged messages with an opcode known at the compilation time. |
+| [StatusMessage](#statusmessage) | Class | A mesh message containing the operation status. |
+| [StepResolution](#stepresolution) | Unknown | No description yet. |
+| [Storage](#storage) | Class | Abstract base class for storage engines. Subclasses must implement the core storage methods: `get`, `set`, `remove`, and `clear`. This class defines the contract for key-value storage with asynchronous access. |
+| [Success](#success) | Class | No description yet. |
+| [Task](#task) | Class | No description yet. |
+| [TimeInterval](#timeinterval) | Type alias | Double |
+| [timeIntervalSinceNow](#timeintervalsincenow) | Function | No description yet. |
+| [toPaddedHex16](#topaddedhex16) | Function | No description yet. |
+| [toPaddedHex32](#topaddedhex32) | Function | No description yet. |
+| [toPaddedHex64](#topaddedhex64) | Function | No description yet. |
+| [toPaddedHex64Signed](#topaddedhex64signed) | Function | No description yet. |
+| [toPaddedHex8](#topaddedhex8) | Function | No description yet. |
+| [TransactionMessage](#transactionmessage) | Class | A message with Transaction Identifier. The Transaction Identifier will automatically be set and incremented each time a message is sent. The counter is reused for all types that extend this protocol. |
+| [TransitionMessage](#transitionmessage) | Class | A base protocol for a message that can initiate a non-immediate state transition. |
+| [TransitionStatusMessage](#transitionstatusmessage) | Class | A base protocol for messages sent as responses to ``TransitionMessage``s. |
+| [TransitionTime](#transitiontime) | Class | This structure represents a time needed to transition from one state to another, for example dimming a light. Internally, it uses steps and step resolution. Thanks to that only some time intervals are possible. Use ``TransitionTime/interval`` to get exact time |
+| [Transport](#transport) | Class | Abstract base class for transport implementations. Provides a static method to retrieve the advertisement data service data key. |
+| [tryOptionalAsync](#tryoptionalasync) | Function | No description yet. |
+| [typeOf](#typeof) | Function | No description yet. |
+| [UInt16](#uint16) | Type alias | Represents an unsigned 16-bit integer. |
+| [UInt32](#uint32) | Type alias | Represents an unsigned 32-bit integer. |
+| [UInt64](#uint64) | Type alias | Represents an unsigned 64-bit integer using bigint. |
+| [UInt8](#uint8) | Type alias | Represents an unsigned 8-bit integer. |
+| [UnacknowledgedConfigMessage](#unacknowledgedconfigmessage) | Class | A base protocol for unacknowledged Configuration messages. Unacknowledged configuration messages are sent as replies to acknowledged messages. |
+| [UnacknowledgedMeshMessage](#unacknowledgedmeshmessage) | Class | The base class for unacknowledged messages. |
+| [unpackInt16BE](#unpackint16be) | Function | No description yet. |
+| [unpackInt16LE](#unpackint16le) | Function | No description yet. |
+| [unpackInt32BE](#unpackint32be) | Function | No description yet. |
+| [unpackInt32LE](#unpackint32le) | Function | No description yet. |
+| [unpackUInt16BE](#unpackuint16be) | Function | No description yet. |
+| [unpackUInt16LE](#unpackuint16le) | Function | No description yet. |
+| [unpackUInt32BE](#unpackuint32be) | Function | No description yet. |
+| [unpackUInt32LE](#unpackuint32le) | Function | No description yet. |
+| [UserDefaults](#userdefaults) | Class | No description yet. |
+| [UUID](#uuid) | Class | Represents a universally unique identifier (UUID) with Swift-like API |
+| [uuidToHex](#uuidtohex) | Function | No description yet. |
+| [uuidToUint8Array](#uuidtouint8array) | Function | No description yet. |
+| [writeInt16BE](#writeint16be) | Function | No description yet. |
+| [writeInt16LE](#writeint16le) | Function | No description yet. |
+| [writeInt32BE](#writeint32be) | Function | No description yet. |
+| [writeInt32LE](#writeint32le) | Function | No description yet. |
+| [writeUInt16BE](#writeuint16be) | Function | No description yet. |
+| [writeUInt16LE](#writeuint16le) | Function | No description yet. |
+| [writeUInt32BE](#writeuint32be) | Function | No description yet. |
+| [writeUInt32LE](#writeuint32le) | Function | No description yet. |
+| [xorUint8Arrays](#xoruint8arrays) | Function | No description yet. |
+
+## Exported API
+
+### AccessError
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/access-error.ts#L4`
+
+
+A set of errors originating from the access layer.
+
+
+```ts
+class AccessError extends Error
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `busy` | `AccessError` | Error thrown when trying to send a message to an address for which another message is already being sent. |
+| `cancelled` | `AccessError` | Thrown when sending the message was cancelled. |
+| `cannotDelete` | `AccessError` | Error thrown when the Provisioner is trying to delete the last Network Key from the Node, or a key that is used to secure the message. |
+| `cannotRelay` | `AccessError` | Thrown when a message is sent that is encrypted with a Network Key that is not known to the connected GATT Proxy, or no GATT Proxy is connected. |
+| `invalidDestination` | `AccessError` | Thrown when the destination Address is not known and the library cannot determine the Network Key to use. |
+| `invalidElement` | `AccessError` | Thrown when trying to send a message using an Element that does not belong to the local Provisioner's Node. |
+| `invalidKey` | `AccessError` | Thrown when the target Node cannot decrypt messages sent with the given key. |
+| `invalidSource` | `AccessError` | Error thrown when the local Provisioner does not have a Unicast Address specified and is not able to send requested message. |
+| `invalidTtl` | `AccessError` | Thrown when the given TTL is not valid. Valid TTL must be 0 or in range 2...127. |
+| `modelNotBoundToAppKey` | `AccessError` | Thrown when trying to send a message from a Model that does not have any Application Key bound to it. |
+| `noDeviceKey` | `AccessError` | Thrown when trying to send a config message to a Node of which the Device Key is not known. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+| `timeout` | `AccessError` | Thrown, when the acknowledgment has not been received until the time run out. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### AcknowledgedConfigMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L256`
+
+
+A base protocol for acknowledged Configuration messages. Acknowledged messages will be responded with a status message.
+
+
+```ts
+class AcknowledgedConfigMessage extends ConfigMessage<this> & StaticAcknowledgedMeshMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `AcknowledgedConfigMessage(): AcknowledgedConfigMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `Pick<typeof StaticMeshResponse, "fromData" \| "opCode">` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### AcknowledgedMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L100`
+
+
+The base class for acknowledged messages. An acknowledged message is transmitted and acknowledged by each receiving element by responding to that message. The response is typically a status message. If a response is not received within an arbitrary time period, the message will be retransmitted automatically until the timeout occurs. Acknowledged messages are expected to be replied with a status message with a message of type set as `AcknowledgedMeshMessage.responseOpCode`. Access Layer timer will wait for `NetworkParameters.acknowledgmentMessageTimeout` seconds before throwing a timeout.
+
+
+```ts
+class AcknowledgedMeshMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `AcknowledgedMeshMessage(): AcknowledgedMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### AcknowledgedProxyConfigurationMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/proxy-configuration-message.ts#L34`
+
+
+A base class for acknowledged proxy configuration messages. An acknowledged message is transmitted and acknowledged by each receiving element by responding to that message. The response is typically a status message. If a response is not received within an arbitrary time period, the message will be retransmitted automatically until the timeout occurs.
+
+
+```ts
+class AcknowledgedProxyConfigurationMessage extends ProxyConfigurationMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `AcknowledgedProxyConfigurationMessage(): AcknowledgedProxyConfigurationMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### Address
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/address.ts#L14`
+
+
+Bluetooth Mesh address type. Type alias for `UInt16`. In Bluetooth mesh addresses are divided into several categories: - Unassigned Address - address 0x0000. - Unicast Addresses - a unique address of an `Element`. - Group Address - a group address allows sending messages to multiple receivers. - Virtual Group Address - each virtual address is a hash of a Virtual Label (UUID). - Fixed Group Addresses - set of predefined group addresses.
+
+
+```ts
+class Address extends Number
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Address(value: number): Address;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `allFriends` | `Address` | A message sent to the all-friends address will be processed by the Primary Element of all nodes that have the friend functionality enabled. That means, that Models on the Primary Element of all the Nodes are automatically subscribed to all-friends address if the Node has Friend functionality enabled. Models on the Primary and other Elements of a Node may subscribe to this address to receive messages no matter what the feature state is. |
+| `allNodes` | `Address` | A message sent to the all-nodes address will be processed by the Primary Element of all nodes. That means, that all Models on the Primary Element of all the Nodes are automatically subscribed to all-nodes address. It is not possible for Models on other Elements to receive messages sent to All Nodes address, as they cannot subscribe to this address. |
+| `allProxies` | `Address` | A message sent to the all-proxies address will be processed by the Primary Element of all nodes that have the friend functionality enabled. That means, that Models on the Primary Element of all the Nodes are automatically subscribed to all-proxies address if the Node has Proxy functionality enabled. Models on the Primary and other Elements of a Node may subscribe to this address to receive messages no matter what the feature state is. |
+| `allRelays` | `Address` | A message sent to the all-relays address will be processed by the Primary Element of all nodes that have the relay functionality enabled. That means, that Models on the Primary Element of all the Nodes are automatically subscribed to all-relays address if the Node has Relay functionality enabled. Models on the Primary and other Elements of a Node may subscribe to this address to receive messages no matter what the feature state is. |
+| `EPSILON` | `number` | The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1 that is representable as a Number value, which is approximately: 2.2204460492503130808472633361816 x 10‍−‍16. |
+| `MAX_SAFE_INTEGER` | `number` | The value of the largest integer n such that n and n + 1 are both exactly representable as a Number value. The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. |
+| `MAX_VALUE` | `number` | The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. |
+| `maxGroupAddress` | `Address` | No description yet. |
+| `maxUnicastAddress` | `Address` | No description yet. |
+| `maxVirtualAddress` | `Address` | No description yet. |
+| `MIN_SAFE_INTEGER` | `number` | The value of the smallest integer n such that n and n − 1 are both exactly representable as a Number value. The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)). |
+| `MIN_VALUE` | `number` | The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. |
+| `minGroupAddress` | `Address` | No description yet. |
+| `minUnicastAddress` | `Address` | No description yet. |
+| `minVirtualAddress` | `Address` | No description yet. |
+| `NaN` | `number` | A value that is not a number. In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function. |
+| `NEGATIVE_INFINITY` | `number` | A value that is less than the largest negative number that can be represented in JavaScript. JavaScript displays NEGATIVE_INFINITY values as -infinity. |
+| `POSITIVE_INFINITY` | `number` | A value greater than the largest number that can be represented in JavaScript. JavaScript displays POSITIVE_INFINITY values as infinity. |
+| `unassignedAddress` | `Address` | No description yet. |
+| `bytes` | `unknown` | No description yet. |
+| `bytesBE` | `unknown` | No description yet. |
+| `dec` | `unknown` | No description yet. |
+| `hex` | `unknown` | No description yet. |
+| `isGroup` | `unknown` | No description yet. |
+| `isSpecialGroup` | `unknown` | No description yet. |
+| `isUnassigned` | `unknown` | No description yet. |
+| `isUnicast` | `unknown` | No description yet. |
+| `isValidAddress` | `unknown` | No description yet. |
+| `isVirtual` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: Address): boolean;` | No description yet. |
+| `toExponential` | `toExponential(fractionDigits?: number): string;` | No description yet. |
+| `toFixed` | `toFixed(fractionDigits?: number): string;` | No description yet. |
+| `toLocaleString` | `toLocaleString(locales?: string \| string[], options?: NumberFormatOptions): string;` | No description yet. |
+| `toPrecision` | `toPrecision(precision?: number): string;` | No description yet. |
+| `toString` | `toString(radix?: number): string;` | No description yet. |
+| `valueOf` | `valueOf(): number;` | No description yet. |
+| `fromHex` | `fromHex(hex: string): Address \| undefined;` | No description yet. |
+| `isFinite` | `isFinite(number: unknown): boolean;` | No description yet. |
+| `isInteger` | `isInteger(number: unknown): boolean;` | No description yet. |
+| `isNaN` | `isNaN(number: unknown): boolean;` | No description yet. |
+| `isSafeInteger` | `isSafeInteger(number: unknown): boolean;` | No description yet. |
+| `parseFloat` | `parseFloat(string: string): number;` | No description yet. |
+| `parseInt` | `parseInt(string: string, radix?: number): number;` | No description yet. |
+
+### Algorithm
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/enums/algorithm.ts#L5`
+
+### assertArray
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L196`
+
+
+```ts
+function assertArray<T>(value: unknown, assertion?: (element: unknown, message?: string) => asserts element is T, message?: string): asserts value is T[];
+```
+
+### assertBoolean
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L255`
+
+
+```ts
+function assertBoolean(value: unknown, message?: string): asserts value is boolean;
+```
+
+### assertDirectInstanceOf
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L235`
+
+
+```ts
+function assertDirectInstanceOf<T>(instance: unknown, class_: Class<T>, message?: string): asserts instance is T;
+```
+
+### assertEnumCase
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L245`
+
+
+```ts
+function assertEnumCase<T>(value: unknown, targetEnum: T, message?: string): asserts value is T[keyof T];
+```
+
+### AssertionTypeDescription
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/helpers/common.ts#L155`
+
+
+```ts
+type AssertionTypeDescription = typeof _assertionTypeDescriptions[number];
+```
+
+### assertNumber
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L171`
+
+
+```ts
+function assertNumber(value: unknown, message?: string): asserts value is number;
+```
+
+### assertObject
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L221`
+
+
+```ts
+function assertObject(value: unknown, message?: string): asserts value is object;
+```
+
+### assertString
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L161`
+
+
+```ts
+function assertString(value: unknown, message?: string): asserts value is string;
+```
+
+### AttentionTimerHandler
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/attention-timeout-handler.ts#L12`
+
+
+An Attention Timer Handler is used to notify the app about the Attention Timer state. The Attention Timer is used to attract the user's attention to the device. It may only be started and stopped by sending a `HealthAttentionSet` or `HealthAttentionSetUnacknowledged` message to the main Element of the local Node.
+
+
+```ts
+class AttentionTimerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `AttentionTimerHandler(): AttentionTimerHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `attentionTimerDidStart` | `attentionTimerDidStart(duration: number): void;` | No description yet. |
+| `attentionTimerDidStop` | `attentionTimerDidStop(): void;` | No description yet. |
+
+### BackgroundTimer
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/background-timer.ts#L7`
+
+
+```ts
+class BackgroundTimer
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BackgroundTimer(interval: number, repeats: boolean, callback: TimerCallback, queue: DispatchQueue): BackgroundTimer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `interval` | `number` | No description yet. |
+| `repeats` | `boolean` | No description yet. |
+| `remainingTime` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `invalidate` | `invalidate(): void;` | No description yet. |
+| `scheduledTimer` | `scheduledTimer(interval: number, repeats: boolean, callback: TimerCallback, queue: DispatchQueue): BackgroundTimer;` | No description yet. |
+
+### BaseMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L9`
+
+
+The base interface of every mesh message. Mesh messages can be sent to and received from a mesh network.
+
+
+```ts
+class BaseMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BaseMeshMessage(): BaseMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `parameters` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### BigUInt
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/big-uint.ts#L1`
+
+
+```ts
+class BigUInt
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BigUInt(decimalString: string): BigUInt;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `maxBytes` | `14` | No description yet. |
+| `maxDecimalDigits` | `32` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toBytes` | `toBytes(sizeInBytes: number): Uint8Array<ArrayBufferLike> \| undefined;` | No description yet. |
+| `toDecimalString` | `toDecimalString(): string;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `random` | `random(length: number): BigUInt \| undefined;` | No description yet. |
+
+### BindableTinyEmitter
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/emitter.ts#L1`
+
+
+```ts
+class BindableTinyEmitter<E>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BindableTinyEmitter<E>(): BindableTinyEmitter<E>;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `bindAllEvents(handler: Partial<E>): () => void;` | No description yet. |
+| `emit` | `emit<K>(event: K, args: Parameters<E[K]>): void;` | No description yet. |
+| `off` | `off<K>(event: K, fn?: E[K]): void;` | No description yet. |
+| `on` | `on<K>(event: K, fn: E[K]): () => void;` | No description yet. |
+| `unbindAllEvents` | `unbindAllEvents(handler: Partial<E>): void;` | No description yet. |
+
+### bitArrayToUint8Array
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L4`
+
+
+```ts
+function bitArrayToUint8Array(signedInts: BitArray): Uint8Array;
+```
+
+### BleError
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L407`
+
+
+```ts
+class BleError extends Error
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BleError(code: number, message: string): BleError;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `code` | `number` | No description yet. |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### calculateHMAC_SHA256
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L123`
+
+
+```ts
+function calculateHMAC_SHA256(key: Uint8Array, data: Uint8Array): Uint8Array;
+```
+
+### calculateSharedSecret
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L102`
+
+
+```ts
+function calculateSharedSecret(privateKeyHex: string, publicKeyHex: string): string;
+```
+
+### CancellationError
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/errors.ts#L1`
+
+
+```ts
+class CancellationError extends Error
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CancellationError(message: string): CancellationError;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### CBCentralManager
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L367`
+
+
+Abstract class representing a Bluetooth Central Manager. Subclasses must implement scanning, connection, and state management logic.
+
+
+```ts
+class CBCentralManager extends BindableTinyEmitter<CBCentralManagerHandler>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBCentralManager(): CBCentralManager;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `state` | `CBCentralManagerState` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `bindAllEvents(handler: Partial<E>): () => void;` | No description yet. |
+| `cancelPeripheralConnection` | `cancelPeripheralConnection(peripheral: CBPeripheral): Promise<void>;` | No description yet. |
+| `connect` | `connect(peripheral: CBPeripheral): Promise<void>;` | No description yet. |
+| `emit` | `emit<K>(event: K, args: Parameters<CBCentralManagerHandler[K]>): void;` | No description yet. |
+| `getState` | `getState(): CBCentralManagerState;` | No description yet. |
+| `off` | `off<K>(event: K, fn?: CBCentralManagerHandler[K]): void;` | No description yet. |
+| `on` | `on<K>(event: K, fn: CBCentralManagerHandler[K]): () => void;` | No description yet. |
+| `retrieveConnectedPeripherals` | `retrieveConnectedPeripherals(serviceUUIDs?: string[]): CBPeripheral[];` | No description yet. |
+| `retrievePeripherals` | `retrievePeripherals(identifiers: UUID[]): CBPeripheral[];` | No description yet. |
+| `scanForPeripherals` | `scanForPeripherals(serviceUUIDs?: string[]): Promise<void>;` | No description yet. |
+| `stopScan` | `stopScan(): Promise<void>;` | No description yet. |
+| `unbindAllEvents` | `unbindAllEvents(handler: Partial<E>): void;` | No description yet. |
+
+### CBCentralManagerHandler
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L292`
+
+
+Abstract base class representing the handler of a central Bluetooth manager. Use this class to respond to central manager events such as state updates and peripheral discovery.
+
+
+```ts
+class CBCentralManagerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBCentralManagerHandler(): CBCentralManagerHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `centralManagerDidConnect` | `centralManagerDidConnect(central: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
+| `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(central: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, advertisementData?: Record<string, unknown>): void;` | No description yet. |
+| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidUpdateState` | `centralManagerDidUpdateState(central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
+
+### CBCentralManagerState
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L354`
+
+
+```ts
+enum CBCentralManagerState {
+  poweredOff,
+  poweredOn,
+  resetting,
+  unauthorized,
+  unknown,
+  unsupported,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `poweredOff` | No description yet. |
+| `poweredOn` | No description yet. |
+| `resetting` | No description yet. |
+| `unauthorized` | No description yet. |
+| `unknown` | No description yet. |
+| `unsupported` | No description yet. |
+
+### CBCharacteristic
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L154`
+
+
+```ts
+class CBCharacteristic
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBCharacteristic(): CBCharacteristic;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `isNotifying` | `boolean` | If true, the characteristic is currently notifying (i.e. streaming updates) |
+| `properties` | `CBCharacteristicProperties[]` | Characteristic properties (e.g., read, write, notify) |
+| `serviceUUID` | `CBUUID` | UUID of the service this characteristic belongs to |
+| `uuid` | `CBUUID` | THe UUID of the characteristic. |
+| `value` | `Data` | Last known value, if read or notified |
+| `isMeshProvisioningDataInCharacteristic` | `unknown` | No description yet. |
+| `isMeshProvisioningDataOutCharacteristic` | `unknown` | No description yet. |
+| `isMeshProxyDataInCharacteristic` | `unknown` | No description yet. |
+| `isMeshProxyDataOutCharacteristic` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: unknown): boolean;` | No description yet. |
+
+### CBCharacteristicProperties
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L136`
+
+
+```ts
+enum CBCharacteristicProperties {
+  authenticatedSignedWrites,
+  broadcast,
+  extendedProperties,
+  indicate,
+  indicateEncryptionRequired,
+  notify,
+  notifyEncryptionRequired,
+  read,
+  write,
+  writeWithoutResponse,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `authenticatedSignedWrites` | No description yet. |
+| `broadcast` | No description yet. |
+| `extendedProperties` | No description yet. |
+| `indicate` | No description yet. |
+| `indicateEncryptionRequired` | No description yet. |
+| `notify` | No description yet. |
+| `notifyEncryptionRequired` | No description yet. |
+| `read` | No description yet. |
+| `write` | No description yet. |
+| `writeWithoutResponse` | No description yet. |
+
+### CBCharacteristicWriteType
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L149`
+
+
+```ts
+enum CBCharacteristicWriteType {
+  withoutResponse,
+  withResponse,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `withoutResponse` | No description yet. |
+| `withResponse` | No description yet. |
+
+### CBPeripheral
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L72`
+
+
+```ts
+class CBPeripheral extends BindableTinyEmitter<CBPeripheralHandler>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBPeripheral(): CBPeripheral;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `advertisementData` | `Record<string, unknown>` | Optional manufacturer data or device metadata |
+| `identifier` | `UUID` | A unique identifier of the peripheral |
+| `name` | `string` | Display name (optional, may be null or undefined if not advertising) |
+| `rssi` | `number` | Signal strength in dBm |
+| `services` | `CBService[]` | A list of services provided by the peripheral |
+| `state` | `CBPeripheralState` | Current connection state |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `bindAllEvents(handler: Partial<E>): () => void;` | No description yet. |
+| `discoverCharacteristics` | `discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService): void;` | No description yet. |
+| `discoverServices` | `discoverServices(serviceUUIDs: CBUUID[]): void;` | No description yet. |
+| `emit` | `emit<K>(event: K, args: Parameters<CBPeripheralHandler[K]>): void;` | No description yet. |
+| `equal` | `equal(other: unknown): boolean;` | No description yet. |
+| `maximumWriteValueLength` | `maximumWriteValueLength(type: CBCharacteristicWriteType): Long;` | No description yet. |
+| `off` | `off<K>(event: K, fn?: CBPeripheralHandler[K]): void;` | No description yet. |
+| `on` | `on<K>(event: K, fn: CBPeripheralHandler[K]): () => void;` | No description yet. |
+| `readRSSI` | `readRSSI(): void;` | No description yet. |
+| `setNotifyValue` | `setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): void;` | No description yet. |
+| `unbindAllEvents` | `unbindAllEvents(handler: Partial<E>): void;` | No description yet. |
+| `writeValue` | `writeValue(data: Data, characteristic: CBCharacteristic, type: CBCharacteristicWriteType): void;` | No description yet. |
+
+### CBPeripheralHandler
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L210`
+
+
+Abstract base class representing the handler of a Bluetooth peripheral. Use this class to respond to events such as service discovery and characteristic updates.
+
+
+```ts
+class CBPeripheralHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBPeripheralHandler(): CBPeripheralHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `didDisconnect` | `didDisconnect(peripheral: CBPeripheral): void;` | No description yet. |
+| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(peripheral: CBPeripheral, service: CBService, error?: Error): void;` | No description yet. |
+| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
+| `didReadRSSI` | `didReadRSSI(peripheral: CBPeripheral, rssi: Long, error?: Error): void;` | No description yet. |
+| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
+| `didUpdateState` | `didUpdateState(peripheral: CBPeripheral): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
+| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
+
+### CBPeripheralState
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L65`
+
+
+```ts
+enum CBPeripheralState {
+  connected,
+  connecting,
+  disconnected,
+  disconnecting,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `connected` | No description yet. |
+| `connecting` | No description yet. |
+| `disconnected` | No description yet. |
+| `disconnecting` | No description yet. |
+
+### CBService
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L113`
+
+
+```ts
+class CBService
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBService(): CBService;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `characteristics` | `CBCharacteristic[]` | No description yet. |
+| `peripheral` | `CBPeripheral` | No description yet. |
+| `uuid` | `CBUUID` | The UUID of the service. |
+| `isMeshProvisioningService` | `unknown` | No description yet. |
+| `isMeshProxyService` | `unknown` | No description yet. |
+
+### CBUUID
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/cbuuid.ts#L11`
+
+
+Represents a Core Bluetooth UUID. Can be constructed from a string, number, or Uint8Array. Provides utility methods for comparison and string representation.
+
+
+```ts
+class CBUUID
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CBUUID(value: string \| Uint8Array<ArrayBufferLike>): CBUUID;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `fullUuidString` | `unknown` | No description yet. |
+| `shortUuid` | `unknown` | No description yet. |
+| `uuid` | `unknown` | No description yet. |
+| `uuidString` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equals` | `equals(other: CBUUID): boolean;` | No description yet. |
+| `toBytes` | `toBytes(): Uint8Array;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+
+### chunkedMap
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/map.ts#L3`
+
+
+```ts
+function chunkedMap<T>(map: Map<string, T>, maxSize: number): Map<string, T>[];
+```
+
+### Class
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/common.ts#L23`
+
+
+Matches a [`class`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes).
+
+
+```ts
+type Class<T, Arguments> = Constructor<T, Arguments> & { prototype: T };
+```
+
+### ClosedRange
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/closed-range.ts#L4`
+
+
+```ts
+class ClosedRange<T>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ClosedRange<T>(lower: T, upper: T, comparator?: (a: T, b: T) => number): ClosedRange<T>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `lowerBound` | `T` | No description yet. |
+| `upperBound` | `T` | No description yet. |
+| `length` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(value: T): boolean;` | No description yet. |
+| `forEach` | `forEach(callback: (value: T) => void): void;` | No description yet. |
+| `overlaps` | `overlaps(other: ClosedRange<T>): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+
+### CompanyIdentifier
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/enums/company-identifier.ts#L7`
+
+
+Source: https://www.bluetooth.com/specifications/assigned-numbers/ Last update date: 7 June 2023
+
+### ConfigAnyModelMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L291`
+
+
+A base protocol for config messages related to Models, where the Model can be a vendor model.
+
+
+```ts
+class ConfigAnyModelMessage extends ConfigModelMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAnyModelMessage(): ConfigAnyModelMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `companyIdentifier` | `unknown` | No description yet. |
+| `elementAddress` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `modelId` | `unknown` | No description yet. |
+| `modelIdentifier` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigAppKeyMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L320`
+
+
+A base protocol for config messages related to Application Keys.
+
+
+```ts
+class ConfigAppKeyMessage extends ConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyMessage(): ConfigAppKeyMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `applicationKeyIndex` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigElementMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L265`
+
+
+A base protocol for config messages related to Elements.
+
+
+```ts
+class ConfigElementMessage extends ConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigElementMessage(): ConfigElementMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `elementAddress` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L145`
+
+
+A base protocol for all Configuration messages. Configuration messages are used to configure Nodes. They are sent between Configuration Client model on the Configuration Manager and Configuration Server model on the device, which is being configured. All Config messages are encrypted using target Node's Device Key.
+
+
+```ts
+class ConfigMessage extends StaticMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigMessage(): ConfigMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigMessageStatus
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L19`
+
+### ConfigModelMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L275`
+
+
+A base protocol for config messages related to Models.
+
+
+```ts
+class ConfigModelMessage extends ConfigElementMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigModelMessage(): ConfigModelMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `elementAddress` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `modelId` | `unknown` | No description yet. |
+| `modelIdentifier` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigNetAndAppKeyMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L362`
+
+
+A base protocol for config messages related to Network Key and Application Key.
+
+
+```ts
+class ConfigNetAndAppKeyMessage extends ConfigNetKeyMessage<this> & ConfigAppKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNetAndAppKeyMessage(): ConfigNetAndAppKeyMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `applicationKeyIndex` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `networkKeyIndex` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `encodeNetAndAppKeyIndex` | `encodeNetAndAppKeyIndex(): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `decodeNetAndAppKeyIndex` | `decodeNetAndAppKeyIndex(data: Data, offset: number): { applicationKeyIndex: KeyIndex; networkKeyIndex: KeyIndex };` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigNetKeyMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L330`
+
+
+A base protocol for config messages related to Network Keys.
+
+
+```ts
+class ConfigNetKeyMessage extends ConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNetKeyMessage(): ConfigNetKeyMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `networkKeyIndex` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigResponse
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L244`
+
+
+The base class for response messages.
+
+
+```ts
+class ConfigResponse extends StaticMeshResponse<this> & UnacknowledgedConfigMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigResponse(): ConfigResponse;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ConfigStatusMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L209`
+
+
+A base protocol for config status messages.
+
+
+```ts
+class ConfigStatusMessage extends ConfigMessage<this> & StatusMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigStatusMessage(): ConfigStatusMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+| `status` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### Data
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/buffer.ts#L1`
+
+
+```ts
+type Data = Uint8Array;
+```
+
+### dataViewToUint8Array
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L25`
+
+
+```ts
+function dataViewToUint8Array(view: DataView): Uint8Array;
+```
+
+### DecodingError
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/decoding-error.ts#L1`
+
+
+```ts
+class DecodingError extends Error
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `DecodingError(message: string): DecodingError;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### decryptAesCcm
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L45`
+
+
+```ts
+function decryptAesCcm(key: Uint8Array, iv: Uint8Array, cipherTextWithTag: Uint8Array, aad: Uint8Array<ArrayBufferLike> | undefined, tagLength: number): Uint8Array;
+```
+
+### DispatchQueue
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/dispatch-queue.ts#L3`
+
+
+```ts
+class DispatchQueue
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `DispatchQueue(label: string): DispatchQueue;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `label` | `string` | No description yet. |
+| `background` | `unknown` | No description yet. |
+| `io` | `unknown` | No description yet. |
+| `main` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `async` | `async(execute: () => void \| Promise<void>): Promise<void>;` | No description yet. |
+| `executeTimerCallback` | `executeTimerCallback(callback: () => void): Promise<void>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `named` | `named(label: string): DispatchQueue;` | No description yet. |
+
+### Double
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L47`
+
+
+Represents a 64-bit IEEE‑754 double-precision floating-point (the same as JavaScript's built-in `number` type).
+
+
+```ts
+type Double = number;
+```
+
+### encryptAesCcm
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L20`
+
+
+```ts
+function encryptAesCcm(key: Uint8Array, iv: Uint8Array, data: Uint8Array, aad: Uint8Array<ArrayBufferLike> | undefined, tagLength: number): Uint8Array;
+```
+
+### encryptAesEcb
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L73`
+
+
+```ts
+function encryptAesEcb(plaintext: Uint8Array, keyBytes: Uint8Array): Uint8Array<ArrayBufferLike>;
+```
+
+### ExportConfiguration
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/types/export-configuration.ts#L15`
+
+
+configuration allows to narrow down the exported configuration to a required minimum. When sharing a mesh network configuration a care must be taken not to share sensitive information to prevent unauthorized use. When sharing a configuration with a guest, a separate Network Key and set of Application Keys should be created. The Nodes given to the guest under control should be configured to use the keys. The guest can be given only the part of the network related to the guest Network Key, with all other data excluded. Also, to prevent reconfiguration of the Nodes, only partial Nodes configuration can be shared, which excludes the Device Keys of those Nodes.
+
+
+```ts
+enum ExportConfiguration {
+  full,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `full` | This configuration will contain the whole copy of local mesh network. |
+
+### Failure
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/result.ts#L33`
+
+
+```ts
+class Failure<T, E>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Failure<T, E>(error: E): Failure<T, E>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `error` | `E` | No description yet. |
+| `isFailure` | `true` | No description yet. |
+| `isSuccess` | `false` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `flatMap` | `flatMap<U>(_fn: (val: T) => Result<U, E>): Failure<U, E>;` | No description yet. |
+| `getOrThrow` | `getOrThrow(): T;` | No description yet. |
+| `map` | `map<U>(_fn: (val: T) => U): Result<U, E>;` | No description yet. |
+| `mapError` | `mapError<F>(fn: (err: E) => F): Failure<T, F>;` | No description yet. |
+
+### generateElGamalKeyPair
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L79`
+
+
+```ts
+function generateElGamalKeyPair(): { privateKey: string; publicKey: string };
+```
+
+### getEnumKeys
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/enum.ts#L5`
+
+
+```ts
+function getEnumKeys<T>(_enum: T): string[];
+```
+
+### getEnumValues
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/enum.ts#L13`
+
+
+```ts
+function getEnumValues<T, V>(_enum: T): V[];
+```
+
+### getSecureRandomBytes
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L6`
+
+
+```ts
+function getSecureRandomBytes(length: Long): Uint8Array<ArrayBuffer> | Error;
+```
+
+### HeartbeatSubscription
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-models/heartbeat-subscription.ts#L46`
+
+
+```ts
+class HeartbeatSubscription
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `HeartbeatSubscription(): HeartbeatSubscription;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `destination` | `Address` | The destination address for the Heartbeat messages. It can be either a Group or Unicast Address. |
+| `source` | `Address` | The source address for the Heartbeat messages. It must be a Unicast Address. |
+| `state` | `State \| undefined` | The state contains variables used for handling Heartbeat messages received by the local Node. |
+| `isEnabled` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches<T>(heartbeat: T): boolean;` | No description yet. |
+| `updateIfMatches` | `updateIfMatches<T>(heartbeat: T): void;` | No description yet. |
+| `periodLog2Period` | `periodLog2Period(periodLog: number): number;` | No description yet. |
+| `remainingPeriod2Period` | `remainingPeriod2Period(remainingPeriod: number): number;` | No description yet. |
+
+### Hex
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/common.ts#L11`
+
+
+Represents a hexadecimal string (e.g., color codes, hashes).
+
+
+```ts
+type Hex = string;
+```
+
+### hexToUuid
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/uuid.ts#L8`
+
+
+```ts
+function hexToUuid(hex: string): string;
+```
+
+### importKeyFromPrivate
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/crypto.ts#L93`
+
+
+```ts
+function importKeyFromPrivate(privateKeyHex: string): string;
+```
+
+### Int16
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L21`
+
+
+Represents a signed 16-bit integer.
+
+
+```ts
+type Int16 = number;
+```
+
+### Int32
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L31`
+
+
+Represents a signed 32-bit integer.
+
+
+```ts
+type Int32 = number;
+```
+
+### Int64
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L41`
+
+
+Represents a signed 64-bit integer using Long.
+
+
+```ts
+type Int64 = Long;
+```
+
+### Int8
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L11`
+
+
+Represents a signed 8-bit integer.
+
+
+```ts
+type Int8 = number;
+```
+
+### isArray
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L181`
+
+
+```ts
+function isArray<T>(value: unknown, assertion?: (value: T) => value is T): value is T[];
+```
+
+### isDirectInstanceOf
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L227`
+
+
+```ts
+function isDirectInstanceOf<T>(instance: unknown, class_: Class<T>): instance is T;
+```
+
+### isEnumCase
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/enum.ts#L23`
+
+
+```ts
+function isEnumCase<T>(value: unknown, targetEnum: T): value is T[keyof T];
+```
+
+### isFunction
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L177`
+
+
+```ts
+function isFunction(value: unknown): value is (args: unknown[]) => unknown;
+```
+
+### isNull
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L213`
+
+
+```ts
+function isNull(value: unknown): value is null;
+```
+
+### isNumber
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L167`
+
+
+```ts
+function isNumber(value: unknown): value is number;
+```
+
+### isObject
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L217`
+
+
+```ts
+function isObject(value: unknown): value is object;
+```
+
+### isValidUuid
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/uuid.ts#L12`
+
+
+```ts
+function isValidUuid(hex: string): boolean;
+```
+
+### IvIndex
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/ivindex.ts#L3`
+
+
+```ts
+class IvIndex
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `IvIndex(index: number, updateActive: boolean): IvIndex;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `index` | `number` | No description yet. |
+| `updateActive` | `boolean` | No description yet. |
+| `indexKey` | `string` | No description yet. |
+| `ivRecoveryKey` | `string` | No description yet. |
+| `timestampKey` | `string` | No description yet. |
+| `asMap` | `unknown` | No description yet. |
+| `previous` | `unknown` | No description yet. |
+| `transmitIndex` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equals` | `equals(other: unknown): boolean;` | No description yet. |
+| `indexFor` | `indexFor(ivi: number): number;` | No description yet. |
+| `lt` | `lt(other: unknown): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromMap` | `fromMap(map?: Record<string, unknown>): IvIndex \| undefined;` | No description yet. |
+
+### Key
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/key.ts#L9`
+
+
+Base protocol for Network and Application Keys.
+
+
+```ts
+class Key
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Key(): Key;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$index` | `KeyIndex` | No description yet. |
+| `$key` | `Data` | 128-bit key. |
+| `$name` | `string` | No description yet. |
+| `index` | `unknown` | No description yet. |
+| `key` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+
+### KeyIndex
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/key-index.ts#L15`
+
+
+The key index is a 12-bit unsigned integer identifying a Network or an Application Key. The key indexes within Network Keys and Application Keys must be distinct. This type is an alias for `UInt16`. To check the range, use `isValidKeyIndex`.
+
+
+```ts
+class KeyIndex extends Number
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `KeyIndex(value: number): KeyIndex;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `EPSILON` | `number` | The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1 that is representable as a Number value, which is approximately: 2.2204460492503130808472633361816 x 10‍−‍16. |
+| `MAX_SAFE_INTEGER` | `number` | The value of the largest integer n such that n and n + 1 are both exactly representable as a Number value. The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. |
+| `MAX_VALUE` | `number` | The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. |
+| `MIN_SAFE_INTEGER` | `number` | The value of the smallest integer n such that n and n − 1 are both exactly representable as a Number value. The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)). |
+| `MIN_VALUE` | `number` | The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. |
+| `NaN` | `number` | A value that is not a number. In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function. |
+| `NEGATIVE_INFINITY` | `number` | A value that is less than the largest negative number that can be represented in JavaScript. JavaScript displays NEGATIVE_INFINITY values as -infinity. |
+| `POSITIVE_INFINITY` | `number` | A value greater than the largest number that can be represented in JavaScript. JavaScript displays POSITIVE_INFINITY values as infinity. |
+| `bytes` | `unknown` | No description yet. |
+| `bytesBE` | `unknown` | No description yet. |
+| `isValidKeyIndex` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: KeyIndex): boolean;` | No description yet. |
+| `toExponential` | `toExponential(fractionDigits?: number): string;` | No description yet. |
+| `toFixed` | `toFixed(fractionDigits?: number): string;` | No description yet. |
+| `toLocaleString` | `toLocaleString(locales?: string \| string[], options?: NumberFormatOptions): string;` | No description yet. |
+| `toPrecision` | `toPrecision(precision?: number): string;` | No description yet. |
+| `toString` | `toString(radix?: number): string;` | No description yet. |
+| `valueOf` | `valueOf(): number;` | No description yet. |
+| `isFinite` | `isFinite(number: unknown): boolean;` | No description yet. |
+| `isInteger` | `isInteger(number: unknown): boolean;` | No description yet. |
+| `isNaN` | `isNaN(number: unknown): boolean;` | No description yet. |
+| `isSafeInteger` | `isSafeInteger(number: unknown): boolean;` | No description yet. |
+| `parseFloat` | `parseFloat(string: string): number;` | No description yet. |
+| `parseInt` | `parseInt(string: string, radix?: number): number;` | No description yet. |
+
+### KeyRefreshPhase
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/enums/key-refresh-phase.ts#L6`
+
+
+Safely parses numeric input into a KeyRefreshPhase.
+
+### KeySet
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-models/key-set.ts#L5`
+
+
+```ts
+class KeySet
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `KeySet(): KeySet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `accessKey` | `unknown` | No description yet. |
+| `aid` | `unknown` | No description yet. |
+| `networkKey` | `unknown` | No description yet. |
+
+### LocalProvisionerUuidKey
+
+**Kind:** Variable
+
+**Source:** `packages/utils/src/constants/common.ts#L13`
+
+
+The key used in `UserDefaults` to store the UUID of the local Provisioner for each loaded mesh network. The intent is to restore the same instance (move to index 0) whenever the same mesh network configuration is imported. Local Provisioner UUID is saved whenever a new Provisioner is added or moved to index 0 in the `MeshNetwork.provisioners` array in mesh network object. Use `MeshNetwork.restoreLocalProvisioner()` to restore the Provisioner instance.
+
+
+```ts
+const LocalProvisionerUuidKey: "provisioner";
+```
+
+### Location
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/enums/location.ts#L10`
+
+### LogCategory
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/types/logger.ts#L40`
+
+
+The log category indicates the component that created the log entry.
+
+
+```ts
+enum LogCategory {
+  access,
+  bearer,
+  foundationModel,
+  lowerTransport,
+  model,
+  network,
+  provisioning,
+  proxy,
+  upperTransport,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `access` | Log created by the Access layer. |
+| `bearer` | Log created by the Bearer component. |
+| `foundationModel` | Log created by the Foundation layer models. |
+| `lowerTransport` | Log created by the Lower Transport layer. |
+| `model` | Log created by the Access layer model. |
+| `network` | Log created by the Network layer. |
+| `provisioning` | Log created by the Provisioning component. |
+| `proxy` | Log created by the Proxy component. |
+| `upperTransport` | Log created by the Upper Transport layer. |
+
+### LoggerHandler
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/logger.ts#L61`
+
+
+```ts
+class LoggerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `LoggerHandler(): LoggerHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `d` | `d(category: LogCategory, message: string): void;` | No description yet. |
+| `e` | `e(category: LogCategory, message: string): void;` | No description yet. |
+| `i` | `i(category: LogCategory, message: string): void;` | No description yet. |
+| `log` | `log(message: string, category: LogCategory, level: LogLevel): void;` | No description yet. |
+| `v` | `v(category: LogCategory, message: string): void;` | No description yet. |
+| `w` | `w(category: LogCategory, message: string): void;` | No description yet. |
+
+### LogLevel
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/logger.ts#L4`
+
+
+Log level, which allows filtering logs by importance.
+
+
+```ts
+class LogLevel
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `application` | `LogLevel` | Messages about application level events, in this case DFU messages in human-readable form. |
+| `debug` | `LogLevel` | Lowest priority. Usually names of called methods or callbacks received. |
+| `error` | `LogLevel` | Highest priority messages with errors. |
+| `info` | `LogLevel` | Messages about completed tasks. |
+| `verbose` | `LogLevel` | Low priority messages what the service is doing. |
+| `warning` | `LogLevel` | Important messages. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+
+### longMin
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L108`
+
+
+```ts
+function longMin(a: Long, b: Long): Long;
+```
+
+### MeshCDB
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/constants/mesh-schema.ts#L7`
+
+
+A namespace for Mesh Configuration Database Zod schemas. This provides a clean, organized, and properly typed structure for validation.
+
+### MeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L34`
+
+
+The base class of every mesh message. Mesh messages can be sent to and received from the mesh network. For messages with the Op Code known during compilation a `StaticMeshMessage` protocol should be preferred. Parameters `MeshMessage.security` and `MeshMessage.isSegmented` are checked and should be set only for outgoing messages.
+
+
+```ts
+class MeshMessage extends BaseMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshMessage(): MeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### MeshMessageSecurity
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/enums/mesh-message-security.ts#L16`
+
+
+The mesh message security enum determines authentication level which shall be used when encrypting a segmented mesh message. This filed is used to determine the TransMIC. The Message Integrity Check for Transport (TransMIC) is a 32-bit or 64-bit field that authenticates that the Access payload has not been changed. For a segmented message, where SEG is set to 1, the size of the TransMIC is determined by the value of the SZMIC field in the Lower Transport PDU. For unsegmented messages, the size of the TransMIC is 32 bits for data messages. Control messages do not have a TransMIC.
+
+
+```ts
+enum MeshMessageSecurity {
+  high,
+  low,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `high` | Message will be sent with 64-bit Transport MIC. Unsegmented messages cannot be sent with this option. |
+| `low` | Message will be sent with 32-bit Transport MIC. |
+
+### MeshNetworkError
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-network-error.ts#L4`
+
+
+A set of generic mesh errors.
+
+
+```ts
+class MeshNetworkError extends Error
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `addressNotAvailable` | `MeshNetworkError` | Thrown when the address cannot be assigned as it is being used by another node. |
+| `addressNotInAllocatedRange` | `MeshNetworkError` | Thrown when a node cannot be added due to its address not being inside Provisioner's unicast address range. |
+| `cannotRemove` | `MeshNetworkError` | Thrown when the object cannot be removed. |
+| `groupAlreadyExists` | `MeshNetworkError` | Thrown when a new Group is being added with the same address as one that is already in the network. |
+| `groupInUse` | `MeshNetworkError` | Thrown when trying to remove a Group that is either a parent of another Group, or set as publication or subscription address for a Model. |
+| `invalidAddress` | `MeshNetworkError` | Thrown when the address is of a wrong type. |
+| `invalidKey` | `MeshNetworkError` | Thrown when the provided key is not 128-bit long. |
+| `invalidRange` | `MeshNetworkError` | Thrown when the range to be allocated is of invalid type. |
+| `ivIndexTooSmall` | `MeshNetworkError` | Thrown when setting too small IV Index. The new IV Index must be greater than or equal to the previous one. |
+| `keyIndexAlreadyExists` | `MeshNetworkError` | Thrown when a key with the same index already exists in the network. |
+| `keyIndexOutOfRange` | `MeshNetworkError` | Thrown when the given Key Index is not valid. |
+| `keyInUse` | `MeshNetworkError` | Thrown when trying to remove a key that is being used by another Node. |
+| `keyNotKnown` | `MeshNetworkError` | Thrown when trying to remove a key that is not known by the network. |
+| `noAddressAvailable` | `MeshNetworkError` | Thrown when a node cannot be added due to lack of available addresses in Provisioner's range. |
+| `noApplicationKey` | `MeshNetworkError` | Thrown when Application Key is required to continue with the operation. |
+| `nodeAlreadyExist` | `MeshNetworkError` | Thrown when a new Provisioner has the same UUID as one node that is already in the mesh network. |
+| `noNetwork` | `MeshNetworkError` | Thrown when trying to send a mesh message before setting up the mesh network. |
+| `noNetworkKey` | `MeshNetworkError` | Thrown when Network Key is required to continue with the operation. |
+| `overlappingProvisionerRanges` | `MeshNetworkError` | Thrown when any allocated range of the new Provisioner overlaps with an existing one. |
+| `provisionerNotInNetwork` | `MeshNetworkError` | Thrown when the requested Provisioner is not in the Mesh Network. |
+| `provisionerUsedInAnotherNetwork` | `MeshNetworkError` | Thrown when trying to add a Provisioner that is already a part of another mesh network. |
+| `sceneAlreadyExists` | `MeshNetworkError` | Thrown when a new Scene is being added with the same number as one that is already in the network. |
+| `sceneInUse` | `MeshNetworkError` | Thrown when trying to remove a Scene stored by at least one Scene Register. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### MeshProvisioningService
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L32`
+
+
+A structure defining Mesh Provisioning service, which shall be present on unprovisioned devices. It allows sending provisioning messages. When provisioning is complete, the service shall be replaced with Mesh Proxy service.
+
+
+```ts
+class MeshProvisioningService extends MeshService
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `dataInUuid` | `CBUUID` | Data In characteristic UUID. |
+| `dataOutUuid` | `CBUUID` | Data Out characteristic UUID. |
+| `uuid` | `CBUUID` | Service UUID. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(service: CBService): boolean;` | No description yet. |
+
+### MeshProxyService
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L52`
+
+
+A structure defining Mesh Proxy service, which shall be present on provisioned Nodes. The Mesh Proxy service is used to send mesh messages over GATT.
+
+
+```ts
+class MeshProxyService extends MeshService
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `dataInUuid` | `CBUUID` | Data In characteristic UUID. |
+| `dataOutUuid` | `CBUUID` | Data Out characteristic UUID. |
+| `uuid` | `CBUUID` | Service UUID. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(service: CBService): boolean;` | No description yet. |
+
+### MeshResponse
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L117`
+
+
+The base class for response messages.
+
+
+```ts
+class MeshResponse extends UnacknowledgedMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshResponse(): MeshResponse;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### MeshService
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L10`
+
+
+A base class for mesh service objects.
+
+
+```ts
+class MeshService
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshService(): MeshService;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `dataInUuid` | `CBUUID` | Data In characteristic UUID. |
+| `dataOutUuid` | `CBUUID` | Data Out characteristic UUID. |
+| `uuid` | `CBUUID` | Service UUID. |
+
+### meshTimestamp
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L32`
+
+
+```ts
+function meshTimestamp(timestamp: number): string;
+```
+
+### NSNull
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/common.ts#L5`
+
+
+Unique symbol used to represent a special "null" value within the namespace. Useful for distinguishing between JavaScript's native `null` and a custom sentinel value.
+
+
+```ts
+type NSNull = typeof NSNull;
+```
+
+### OobInformation
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/oob.ts#L11`
+
+
+Information that points to Out-Of-Band (OOB) information needed for provisioning.
+
+
+```ts
+class OobInformation
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `OobInformation(rawValue: number): OobInformation;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `rawValue` | `number` | No description yet. |
+| `barCode` | `OobInformation` | No description yet. |
+| `electronicURI` | `OobInformation` | No description yet. |
+| `insideBox` | `OobInformation` | No description yet. |
+| `insideManual` | `OobInformation` | No description yet. |
+| `nfc` | `OobInformation` | No description yet. |
+| `number` | `OobInformation` | No description yet. |
+| `onBox` | `OobInformation` | No description yet. |
+| `onDevice` | `OobInformation` | No description yet. |
+| `onPieceOfPaper` | `OobInformation` | No description yet. |
+| `other` | `OobInformation` | No description yet. |
+| `qrCode` | `OobInformation` | No description yet. |
+| `string` | `OobInformation` | No description yet. |
+| `supportForCertificateBasedProvisioning` | `OobInformation` | No description yet. |
+| `supportForProvisioningRecords` | `OobInformation` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromAdvertisementData` | `fromAdvertisementData(advertisementData: Record<string, unknown>): OobInformation \| undefined;` | No description yet. |
+
+### OptionSet
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/option-set.ts#L4`
+
+
+```ts
+class OptionSet<F>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `OptionSet<F>(value: number): OptionSet<F>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(flag: F): boolean;` | No description yet. |
+| `equals` | `equals(other: OptionSet<F>): boolean;` | No description yet. |
+| `insert` | `insert(flag: F): OptionSet<F>;` | No description yet. |
+| `intersect` | `intersect(other: OptionSet<F>): OptionSet<F>;` | No description yet. |
+| `isDisjoint` | `isDisjoint(other: OptionSet<F>): boolean;` | No description yet. |
+| `isDisjointWithArray` | `isDisjointWithArray(others: OptionSet<F>[]): boolean;` | No description yet. |
+| `remove` | `remove(flag: F): OptionSet<F>;` | No description yet. |
+| `subtract` | `subtract(other: OptionSet<F>): OptionSet<F>;` | No description yet. |
+| `toggle` | `toggle(flag: F): OptionSet<F>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `union` | `union(other: OptionSet<F>): OptionSet<F>;` | No description yet. |
+| `empty` | `empty<F>(): OptionSet<F>;` | No description yet. |
+| `fromData` | `fromData<F>(data: Data, offset: number): OptionSet<F>;` | No description yet. |
+
+### packInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L52`
+
+
+```ts
+function packInt16BE(n: number): Uint8Array;
+```
+
+### packInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L6`
+
+
+```ts
+function packInt16LE(n: number): Uint8Array;
+```
+
+### packInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L78`
+
+
+```ts
+function packInt32BE(n: number): Uint8Array;
+```
+
+### packInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L28`
+
+
+```ts
+function packInt32LE(n: number): Uint8Array;
+```
+
+### packUInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L65`
+
+
+```ts
+function packUInt16BE(n: number): Uint8Array;
+```
+
+### packUInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L17`
+
+
+```ts
+function packUInt16LE(n: number): Uint8Array;
+```
+
+### packUInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L91`
+
+
+```ts
+function packUInt32BE(n: number): Uint8Array;
+```
+
+### packUInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L39`
+
+
+```ts
+function packUInt32LE(n: number): Uint8Array;
+```
+
+### ProxyConfigurationMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/proxy-configuration-message.ts#L8`
+
+
+A base class for Proxy configuration messages.
+
+
+```ts
+class ProxyConfigurationMessage extends BaseMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProxyConfigurationMessage(): ProxyConfigurationMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### ProxyFilterEventHandler
+
+**Kind:** Interface
+
+**Source:** `packages/utils/src/types/proxy-filter.ts#L6`
+
+
+```ts
+interface ProxyFilterEventHandler<T>
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `handle` | `handle(message: ProxyConfigurationMessage, proxy: T): Promise<void>;` | No description yet. |
+| `managerDidDeliverMessage` | `managerDidDeliverMessage(message: ProxyConfigurationMessage): void;` | No description yet. |
+| `managerFailedToDeliverMessage` | `managerFailedToDeliverMessage(message: ProxyConfigurationMessage, error: Error): void;` | No description yet. |
+| `newNetworkCreated` | `newNetworkCreated(): void;` | No description yet. |
+| `newProxyDidConnect` | `newProxyDidConnect(): Promise<void>;` | No description yet. |
+
+### ProxyFilterHandler
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/proxy-filter.ts#L72`
+
+
+The delegate that will be notified about changes of the Proxy Filter.
+
+
+```ts
+class ProxyFilterHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProxyFilterHandler(): ProxyFilterHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `proxyFilterLimitReached` | `proxyFilterLimitReached(type: ProxyFilterType, maxSize: number): void;` | No description yet. |
+| `proxyFilterUpdateAcknowledged` | `proxyFilterUpdateAcknowledged(type: ProxyFilterType, listSize: number): void;` | No description yet. |
+| `proxyFilterUpdated` | `proxyFilterUpdated(type: ProxyFilterType, addresses: Map<string, Address>): void;` | No description yet. |
+
+### ProxyFilterSetup
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/types/proxy-filter.ts#L137`
+
+### ProxyFilterSetupType
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/types/proxy-filter.ts#L114`
+
+
+An enumeration for different initial configurations of the Proxy Filter.
+
+
+```ts
+enum ProxyFilterSetupType {
+  acceptList,
+  automatic,
+  rejectList,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `acceptList` | The Proxy Filter on each connected Proxy Node will be set to `ProxyFilterType.acceptList` with given set of addresses. |
+| `automatic` | In automatic Proxy Filter setup the filter will be set to `ProxyFilterType.acceptList` with Unicast Addresses of all local Elements, all Group Addresses with at least one local Model subscribed and the All Nodes (0xFFFF) address. This is the default configuration. |
+| `rejectList` | The Proxy Filter on each connected Proxy Node will be set to `ProxyFilerType.rejectList` with given set of addresses. |
+
+### ProxyFilterType
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/types/proxy-filter-type.ts#L7`
+
+### RangeObject
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/range-object.ts#L14`
+
+
+A base class for an address or scene range. Ranges are assigned to `Provisioner` objects. Each Provisioner may provision new Nodes, create Groups and Scenes using only values from assigned ranges. The assigned ranges may not overlap with the ranges of other Provisioners, otherwise different instances could reuse the same values leading to collisions.
+
+
+```ts
+class RangeObject<T>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `RangeObject<T>(range: ClosedRange<T>): RangeObject<T>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `count` | `unknown` | No description yet. |
+| `lowerBound` | `unknown` | No description yet. |
+| `range` | `unknown` | No description yet. |
+| `upperBound` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(value: T): boolean;` | No description yet. |
+| `containsRange` | `containsRange(range: RangeObject<T>): boolean;` | No description yet. |
+| `overlaps` | `overlaps(other: RangeObject<T>): boolean;` | No description yet. |
+
+### readUInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L90`
+
+
+```ts
+function readUInt16BE(data: Uint8Array, offset: number): number;
+```
+
+### readUInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L80`
+
+
+```ts
+function readUInt16LE(data: Uint8Array, offset: number): number;
+```
+
+### readUInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L54`
+
+
+```ts
+function readUInt32BE(bytes: Uint8Array, offset: number): number;
+```
+
+### readUInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L64`
+
+
+```ts
+function readUInt32LE(data: Uint8Array, offset: number): number;
+```
+
+### Result
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/result.ts#L1`
+
+
+```ts
+type Result<T, E> = Success<T, E> | Failure<T, E>;
+```
+
+### SceneNumber
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-models/scene-number.ts#L10`
+
+
+Scene number enum type.
+
+
+```ts
+class SceneNumber extends Number
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `SceneNumber(value: number): SceneNumber;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `EPSILON` | `number` | The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1 that is representable as a Number value, which is approximately: 2.2204460492503130808472633361816 x 10‍−‍16. |
+| `invalidScene` | `SceneNumber` | No description yet. |
+| `MAX_SAFE_INTEGER` | `number` | The value of the largest integer n such that n and n + 1 are both exactly representable as a Number value. The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. |
+| `MAX_VALUE` | `number` | The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. |
+| `maxScene` | `SceneNumber` | No description yet. |
+| `MIN_SAFE_INTEGER` | `number` | The value of the smallest integer n such that n and n − 1 are both exactly representable as a Number value. The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)). |
+| `MIN_VALUE` | `number` | The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. |
+| `minScene` | `SceneNumber` | No description yet. |
+| `NaN` | `number` | A value that is not a number. In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function. |
+| `NEGATIVE_INFINITY` | `number` | A value that is less than the largest negative number that can be represented in JavaScript. JavaScript displays NEGATIVE_INFINITY values as -infinity. |
+| `POSITIVE_INFINITY` | `number` | A value greater than the largest number that can be represented in JavaScript. JavaScript displays POSITIVE_INFINITY values as infinity. |
+| `hex` | `unknown` | No description yet. |
+| `isValidSceneNumber` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toExponential` | `toExponential(fractionDigits?: number): string;` | No description yet. |
+| `toFixed` | `toFixed(fractionDigits?: number): string;` | No description yet. |
+| `toLocaleString` | `toLocaleString(locales?: string \| string[], options?: NumberFormatOptions): string;` | No description yet. |
+| `toPrecision` | `toPrecision(precision?: number): string;` | No description yet. |
+| `toString` | `toString(radix?: number): string;` | No description yet. |
+| `valueOf` | `valueOf(): number;` | No description yet. |
+| `fromHex` | `fromHex(hex: string): SceneNumber \| undefined;` | No description yet. |
+| `isFinite` | `isFinite(number: unknown): boolean;` | No description yet. |
+| `isInteger` | `isInteger(number: unknown): boolean;` | No description yet. |
+| `isNaN` | `isNaN(number: unknown): boolean;` | No description yet. |
+| `isSafeInteger` | `isSafeInteger(number: unknown): boolean;` | No description yet. |
+| `parseFloat` | `parseFloat(string: string): number;` | No description yet. |
+| `parseInt` | `parseInt(string: string, radix?: number): number;` | No description yet. |
+
+### SigModelId
+
+**Kind:** Enumeration
+
+**Source:** `packages/utils/src/enums/sig-model-id.ts#L1`
+
+
+```ts
+enum SigModelId {
+  blobTransferClientModelId,
+  blobTransferServerModelId,
+  bridgeConfigurationClientModelId,
+  bridgeConfigurationServerModelId,
+  configurationClientModelId,
+  configurationServerModelId,
+  directedForwardingConfigurationClientModelId,
+  directedForwardingConfigurationServerModelId,
+  firmwareDistributionClientModelId,
+  firmwareDistributionServerModelId,
+  firmwareUpdateClientModelId,
+  firmwareUpdateServerModelId,
+  genericAdminPropertyServerModelId,
+  genericBatteryClientModelId,
+  genericBatteryServerModelId,
+  genericClientPropertyServerModelId,
+  genericDefaultTransitionTimeClientModelId,
+  genericDefaultTransitionTimeServerModelId,
+  genericLevelClientModelId,
+  genericLevelServerModelId,
+  genericLocationClientModelId,
+  genericLocationServerModelId,
+  genericLocationSetupServerModelId,
+  genericManufacturerPropertyServerModelId,
+  genericOnOffClientModelId,
+  genericOnOffServerModelId,
+  genericPowerLevelClientModelId,
+  genericPowerLevelServerModelId,
+  genericPowerLevelSetupServerModelId,
+  genericPowerOnOffClientModelId,
+  genericPowerOnOffServerModelId,
+  genericPowerOnOffSetupServerModelId,
+  genericPropertyClientModelId,
+  genericUserPropertyServerModelId,
+  healthClientModelId,
+  healthServerModelId,
+  largeCompositionDataClientModelId,
+  largeCompositionDataServerModelId,
+  lightCTLClientModelId,
+  lightCTLServerModelId,
+  lightCTLSetupServerModelId,
+  lightCTLTemperatureServerModelId,
+  lightHSLClientModelId,
+  lightHSLHueServerModelId,
+  lightHSLSaturationServerModelId,
+  lightHSLServerModelId,
+  lightHSLSetupServerModelId,
+  lightLCClientModelId,
+  lightLCServerModelId,
+  lightLCSetupServerModelId,
+  lightLightnessClientModelId,
+  lightLightnessServerModelId,
+  lightLightnessSetupServerModelId,
+  lightXyLClientModelId,
+  lightXyLServerModelId,
+  lightXyLSetupServerModelId,
+  onDemandPrivateProxyClientModelId,
+  onDemandPrivateProxyServerModelId,
+  opcodesAggregatorClientModelId,
+  opcodesAggregatorServerModelId,
+  privateBeaconClientModelId,
+  privateBeaconServerModelId,
+  remoteProvisioningClientModelId,
+  remoteProvisioningServerModelId,
+  sarConfigurationClientModelId,
+  sarConfigurationServerModelId,
+  sceneClientModelId,
+  sceneServerModelId,
+  sceneSetupServerModelId,
+  schedulerClientModelId,
+  schedulerServerModelId,
+  schedulerSetupServerModelId,
+  sensorClientModelId,
+  sensorServerModelId,
+  sensorSetupServerModelId,
+  solicitationPduRplConfigurationClientModelId,
+  solicitationPduRplConfigurationServerModelId,
+  timeClientModelId,
+  timeServerModelId,
+  timeSetupServerModelId,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `blobTransferClientModelId` | No description yet. |
+| `blobTransferServerModelId` | No description yet. |
+| `bridgeConfigurationClientModelId` | No description yet. |
+| `bridgeConfigurationServerModelId` | No description yet. |
+| `configurationClientModelId` | No description yet. |
+| `configurationServerModelId` | No description yet. |
+| `directedForwardingConfigurationClientModelId` | No description yet. |
+| `directedForwardingConfigurationServerModelId` | No description yet. |
+| `firmwareDistributionClientModelId` | No description yet. |
+| `firmwareDistributionServerModelId` | No description yet. |
+| `firmwareUpdateClientModelId` | No description yet. |
+| `firmwareUpdateServerModelId` | No description yet. |
+| `genericAdminPropertyServerModelId` | No description yet. |
+| `genericBatteryClientModelId` | No description yet. |
+| `genericBatteryServerModelId` | No description yet. |
+| `genericClientPropertyServerModelId` | No description yet. |
+| `genericDefaultTransitionTimeClientModelId` | No description yet. |
+| `genericDefaultTransitionTimeServerModelId` | No description yet. |
+| `genericLevelClientModelId` | No description yet. |
+| `genericLevelServerModelId` | No description yet. |
+| `genericLocationClientModelId` | No description yet. |
+| `genericLocationServerModelId` | No description yet. |
+| `genericLocationSetupServerModelId` | No description yet. |
+| `genericManufacturerPropertyServerModelId` | No description yet. |
+| `genericOnOffClientModelId` | No description yet. |
+| `genericOnOffServerModelId` | No description yet. |
+| `genericPowerLevelClientModelId` | No description yet. |
+| `genericPowerLevelServerModelId` | No description yet. |
+| `genericPowerLevelSetupServerModelId` | No description yet. |
+| `genericPowerOnOffClientModelId` | No description yet. |
+| `genericPowerOnOffServerModelId` | No description yet. |
+| `genericPowerOnOffSetupServerModelId` | No description yet. |
+| `genericPropertyClientModelId` | No description yet. |
+| `genericUserPropertyServerModelId` | No description yet. |
+| `healthClientModelId` | No description yet. |
+| `healthServerModelId` | No description yet. |
+| `largeCompositionDataClientModelId` | No description yet. |
+| `largeCompositionDataServerModelId` | No description yet. |
+| `lightCTLClientModelId` | No description yet. |
+| `lightCTLServerModelId` | No description yet. |
+| `lightCTLSetupServerModelId` | No description yet. |
+| `lightCTLTemperatureServerModelId` | No description yet. |
+| `lightHSLClientModelId` | No description yet. |
+| `lightHSLHueServerModelId` | No description yet. |
+| `lightHSLSaturationServerModelId` | No description yet. |
+| `lightHSLServerModelId` | No description yet. |
+| `lightHSLSetupServerModelId` | No description yet. |
+| `lightLCClientModelId` | No description yet. |
+| `lightLCServerModelId` | No description yet. |
+| `lightLCSetupServerModelId` | No description yet. |
+| `lightLightnessClientModelId` | No description yet. |
+| `lightLightnessServerModelId` | No description yet. |
+| `lightLightnessSetupServerModelId` | No description yet. |
+| `lightXyLClientModelId` | No description yet. |
+| `lightXyLServerModelId` | No description yet. |
+| `lightXyLSetupServerModelId` | No description yet. |
+| `onDemandPrivateProxyClientModelId` | No description yet. |
+| `onDemandPrivateProxyServerModelId` | No description yet. |
+| `opcodesAggregatorClientModelId` | No description yet. |
+| `opcodesAggregatorServerModelId` | No description yet. |
+| `privateBeaconClientModelId` | No description yet. |
+| `privateBeaconServerModelId` | No description yet. |
+| `remoteProvisioningClientModelId` | No description yet. |
+| `remoteProvisioningServerModelId` | No description yet. |
+| `sarConfigurationClientModelId` | No description yet. |
+| `sarConfigurationServerModelId` | No description yet. |
+| `sceneClientModelId` | No description yet. |
+| `sceneServerModelId` | No description yet. |
+| `sceneSetupServerModelId` | No description yet. |
+| `schedulerClientModelId` | No description yet. |
+| `schedulerServerModelId` | No description yet. |
+| `schedulerSetupServerModelId` | No description yet. |
+| `sensorClientModelId` | No description yet. |
+| `sensorServerModelId` | No description yet. |
+| `sensorSetupServerModelId` | No description yet. |
+| `solicitationPduRplConfigurationClientModelId` | No description yet. |
+| `solicitationPduRplConfigurationServerModelId` | No description yet. |
+| `timeClientModelId` | No description yet. |
+| `timeServerModelId` | No description yet. |
+| `timeSetupServerModelId` | No description yet. |
+
+### StaticAcknowledgedMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L155`
+
+
+A base class for acknowledged messages which opcode and the type of the response message are known during compilation time. The message must have the ``StaticAcknowledgedMeshMessage/responseType`` specified.
+
+
+```ts
+class StaticAcknowledgedMeshMessage extends StaticMeshMessage<this> & AcknowledgedMeshMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticAcknowledgedMeshMessage(): StaticAcknowledgedMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `Pick<typeof StaticMeshResponse, "fromData" \| "opCode">` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StaticAcknowledgedProxyConfigurationMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/proxy-configuration-message.ts#L43`
+
+
+A base class static acknowledged proxy configuration messages.
+
+
+```ts
+class StaticAcknowledgedProxyConfigurationMessage extends AcknowledgedProxyConfigurationMessage<this> & StaticProxyConfigurationMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticAcknowledgedProxyConfigurationMessage(): StaticAcknowledgedProxyConfigurationMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof StaticProxyConfigurationMessage` | The Type of the response message. |
+| `opCode` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StaticMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L124`
+
+
+A type of a mesh message which opcode is known during compilation time.
+
+
+```ts
+class StaticMeshMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticMeshMessage(): StaticMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StaticMeshResponse
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L141`
+
+
+The base class for response messages with an opcode known at the compilation time.
+
+
+```ts
+class StaticMeshResponse extends MeshResponse<this> & StaticUnacknowledgedMeshMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticMeshResponse(): StaticMeshResponse;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StaticProxyConfigurationMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/proxy-configuration-message.ts#L19`
+
+
+A type of Proxy Configuration message which opcode is known during compilation time.
+
+
+```ts
+class StaticProxyConfigurationMessage extends ProxyConfigurationMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticProxyConfigurationMessage(): StaticProxyConfigurationMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StaticUnacknowledgedMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L130`
+
+
+The base class for unacknowledged messages with an opcode known at the compilation time.
+
+
+```ts
+class StaticUnacknowledgedMeshMessage extends StaticMeshMessage<this> & UnacknowledgedMeshMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StaticUnacknowledgedMeshMessage(): StaticUnacknowledgedMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StatusMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L206`
+
+
+A mesh message containing the operation status.
+
+
+```ts
+class StatusMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StatusMessage(): StatusMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### StepResolution
+
+**Kind:** Unknown
+
+**Source:** `packages/utils/src/types/step-resolution.ts#L7`
+
+### Storage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/storage.ts#L10`
+
+
+Abstract base class for storage engines. Subclasses must implement the core storage methods: `get`, `set`, `remove`, and `clear`. This class defines the contract for key-value storage with asynchronous access.
+
+
+```ts
+class Storage<Value>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Storage<Value>(): Storage<Value>;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `clear` | `clear(): void \| Promise<void>;` | No description yet. |
+| `get` | `get(key: string): Value \| Promise<Value \| undefined> \| undefined;` | No description yet. |
+| `load` | `load(): Data \| Promise<Data \| undefined> \| undefined;` | No description yet. |
+| `remove` | `remove(key: string): void \| Promise<void>;` | No description yet. |
+| `save` | `save(data: Data): boolean \| Promise<boolean>;` | No description yet. |
+| `set` | `set(key: string, value: Value): void \| Promise<void>;` | No description yet. |
+
+### Success
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/result.ts#L3`
+
+
+```ts
+class Success<T, E>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Success<T, E>(value: T): Success<T, E>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `isFailure` | `false` | No description yet. |
+| `isSuccess` | `true` | No description yet. |
+| `value` | `T` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `flatMap` | `flatMap<U>(fn: (val: T) => Result<U, E>): Result<U, E>;` | No description yet. |
+| `getOrThrow` | `getOrThrow(): T;` | No description yet. |
+| `map` | `map<U>(fn: (val: T) => U): Result<U, E>;` | No description yet. |
+| `mapError` | `mapError<F>(_fn: (err: E) => F): Result<T, F>;` | No description yet. |
+
+### Task
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/task.ts#L10`
+
+
+```ts
+class Task<T, E>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Task<T, E>(executor: (continuation: Continuation<T, E>) => void \| Promise<void>): Task<T, E>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `signal` | `AbortSignal` | No description yet. |
+| `result` | `unknown` | No description yet. |
+| `status` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `cancel` | `cancel(): void;` | No description yet. |
+| `value` | `value(): Promise<T>;` | No description yet. |
+| `detached` | `detached<T, E>(executor: (continuation: Continuation<T, E>) => void \| Promise<void>): Task<T, E>;` | No description yet. |
+| `sleep` | `sleep(ms: number): Task<void, never>;` | No description yet. |
+
+### TimeInterval
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/time-interval.ts#L4`
+
+
+Double
+
+
+```ts
+type TimeInterval = Double;
+```
+
+### timeIntervalSinceNow
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/date.ts#L1`
+
+
+```ts
+function timeIntervalSinceNow(futureOrPastDateMillis: number): number;
+```
+
+### toPaddedHex16
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L117`
+
+
+```ts
+function toPaddedHex16(value: number): string;
+```
+
+### toPaddedHex32
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L122`
+
+
+```ts
+function toPaddedHex32(value: number): string;
+```
+
+### toPaddedHex64
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L128`
+
+
+```ts
+function toPaddedHex64(value: Long): string;
+```
+
+### toPaddedHex64Signed
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L133`
+
+
+```ts
+function toPaddedHex64Signed(value: Long): string;
+```
+
+### toPaddedHex8
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L112`
+
+
+```ts
+function toPaddedHex8(value: number): string;
+```
+
+### TransactionMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L176`
+
+
+A message with Transaction Identifier. The Transaction Identifier will automatically be set and incremented each time a message is sent. The counter is reused for all types that extend this protocol.
+
+
+```ts
+class TransactionMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `TransactionMessage(): TransactionMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `tid` | `number` | Transaction identifier. If not set, this field will automatically be set when the message is being sent or received. |
+| `opCode` | `number` | No description yet. |
+| `continueTransaction` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### TransitionMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L233`
+
+
+A base protocol for a message that can initiate a non-immediate state transition.
+
+
+```ts
+class TransitionMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `TransitionMessage(): TransitionMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `delay` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+| `transitionTime` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### TransitionStatusMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L221`
+
+
+A base protocol for messages sent as responses to ``TransitionMessage``s.
+
+
+```ts
+class TransitionStatusMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `TransitionStatusMessage(): TransitionStatusMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `remainingTime` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### TransitionTime
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/transition-time.ts#L12`
+
+
+This structure represents a time needed to transition from one state to another, for example dimming a light. Internally, it uses steps and step resolution. Thanks to that only some time intervals are possible. Use ``TransitionTime/interval`` to get exact time
+
+
+```ts
+class TransitionTime
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `TransitionTime(steps: number, stepResolution: StepResolution): TransitionTime;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `stepResolution` | `StepResolution` | The step resolution. |
+| `steps` | `number` | Transition Number of Steps, 6-bit value. Value 0 indicates an immediate transition. Value 0x3F means that the value is unknown. The state cannot be set to this value, but an element may report an unknown value if a transition is higher than 0x3E or not determined. |
+| `immediate` | `TransitionTime` | Transition is immediate. |
+| `interval` | `unknown` | No description yet. |
+| `isImmediate` | `unknown` | No description yet. |
+| `isKnown` | `unknown` | No description yet. |
+| `milliseconds` | `unknown` | No description yet. |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `or` | `or(defaultTransitionTime?: TransitionTime): TransitionTime;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromInterval` | `fromInterval(interval: number): TransitionTime;` | No description yet. |
+| `fromRawValue` | `fromRawValue(rawValue: number): TransitionTime;` | No description yet. |
+| `unknown` | `unknown(): TransitionTime;` | No description yet. |
+
+### Transport
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/transport.ts#L5`
+
+
+Abstract base class for transport implementations. Provides a static method to retrieve the advertisement data service data key.
+
+
+```ts
+class Transport
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Transport(): Transport;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `AdvertisementDataServiceDataKey` | `unknown` | No description yet. |
+
+### tryOptionalAsync
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L24`
+
+
+```ts
+function tryOptionalAsync<T>(fn: () => Promise<T>): Promise<T | null>;
+```
+
+### typeOf
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/common.ts#L11`
+
+
+```ts
+function typeOf<T>(value: T): string;
+```
+
+### UInt16
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L16`
+
+
+Represents an unsigned 16-bit integer.
+
+
+```ts
+type UInt16 = number;
+```
+
+### UInt32
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L26`
+
+
+Represents an unsigned 32-bit integer.
+
+
+```ts
+type UInt32 = number;
+```
+
+### UInt64
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L36`
+
+
+Represents an unsigned 64-bit integer using bigint.
+
+
+```ts
+type UInt64 = Long;
+```
+
+### UInt8
+
+**Kind:** Type alias
+
+**Source:** `packages/utils/src/types/number.ts#L6`
+
+
+Represents an unsigned 8-bit integer.
+
+
+```ts
+type UInt8 = number;
+```
+
+### UnacknowledgedConfigMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/config-message.ts#L234`
+
+
+A base protocol for unacknowledged Configuration messages. Unacknowledged configuration messages are sent as replies to acknowledged messages.
+
+
+```ts
+class UnacknowledgedConfigMessage extends ConfigMessage<this> & UnacknowledgedMeshMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `UnacknowledgedConfigMessage(): UnacknowledgedConfigMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### UnacknowledgedMeshMessage
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/mesh-messages/mesh-message.ts#L110`
+
+
+The base class for unacknowledged messages.
+
+
+```ts
+class UnacknowledgedMeshMessage extends MeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `UnacknowledgedMeshMessage(): UnacknowledgedMeshMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(_parameters: Data): BaseMeshMessage \| undefined;` | No description yet. |
+
+### unpackInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L55`
+
+
+```ts
+function unpackInt16BE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L9`
+
+
+```ts
+function unpackInt16LE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L81`
+
+
+```ts
+function unpackInt32BE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L31`
+
+
+```ts
+function unpackInt32LE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackUInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L68`
+
+
+```ts
+function unpackUInt16BE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackUInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L20`
+
+
+```ts
+function unpackUInt16LE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackUInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L94`
+
+
+```ts
+function unpackUInt32BE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### unpackUInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L42`
+
+
+```ts
+function unpackUInt32LE(bytes: Uint8Array<ArrayBufferLike> | number[], offset: number, safe: boolean): number;
+```
+
+### UserDefaults
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/user-defaults.ts#L10`
+
+
+```ts
+class UserDefaults
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `clear` | `clear(): Promise<void>;` | No description yet. |
+| `get` | `get<T>(key: string, parser?: (v: unknown) => T): Promise<T \| undefined>;` | No description yet. |
+| `lastSeqAuthValue` | `lastSeqAuthValue(source: Address): Promise<Long \| undefined>;` | No description yet. |
+| `nextSequenceNumber` | `nextSequenceNumber(source: Address): Promise<number>;` | No description yet. |
+| `previousSeqAuthValue` | `previousSeqAuthValue(source: Address): Promise<Long \| undefined>;` | No description yet. |
+| `register` | `register(defaults: Record<string, StorageValue>): Promise<void>;` | No description yet. |
+| `remove` | `remove(key: string): Promise<void>;` | No description yet. |
+| `removeSeqAuthValuesOfAddress` | `removeSeqAuthValuesOfAddress(source: Address): Promise<void>;` | No description yet. |
+| `removeSeqAuthValuesOfNode` | `removeSeqAuthValuesOfNode(node: { elements: { unicastAddress: Address }[] }): Promise<void>;` | No description yet. |
+| `removeSequenceNumber` | `removeSequenceNumber(source: Address): Promise<void>;` | No description yet. |
+| `resetSequenceNumbers` | `resetSequenceNumbers(node: { elements: { unicastAddress: Address }[] }): Promise<void>;` | No description yet. |
+| `set` | `set<T>(key: string, value: T): Promise<void>;` | No description yet. |
+| `storeLastSeqAuthValue` | `storeLastSeqAuthValue(value: Long, source: Address): Promise<void>;` | No description yet. |
+| `storePreviousSeqAuthValue` | `storePreviousSeqAuthValue(value: Long, source: Address): Promise<void>;` | No description yet. |
+| `instance` | `instance(suiteName: string, storage: Storage): UserDefaults;` | No description yet. |
+
+### UUID
+
+**Kind:** Class
+
+**Source:** `packages/utils/src/types/uuid.ts#L12`
+
+
+Represents a universally unique identifier (UUID) with Swift-like API
+
+
+```ts
+class UUID
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `UUID($uuidString: string): UUID;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$uuidString` | `string` | Optional UUID string (default: random v4 UUID) |
+| `bytes` | `unknown` | No description yet. |
+| `hex` | `unknown` | No description yet. |
+| `uuidString` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: UUID): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromBluetoothUuidString` | `fromBluetoothUuidString(uuidString: string): UUID \| undefined;` | No description yet. |
+| `fromHex` | `fromHex(hex: string): UUID \| undefined;` | No description yet. |
+| `fromUuidString` | `fromUuidString(uuidString: string): UUID \| undefined;` | No description yet. |
+| `isBluetoothUUID` | `isBluetoothUUID(str: string): boolean;` | No description yet. |
+| `isValidUUIDString` | `isValidUUIDString(uuidString: string): boolean;` | No description yet. |
+| `random` | `random(): UUID;` | No description yet. |
+
+### uuidToHex
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/uuid.ts#L4`
+
+
+```ts
+function uuidToHex(uuid: string): string;
+```
+
+### uuidToUint8Array
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/uuid.ts#L16`
+
+
+```ts
+function uuidToUint8Array(uuid: string): Uint8Array;
+```
+
+### writeInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L58`
+
+
+```ts
+function writeInt16BE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L12`
+
+
+```ts
+function writeInt16LE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L84`
+
+
+```ts
+function writeInt32BE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L34`
+
+
+```ts
+function writeInt32LE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeUInt16BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L71`
+
+
+```ts
+function writeUInt16BE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeUInt16LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L23`
+
+
+```ts
+function writeUInt16LE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeUInt32BE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L97`
+
+
+```ts
+function writeUInt32BE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### writeUInt32LE
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/number.ts#L45`
+
+
+```ts
+function writeUInt32LE(n: number, out: Uint8Array, offset: number, clamp: boolean): number;
+```
+
+### xorUint8Arrays
+
+**Kind:** Function
+
+**Source:** `packages/utils/src/helpers/data.ts#L37`
+
+
+```ts
+function xorUint8Arrays(a: Uint8Array, b: Uint8Array): Uint8Array;
+```

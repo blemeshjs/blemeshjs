@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/emerald.css";
+@import "fumadocs-ui/css/preset.css";
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+@theme {
+  /* Base surfaces */
+  --color-fd-background: hsl(0 0% 95.7%); /* svg bg */
+  --color-fd-foreground: hsl(214 73% 19%); /* BLEMesh text */
+  --color-fd-muted: hsl(0 0% 97%);
+  --color-fd-muted-foreground: hsl(214 18% 42%);
+
+  /* Elevated surfaces */
+  --color-fd-popover: hsl(0 0% 98%);
+  --color-fd-popover-foreground: hsl(214 73% 19%);
+  --color-fd-card: hsl(0 0% 93%);
+  --color-fd-card-foreground: hsl(214 73% 19%);
+
+  /* Borders / subtle UI */
+  --color-fd-border: hsla(214 30% 30% / 0.12);
+  --color-fd-ring: hsl(174 72% 47%);
+
+  /* Primary brand */
+  --color-fd-primary: hsl(214 73% 19%); /* navy */
+  --color-fd-primary-foreground: hsl(0 0% 100%);
+
+  /* Secondary */
+  --color-fd-secondary: hsl(0 0% 92%);
+  --color-fd-secondary-foreground: hsl(214 73% 19%);
+
+  /* Accent brand */
+  --color-fd-accent: hsl(174 72% 47%); /* mesh teal */
+  --color-fd-accent-foreground: hsl(0 0% 100%);
+}
+
+.dark {
+  /* Dark surfaces */
+  --color-fd-background: hsl(220 22% 8%);
+  --color-fd-foreground: hsl(0 0% 94%);
+  --color-fd-muted: hsl(220 18% 12%);
+  --color-fd-muted-foreground: hsla(0 0% 78% / 0.75);
+
+  /* Elevated */
+  --color-fd-popover: hsl(220 18% 11%);
+  --color-fd-popover-foreground: hsl(0 0% 94%);
+  --color-fd-card: hsl(220 18% 10%);
+  --color-fd-card-foreground: hsl(0 0% 96%);
+
+  /* Borders */
+  --color-fd-border: hsla(0 0% 100% / 0.08);
+  --color-fd-ring: hsl(174 72% 52%);
+
+  /* Brand */
+  --color-fd-primary: hsl(0 0% 96%);
+  --color-fd-primary-foreground: hsl(214 73% 19%);
+
+  /* Secondary */
+  --color-fd-secondary: hsl(220 18% 14%);
+  --color-fd-secondary-foreground: hsl(0 0% 92%);
+
+  /* Accent */
+  --color-fd-accent: hsla(174 72% 47% / 0.22);
+  --color-fd-accent-foreground: hsl(174 85% 65%);
+}

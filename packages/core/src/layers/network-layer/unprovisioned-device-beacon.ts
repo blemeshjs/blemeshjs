@@ -1,4 +1,4 @@
-import { CBUUID, Data, isEnumCase, OobInformation, readUInt16BE, UUID } from "@mesh-link-js/utils";
+import { CBUUID, Data, isEnumCase, OobInformation, readUInt16BE, UUID } from "@blemeshjs/utils";
 import { BeaconPdu, BeaconType } from "./beacon-pdu.js";
 import { uint8ArrayToHex } from "uint8array-extras";
 

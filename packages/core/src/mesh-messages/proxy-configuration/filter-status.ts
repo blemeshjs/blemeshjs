@@ -6,7 +6,7 @@ import {
   StaticProxyConfigurationMessage,
   UInt16,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { concatUint8Arrays } from "uint8array-extras";
 
 /**

@@ -1,4 +1,4 @@
-import { Address, Data, MeshMessage, UInt16, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { Address, Data, MeshMessage, UInt16, UInt32, UInt8 } from "@blemeshjs/utils";
 import { NetworkKey } from "../../mesh-models/index.js";
 import { LowerTransportPduType } from "./lower-transport-pdu.js";
 import { SegmentedMessage } from "./segmented-message.js";

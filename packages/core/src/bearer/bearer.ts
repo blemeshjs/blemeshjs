@@ -1,4 +1,4 @@
-import { BindableTinyEmitter, Data, UInt8 } from "@mesh-link-js/utils";
+import { BindableTinyEmitter, Data, UInt8 } from "@blemeshjs/utils";
 import { BearerDataHandler, BearerHandler } from "./bearer-handler.js";
 import { Mixin } from "ts-mixer";
 import { ProvisioningRequest } from "../provisioning/provisioning-pdu.js";

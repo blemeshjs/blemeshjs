@@ -8,10 +8,10 @@ import {
   packUInt32BE,
   UInt32,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { AccessPdu } from "../access-layer/access-pdu.js";
 import { concatUint8Arrays, uint8ArrayToHex } from "uint8array-extras";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { AccessMessage } from "../lower-transport-layer/access-message.js";
 import { Group, MeshAddress, MeshNetwork } from "../../mesh-models/index.js";
 import Long from "long";

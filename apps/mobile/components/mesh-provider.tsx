@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { createRNMesh } from "@mesh-link-js/sdk-react-native";
-import { MeshNetworkManager } from "@mesh-link-js/sdk";
+import { createRNMesh } from "@blemeshjs/sdk-react-native";
+import { MeshNetworkManager } from "@blemeshjs/sdk";
 
 const MeshContext = createContext<MeshNetworkManager | null>(null);
 

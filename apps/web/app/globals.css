@@ -7,34 +7,49 @@
 [data-theme="light"],
 [data-theme="default"] {
   /* Theme Colors (Light Mode) */
-  --accent: oklch(79% 0.13 244);
-  --accent-foreground: oklch(15% 0.026 244);
-  --background: oklch(97.02% 0.017 244);
-  --border: oklch(90% 0.017 244);
+  --accent: oklch(72% 0.16 190); /* mesh teal */
+  --accent-foreground: oklch(99% 0 0);
+
+  --background: oklch(95.7% 0.002 220); /* svg bg */
+  --border: oklch(82% 0.01 220);
+
   --danger: oklch(65.32% 0.2407 24.56);
   --danger-foreground: oklch(99.11% 0 0);
-  --default: oklch(94% 0.017 244);
-  --default-foreground: oklch(21.03% 0.0059 244);
-  --field-background: oklch(100% 0.0085 244);
-  --field-foreground: oklch(21.03% 0.017 244);
-  --field-placeholder: oklch(55.17% 0.0341 244);
-  --focus: oklch(79% 0.13 244);
-  --foreground: oklch(21.03% 0.017 244);
-  --muted: oklch(55.17% 0.0341 244);
-  --overlay: oklch(100% 0.0051 244);
-  --overlay-foreground: oklch(21.03% 0.017 244);
-  --scrollbar: oklch(87.1% 0.017 244);
-  --segment: oklch(100% 0.017 244);
-  --segment-foreground: oklch(21.03% 0.017 244);
-  --separator: oklch(92% 0.017 244);
+
+  --default: oklch(93% 0.003 220);
+  --default-foreground: oklch(30% 0.09 250);
+
+  --field-background: oklch(98% 0.002 220);
+  --field-foreground: oklch(30% 0.09 250);
+  --field-placeholder: oklch(55% 0.02 230);
+
+  --focus: oklch(72% 0.16 190);
+
+  --foreground: oklch(30% 0.09 250); /* BLEMesh navy */
+  --muted: oklch(55% 0.02 230);
+
+  --overlay: oklch(98.5% 0.002 220);
+  --overlay-foreground: oklch(30% 0.09 250);
+
+  --scrollbar: oklch(87% 0.006 220);
+
+  --segment: oklch(100% 0.002 220);
+  --segment-foreground: oklch(30% 0.09 250);
+
+  --separator: oklch(90% 0.006 220);
+
   --success: oklch(73.29% 0.2001 149.63);
   --success-foreground: oklch(21.03% 0.0059 149.63);
-  --surface: oklch(100% 0.0085 244);
-  --surface-foreground: oklch(21.03% 0.017 244);
-  --surface-secondary: oklch(95.24% 0.0136 244);
-  --surface-secondary-foreground: oklch(21.03% 0.017 244);
-  --surface-tertiary: oklch(93.73% 0.0136 244);
-  --surface-tertiary-foreground: oklch(21.03% 0.017 244);
+
+  --surface: oklch(98% 0.002 220);
+  --surface-foreground: oklch(30% 0.09 250);
+
+  --surface-secondary: oklch(95% 0.003 220);
+  --surface-secondary-foreground: oklch(30% 0.09 250);
+
+  --surface-tertiary: oklch(93% 0.003 220);
+  --surface-tertiary-foreground: oklch(30% 0.09 250);
+
   --warning: oklch(78.19% 0.1639 71.15);
   --warning-foreground: oklch(21.03% 0.0059 71.15);
 
@@ -43,42 +58,57 @@
   --field-radius: 0.5rem;
 
   /* Font Family */
-  /* Make sure to load IBM Plex Mono font in your app */
   --font-sans: var(--font-ibm-plex-mono);
 }
 
 .dark,
 [data-theme="dark"] {
   color-scheme: dark;
+
   /* Theme Colors (Dark Mode) */
-  --accent: oklch(79% 0.13 244);
-  --accent-foreground: oklch(15% 0.026 244);
-  --background: oklch(12% 0.017 244);
-  --border: oklch(28% 0.017 244);
+  --accent: oklch(76% 0.16 190);
+  --accent-foreground: oklch(10% 0.01 240);
+
+  --background: oklch(18% 0.01 240);
+  --border: oklch(32% 0.01 240);
+
   --danger: oklch(59.4% 0.2034 23.45);
   --danger-foreground: oklch(99.11% 0 0);
-  --default: oklch(27.4% 0.017 244);
-  --default-foreground: oklch(99.11% 0 0);
-  --field-background: oklch(21.03% 0.0341 244);
-  --field-foreground: oklch(99.11% 0.017 244);
-  --field-placeholder: oklch(70.5% 0.0341 244);
-  --focus: oklch(79% 0.13 244);
-  --foreground: oklch(99.11% 0.017 244);
-  --muted: oklch(70.5% 0.0341 244);
-  --overlay: oklch(21.03% 0.0341 244);
-  --overlay-foreground: oklch(99.11% 0.017 244);
-  --scrollbar: oklch(70.5% 0.017 244);
-  --segment: oklch(39.64% 0.017 244);
-  --segment-foreground: oklch(99.11% 0.017 244);
-  --separator: oklch(25% 0.017 244);
+
+  --default: oklch(22% 0.012 240);
+  --default-foreground: oklch(96% 0.003 220);
+
+  --field-background: oklch(20% 0.012 240);
+  --field-foreground: oklch(96% 0.003 220);
+  --field-placeholder: oklch(70% 0.015 230);
+
+  --focus: oklch(76% 0.16 190);
+
+  --foreground: oklch(94% 0.003 220);
+  --muted: oklch(70% 0.015 230);
+
+  --overlay: oklch(21% 0.012 240);
+  --overlay-foreground: oklch(94% 0.003 220);
+
+  --scrollbar: oklch(48% 0.01 240);
+
+  --segment: oklch(26% 0.012 240);
+  --segment-foreground: oklch(94% 0.003 220);
+
+  --separator: oklch(25% 0.01 240);
+
   --success: oklch(73.29% 0.2001 149.63);
   --success-foreground: oklch(21.03% 0.0059 149.63);
-  --surface: oklch(21.03% 0.0341 244);
-  --surface-foreground: oklch(99.11% 0.017 244);
-  --surface-secondary: oklch(25.7% 0.0256 244);
-  --surface-secondary-foreground: oklch(99.11% 0.017 244);
-  --surface-tertiary: oklch(27.21% 0.0256 244);
-  --surface-tertiary-foreground: oklch(99.11% 0.017 244);
+
+  --surface: oklch(20% 0.012 240);
+  --surface-foreground: oklch(94% 0.003 220);
+
+  --surface-secondary: oklch(23% 0.012 240);
+  --surface-secondary-foreground: oklch(94% 0.003 220);
+
+  --surface-tertiary: oklch(26% 0.012 240);
+  --surface-tertiary-foreground: oklch(94% 0.003 220);
+
   --warning: oklch(82.03% 0.1435 75.16);
   --warning-foreground: oklch(21.03% 0.0059 75.16);
 }

@@ -1,33 +1,17 @@
-import { Geist, Geist_Mono, Noto_Sans } from "next/font/google"
+import { RootProvider } from 'fumadocs-ui/provider/next';
+import './global.css';
+import { Inter } from 'next/font/google';
 
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
+const inter = Inter({
+  subsets: ['latin'],
+});
 
-const notoSans = Noto_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("font-sans antialiased", fontMono.variable, notoSans.variable)}
-    >
-      <body className="min-h-svh bg-background text-foreground">
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" className={inter.className} suppressHydrationWarning>
+      <body className="flex flex-col min-h-screen">
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
-  )
+  );
 }

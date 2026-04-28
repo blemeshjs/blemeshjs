@@ -1,0 +1,3539 @@
+---
+title: Core Package
+description: Reusable mesh engine types, messages, bearers, and provisioning primitives shared across runtimes.
+icon: Layers
+---
+
+This page is auto-generated from `packages/core/src/**` and the public exports exposed by `@blemeshjs/core`.
+
+> Update TSDoc comments in source, then run `yarn workspace docs api:generate`. Normal docs `dev`, `build`, and `types:check` runs regenerate these pages automatically.
+
+## Package overview
+
+| Field | Value |
+| --- | --- |
+| Package | `@blemeshjs/core` |
+| Entry point | `packages/core/src/index.ts` |
+| Source tree | `packages/core/src/**` |
+
+
+## Export map
+
+| Export | Kind | Summary |
+| --- | --- | --- |
+| [AddressRange](#addressrange) | Class | The range of addresses of Unicast or Group type. |
+| [addressRangeContains](#addressrangecontains) | Function | No description yet. |
+| [ApplicationKey](#applicationkey) | Class | Application Keys are used to encrypt mesh messages on Access Layer. The Application Key is 128-bit long and is bound to a single Network Key. To use the Application Key, the bound Network Key must be used to encrypt the message on Network Layer. Each key is identified by a `KeyIndex`. There can be up to 4095 Application Keys in a mesh network. AID (Application Key identifier) is derived from the Application Key. The key can be change using Key Refresh Procedure (KRP). |
+| [ApplicationKeys](#applicationkeys) | Unknown | No description yet. |
+| [AuthAction](#authaction) | Type alias | A set of authentication actions aiming to strengthen device provisioning security. |
+| [AuthenticationMethod](#authenticationmethod) | Unknown | No description yet. |
+| [AuthenticationMethodType](#authenticationmethodtype) | Enumeration | No description yet. |
+| [BaseGattProxyBearer](#basegattproxybearer) | Class | Base implementation for GATT Proxy bearer. |
+| [Bearer](#bearer) | Class | The Bearer object is responsible for sending and receiving the data to the mesh network. |
+| [BearerDataHandler](#bearerdatahandler) | Class | A bearer data handler processes mesh messages received by the bearer. |
+| [BearerHandler](#bearerhandler) | Class | The bearer handler will receive events when the bearer has been opened or closed. |
+| [CapabilitiesReceived](#capabilitiesreceived) | Type alias | Provisioning Capabilities were received. |
+| [Complete](#complete) | Type alias | The provisioning process is complete. |
+| [CompositionDataPage](#compositiondatapage) | Class | A base protocol of a single Page of Composition Data. The Composition Data state contains information about a Node, the Elements it includes, and the supported models. The Composition Data is composed of a number of pages of information. |
+| [ConfigAppKeyAdd](#configappkeyadd) | Class | A `ConfigAppKeyAdd` is an acknowledged message used to add an `ApplicationKey` to the AppKey List on a Node and bind it to the `NetworkKey` identified by `NetworkKey.index`. The added Application Key can be used by the Node only as a pair with the specified Network Key. The Application Key is used to authenticate and decrypt messages it receives, as well as authenticate and encrypt messages it sends. |
+| [ConfigAppKeyDelete](#configappkeydelete) | Class | A `ConfigAppKeyDelete` is an acknowledged message used to delete an ``ApplicationKey`` from the AppKey List on a Node. To remove the key from the local Node you may use ``MeshNetwork.removeApplicationKey()``. WARN: It is not guaranteed, that the target Node will remove the key from its            AppKey List. To make sure the Node gets excluded, use ``ConfigAppKeyUpdate``            to update the value of the key and skip the Node when distributing the new            value. After the Key Refresh Procedure is complete, the target Node will            effectively be excluded from the mesh network. |
+| [ConfigAppKeyGet](#configappkeyget) | Class | A `ConfigAppKeyGet` is an acknowledged message used to report all ``ApplicationKey``s known to the Node that are bound to the given ``NetworkKey``. The response to this message is a ``ConfigNetKeyList`` message. |
+| [ConfigAppKeyList](#configappkeylist) | Class | A `ConfigAppKeyList` is an unacknowledged message reporting all ``ApplicationKey``s bound to requested ``NetworkKey`` that are known to the Node. |
+| [ConfigAppKeyStatus](#configappkeystatus) | Class | A `ConfigAppKeyStatus` is an unacknowledged message used to report a status for the requesting message, based on the `NetworkKey.index` identifying the `NetworkKey` on the NetKey List and on the `ApplicationKey.index` identifying the `ApplicationKey` on the AppKey List. |
+| [ConfigCompositionDataGet](#configcompositiondataget) | Class | No description yet. |
+| [ConfigCompositionDataStatus](#configcompositiondatastatus) | Class | No description yet. |
+| [ConfigDefaultTtlGet](#configdefaultttlget) | Class | No description yet. |
+| [ConfigDefaultTtlStatus](#configdefaultttlstatus) | Class | No description yet. |
+| [ConfigModelAppBind](#configmodelappbind) | Class | No description yet. |
+| [ConfigModelAppStatus](#configmodelappstatus) | Class | No description yet. |
+| [ConfigModelAppUnbind](#configmodelappunbind) | Class | No description yet. |
+| [ConfigNetKeyAdd](#confignetkeyadd) | Class | A `ConfigNetKeyAdd` is an acknowledged message used to add an ``NetworkKey`` to the NetKey List on a Node. The Network Key is used to authenticate and decrypt messages it receives, as well as authenticate and encrypt messages it sends. |
+| [ConfigNetKeyDelete](#confignetkeydelete) | Class | `ConfigNetKeyDelete` is an acknowledged message used to delete an `NetworkKey` from the NetKey List on a Node. To remove the key from the local Node you may use `MeshNetwork.remove()`. WARN: It is not guaranteed, that the target Node will remove the key from its            NetKey List. To make sure the Node gets excluded, use ``ConfigNetKeyUpdate``            to update the value of the key and skip the Node when distributing the new            value. After the Key Refresh Procedure is complete, the target Node will            effectively be excluded from the mesh network. |
+| [ConfigNetKeyStatus](#confignetkeystatus) | Class | A `ConfigNetKeyStatus` is an unacknowledged message used to report the status of the operation on the NetKey List. |
+| [ConfigNodeReset](#confignodereset) | Class | No description yet. |
+| [ConfigNodeResetStatus](#confignoderesetstatus) | Class | No description yet. |
+| [Element](#element) | Class | An Element is an addressable entity within a `Node`. Each Node has at least one element, the Primary Element, and may have one or more additional secondary elements. The number and structure of elements is static and does not change throughout the lifetime of a node (that is, as long as the node is part of a network). The Primary Element is addressed using the first Unicast Address assigned to the Node during provisioning. Each additional secondary element is addressed using the subsequent addresses. These unicast element addresses allow nodes to identify which element within a node is transmitting or receiving a message. |
+| [ElementData](#elementdata) | Class | No description yet. |
+| [Elements](#elements) | Unknown | No description yet. |
+| [Failed](#failed) | Type alias | The provisioning has failed because of a local error. |
+| [GattBearer](#gattbearer) | Class | The GATT bearer is responsible for sending and receiving mesh messages to and from the GATT Proxy Node. |
+| [GattBearerError](#gattbearererror) | Class | Set of errors that may be thrown from the GATT bearer. |
+| [GattBearerHandler](#gattbearerhandler) | Class | This class extends `BearerHandler` and adds GATT specific event handlers. |
+| [GenericOnOffGet](#genericonoffget) | Class | No description yet. |
+| [GenericOnOffSet](#genericonoffset) | Class | No description yet. |
+| [GenericOnOffStatus](#genericonoffstatus) | Class | No description yet. |
+| [Group](#group) | Class | The Group object represents a user-defined group of Nodes, identified by Group Address or Virtual Label. A group may be given a human-readable name. In Mesh Configuration Database a Group may have a parent Group, but this is not reflected in the Mesh Profile specification. Groups cannot form circle relationships. |
+| [HeartbeatMessage](#heartbeatmessage) | Class | No description yet. |
+| [InputAction](#inputaction) | Unknown | No description yet. |
+| [InputOob](#inputoob) | Interface | No description yet. |
+| [InputOobActions](#inputoobactions) | Class | A set of supported Input Out-of-band actions. |
+| [isGroupRanges](#isgroupranges) | Function | No description yet. |
+| [isUnicastRanges](#isunicastranges) | Function | No description yet. |
+| [isValidRanges](#isvalidranges) | Function | No description yet. |
+| [IvIndexObserver](#ivindexobserver) | Class | An observer class for the IV Index changes in the mesh network. WARNING: This class is for advanced users and should be used with caution. The IV Index is managed internally by the library. Tracking changes to the IV Index is not necessary for most applications. |
+| [mergedRanges](#mergedranges) | Function | No description yet. |
+| [MeshAddress](#meshaddress) | Class | No description yet. |
+| [MeshBearer](#meshbearer) | Class | A mesh bearer is used to send mesh messages to provisioned nodes. |
+| [MeshData](#meshdata) | Class | The Mesh Network configuration saved internally. It contains the Mesh Network and additional data that are not in the JSON schema, but are used by in the app. |
+| [MeshDataCtor](#meshdatactor) | Type alias | No description yet. |
+| [MeshNetwork](#meshnetwork) | Class | No description yet. |
+| [MeshNetworkCtor](#meshnetworkctor) | Type alias | No description yet. |
+| [MeshNetworkManager](#meshnetworkmanager) | Class | The main object responsible for managing the mesh network. |
+| [MessageHandle](#messagehandle) | Class | No description yet. |
+| [Model](#model) | Class | A Model defines the basic functionality of a `Node`. A Node may include one or more `Element`, each with one or mode models. A model defines the required states, the messages that act upon those states, and any associated behavior. Two Models with the same `Model.modelId` cannot be located on the same Element. A Model may extend another Model. Models in Extend relationship may share states. A Model which does not extend any other Model is called a *base* Model. Models in Extend relationship located on the same Element share the Subscription List. |
+| [ModelData](#modeldata) | Class | No description yet. |
+| [ModelHandler](#modelhandler) | Class | Model handler defines the functionality of a `Model` on the Local Node. Model Delegates are assigned to the Models during setting up the `MeshNetworkManager.localElements`. The Model Delegate must declare a map of mesh message type supported by this Model. Whenever a mesh message matching any of the declared Op Codes is received, and the Model instance is bound to the Application Key used to encrypt the message, one of the message handlers will be called: * `ModelDelegate.modelDidReceiveUnacknowledgedMessage()` * `ModelDelegate.modelDidReceiveAcknowledgedMessage()` * `ModelDelegate.modelDidReceiveResponse()` The Model Delegate also specifies should the Model support subscription and defines publication composer for automatic publications. |
+| [NetworkIdentity](#networkidentity) | Interface | The Network Identity contains information from Network Identity or Private Network Identity beacon. Network Identities can be matched to Network Keys in the network. |
+| [NetworkKey](#networkkey) | Class | No description yet. |
+| [NetworkKeyDerivatives](#networkkeyderivatives) | Class | No description yet. |
+| [NetworkKeys](#networkkeys) | Unknown | No description yet. |
+| [NetworkParameters](#networkparameters) | Class | No description yet. |
+| [NetworkParametersConfig](#networkparametersconfig) | Class | The builder allows easy configuration of `NetworkParameters`. |
+| [NetworkTransmit](#networktransmit) | Class | The object represents parameters of the transmissions of network layer messages originating from a mesh node. |
+| [Node](#node) | Class | No description yet. |
+| [NodeIdentity](#nodeidentity) | Interface | The Node Identity contains information from Node Identity or Private Node Identity beacon. It can be used to match advertising device to a specific `Node` in the network. |
+| [NodeKey](#nodekey) | Class | No description yet. |
+| [Nodes](#nodes) | Unknown | No description yet. |
+| [NoOob](#nooob) | Interface | No description yet. |
+| [OobType](#oobtype) | Class | A set of supported Out-Of-Band types. |
+| [OutputAction](#outputaction) | Unknown | No description yet. |
+| [OutputOob](#outputoob) | Interface | No description yet. |
+| [OutputOobActions](#outputoobactions) | Class | A set of supported Output Out-of-band actions. |
+| [Page0](#page0) | Class | Composition Data Page 0 shall be present on a Node. Composition Data Page 0 shall not change during a term of a Node on the network. |
+| [PBGattBearer](#pbgattbearer) | Class | The PB GATT bearer is responsible for sending and receiving mesh provisioning messages to and from the GATT Proxy Node. |
+| [PduType](#pdutype) | Unknown | No description yet. |
+| [PduTypes](#pdutypes) | Class | A set of supported PDU types by the bearer object. |
+| [Period](#period) | Class | The Publishing Period state determines the interval at which status messages are periodically published by a Model. |
+| [PrivateNetworkIdentity](#privatenetworkidentity) | Class | Representation of Private Network Identity advertising packet. |
+| [PrivateNodeIdentity](#privatenodeidentity) | Class | Representation of Private Node Identity advertising packet. |
+| [Provisioner](#provisioner) | Class | Representation of a Provisioner in the mesh network. A Provisioner is an entity that is able to provision other device to the mesh network by assigning them Unicast Addresses and providing a Network Key in a secure way. A Provisioner with a Unicast Address assigned may also configure devices and becomes a Node of a network on its own. Each Provisioner has assigned 3 ranges: * Unicast Address range - set of Unicast Addresses which may assign to new   Nodes during provisioning, * Group Address range - set of Group Addresses which the Provisioner may use   to define new groups. * Scene range - set of Scene numbers which it may use to define new scenes. The Provisioner should not assign addresses from outside of its ranges to avoid conflicts with other Provisioners. |
+| [Provisioning](#provisioning) | Type alias | Provisioning has been started. |
+| [ProvisioningBearer](#provisioningbearer) | Class | A provisioning bearer is used to send provisioning PDUs to unprovisioned devices. |
+| [ProvisioningCapabilities](#provisioningcapabilities) | Unknown | No description yet. |
+| [ProvisioningError](#provisioningerror) | Class | Set of errors which may be thrown during provisioning a device. |
+| [ProvisioningHandler](#provisioninghandler) | Type alias | The handler for receiving provisioning events. The handler must also provide user input during the provisioning process related to Input or Output OOB. |
+| [ProvisioningManager](#provisioningmanager) | Class | The manager responsible for provisioning a new device into the mesh network. To create an instance of a `ProvisioningManager` use `MeshNetworkManager.provisionUnprovisionedDevice()`. Provisioning is initiated by calling `identifyAndAttractFor()`. This method will make the provisioned device to blink, make sound or attract in any supported way, so that the user could verify which device is being provisioned. The target device will return `ProvisioningCapabilities`, returned to `handler` as `ProvisioningState.capabilitiesReceived()`. User needs to set the `unicastAddress` (by default set to `suggestedUnicastAddress`), `networkKey` and call `provision()`. If user interaction is required during provisioning process corresponding delegate callbacks will be invoked. The provisioning is completed when `ProvisioningState.complete` state is returned. |
+| [ProvisioningState](#provisioningstate) | Unknown | No description yet. |
+| [ProvisioningStateType](#provisioningstatetype) | Enumeration | No description yet. |
+| [ProxyProtocolHandler](#proxyprotocolhandler) | Class | This helper class allows segmentation and reassembly (SAR) using the Proxy Protocol defined in Bluetooth Mesh Profile 1.0.1. |
+| [PublicKey](#publickey) | Unknown | The type of Device Public key to be used. This enumeration is used to specify the Public Key type during provisioning in `ProvisioningManager.provision()`. |
+| [PublicKeyMethod](#publickeymethod) | Unknown | No description yet. |
+| [PublicKeyType](#publickeytype) | Class | The type of Public Key information. |
+| [PublicNetworkIdentity](#publicnetworkidentity) | Class | Representation of Network ID advertising packet. |
+| [PublicNodeIdentity](#publicnodeidentity) | Class | Representation of Node Identity advertising packet. |
+| [Publish](#publish) | Class | The Publishing object defines the publication configuration for a Model. When a Model is configured for publishing, it will sent messages whenever a state of the Model has changed, or periodically. The Publish object defines the destination address and the Application Key to encrypt the messages, together with other settings. To set the publication on a Model, send the `ConfigModelPublicationSet` or `ConfigModelPublicationVirtualAddressSet` messages to the Configuration Server model on the Node. The *Set* messages are confirmed with a `ConfigModelPublicationStatus`. |
+| [rangesContains](#rangescontains) | Function | No description yet. |
+| [Ready](#ready) | Type alias | Provisioning Manager is ready to start. |
+| [RemoteProvisioningError](#remoteprovisioningerror) | Unknown | No description yet. |
+| [RequestingCapabilities](#requestingcapabilities) | Type alias | The manager is requesting Provisioning Capabilities from the device. |
+| [Scene](#scene) | Class | A Scene represents a set of states stored with a Scene Number. A Scene is identified by a `SceneNumber` and may have a human-readable name associated. A Node having a Scene Server model can store the states of other models and restore them on demand. A Node with a Scene Client can recall Scenes on other Nodes. Use `Scene.elements` to get list of `Element's with the given Scene in their Scene Register. |
+| [SceneRange](#scenerange) | Class | The range of `SceneNumber`s assigned to a `Provisioner`. |
+| [serviceData](#servicedata) | Function | No description yet. |
+| [StaticOob](#staticoob) | Interface | No description yet. |
+| [StoredWithSceneModelHandler](#storedwithscenemodelhandler) | Class | The Model Handler which should be used for Models that allow storing the state with a Scene. In addition to handling messages, the Model Handler should also store and recall the current state whenever ``StoredWithSceneModelHandler.store()`` and ``StoredWithSceneModelHandler.recall()`` calls are received. Whenever the state changes due to any other reason than receiving a Scene Recall message, the handler should call ``StoredWithSceneModelHandler.networkDidExitStoredWithSceneState()`` to clear the Current State in the Scene Server model. |
+| [Transmitter](#transmitter) | Class | A transmitter is responsible for delivering messages to the mesh network. |
+| [UnknownNode](#unknownnode) | Class | A class representing an unknown Node connected as a GATT Proxy Node. An Unknown Node is a Node from which a message Proxy Configuration has been received, but the mesh network has no information about it. The Unknown Node has fixed security level set to `Security.insecure`, a single empty Element and only one `NetworkKey`, the one used to encrypt the Proxy Configuration message. All other properties are unknown. NOTE: It is not possible to request its Composition Data, as the Device Key is not known. |
+| [UnprovisionedDevice](#unprovisioneddevice) | Class | A class representing an unprovisioned device. |
+| [unprovisionedDeviceUUID](#unprovisioneddeviceuuid) | Function | No description yet. |
+
+## Exported API
+
+### AddressRange
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/address-range.ts#L43`
+
+
+The range of addresses of Unicast or Group type.
+
+
+```ts
+class AddressRange extends RangeObject<Address>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `AddressRange(range: ClosedRange<Address>): AddressRange;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `allGroupAddresses` | `AddressRange` | A range containing all Group Addresses. This range does not exclude Fixed Group Addresses or Virtual Addresses. |
+| `allUnicastAddresses` | `AddressRange` | A range containing all valid Unicast Addresses. |
+| `count` | `unknown` | No description yet. |
+| `highAddress` | `unknown` | No description yet. |
+| `isGroupRange` | `unknown` | No description yet. |
+| `isUnicastRange` | `unknown` | No description yet. |
+| `isValid` | `unknown` | No description yet. |
+| `lowAddress` | `unknown` | No description yet. |
+| `lowerBound` | `unknown` | No description yet. |
+| `range` | `unknown` | No description yet. |
+| `upperBound` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(value: Address): boolean;` | No description yet. |
+| `containsRange` | `containsRange(range: RangeObject<Address>): boolean;` | No description yet. |
+| `overlaps` | `overlaps(other: RangeObject<Address>): boolean;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): AddressRange;` | No description yet. |
+| `fromAddress` | `fromAddress(address: Address, elementsCount: number): AddressRange;` | No description yet. |
+| `fromNode` | `fromNode(node: Node): AddressRange;` | No description yet. |
+
+### addressRangeContains
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models/address-range.ts#L36`
+
+
+```ts
+function addressRangeContains(range: AddressRange[], value: number): boolean;
+```
+
+### ApplicationKey
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/application-key.ts#L24`
+
+
+Application Keys are used to encrypt mesh messages on Access Layer. The Application Key is 128-bit long and is bound to a single Network Key. To use the Application Key, the bound Network Key must be used to encrypt the message on Network Layer. Each key is identified by a `KeyIndex`. There can be up to 4095 Application Keys in a mesh network. AID (Application Key identifier) is derived from the Application Key. The key can be change using Key Refresh Procedure (KRP).
+
+
+```ts
+class ApplicationKey extends Key
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ApplicationKey($name: string, $index: KeyIndex, key: Data, $boundNetworkKeyIndex: KeyIndex): ApplicationKey;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$index` | `KeyIndex` | No description yet. |
+| `$key` | `Data` | 128-bit key. |
+| `$name` | `string` | No description yet. |
+| `aid` | `number` | No description yet. |
+| `meshNetwork` | `MeshNetwork` | No description yet. |
+| `oldAid` | `number` | No description yet. |
+| `boundNetworkKey` | `unknown` | No description yet. |
+| `boundNetworkKeyIndex` | `unknown` | No description yet. |
+| `index` | `unknown` | No description yet. |
+| `key` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `oldKey` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindToNetworkKey` | `bindToNetworkKey(networkKey: NetworkKey): MeshNetworkError \| undefined;` | No description yet. |
+| `equals` | `equals(other: ApplicationKey): boolean;` | No description yet. |
+| `isBoundToModel` | `isBoundToModel(model: Model): boolean;` | No description yet. |
+| `isBoundToNetworkKey` | `isBoundToNetworkKey(networkKey: NetworkKey): boolean;` | No description yet. |
+| `isUsedIn` | `isUsedIn(meshNetwork: MeshNetwork): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): ApplicationKey;` | No description yet. |
+| `withProperties` | `withProperties(name: string, index: KeyIndex, key: Data, networkKey: NetworkKey): ApplicationKey \| MeshNetworkError;` | No description yet. |
+
+### ApplicationKeys
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/mesh-models-array/application-keys.ts#L6`
+
+### AuthAction
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L106`
+
+
+A set of authentication actions aiming to strengthen device provisioning security.
+
+
+```ts
+type AuthAction = { action: "provideStaticKey"; callback: (data: Data) => void } | { action: "provideNumeric"; callback: (val: Long) => void; maximumNumberOfDigits: UInt8; outputAction: OutputAction } | { action: "provideAlphanumeric"; callback: (text: string) => void; maximumNumberOfCharacters: UInt8 } | { action: "displayNumber"; inputAction: InputAction; value: BigUInt } | { action: "displayAlphanumeric"; text: string };
+```
+
+### AuthenticationMethod
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/oob.ts#L215`
+
+### AuthenticationMethodType
+
+**Kind:** Enumeration
+
+**Source:** `packages/core/src/provisioning/oob.ts#L151`
+
+
+```ts
+enum AuthenticationMethodType {
+  inputOob,
+  noOob,
+  outputOob,
+  staticOob,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `inputOob` | Input OOB authentication. User need to input a value displayed on the Provisioner's screen on the Unprovisioned Device. The value to display to the user will be given using `ProvisioningDelegate.authenticationActionRequired()`. When user completes entering the value `ProvisioningDelegate.inputComplete()` will be called. |
+| `noOob` | No OOB authentication. WARN: This method is considered not secure. |
+| `outputOob` | OOB authentication. The Provisionee will signal a random value using specified method. The value should be provided during provisioning using `ProvisioningDelegate.authenticationActionRequired()`. |
+| `staticOob` | Static OOB authentication. User will be asked to provide 16 or 32 byte hexadecimal value. The value can be read from the device, QR code, website, etc. See `UnprovisionedDevice.oobInformation` for location. |
+
+### BaseGattProxyBearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/base-gatt-proxy-bearer.ts#L34`
+
+
+Base implementation for GATT Proxy bearer.
+
+
+```ts
+class BaseGattProxyBearer<Service> extends Bearer<this> & BindableTinyEmitter<GattBearerHandler, this> implements CBPeripheralHandler, CBCentralManagerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BaseGattProxyBearer<Service>(name: string \| undefined, uuid: UUID, centralManager: CBCentralManager, service: Service): BaseGattProxyBearer<Service>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `basePeripheral` | `CBPeripheral` | No description yet. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void & (handler: Partial<E>) => () => void` | No description yet. |
+| `centralManager` | `CBCentralManager` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void & (event: K, args: Parameters<GattBearerHandler[K]>) => void` | No description yet. |
+| `identifier` | `UUID` | The UUID associated with the peer. |
+| `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
+| `isOpen` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
+| `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
+| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
+| `close` | `close(): void;` | No description yet. |
+| `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
+| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
+| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
+| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
+| `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
+| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
+| `open` | `open(): void;` | No description yet. |
+| `readRSSI` | `readRSSI(): void;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+
+### Bearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer.ts#L127`
+
+
+The Bearer object is responsible for sending and receiving the data to the mesh network.
+
+
+```ts
+class Bearer extends BindableTinyEmitter<BearerHandler<Bearer> & BearerDataHandler<Bearer>, this> & Transmitter<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Bearer(): Bearer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void` | No description yet. |
+| `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `close` | `close(): void \| Error;` | No description yet. |
+| `open` | `open(): void \| Error;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+
+### BearerDataHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer-handler.ts#L7`
+
+
+A bearer data handler processes mesh messages received by the bearer.
+
+
+```ts
+class BearerDataHandler<T>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BearerDataHandler<T>(): BearerDataHandler<T>;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bearerDidDeliverData` | `bearerDidDeliverData(bearer: T, data: Data, type: PduType): void;` | No description yet. |
+
+### BearerHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer-handler.ts#L24`
+
+
+The bearer handler will receive events when the bearer has been opened or closed.
+
+
+```ts
+class BearerHandler<T>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `BearerHandler<T>(): BearerHandler<T>;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bearerDidClose` | `bearerDidClose(bearer: T, error?: Error): void;` | No description yet. |
+| `bearerDidOpen` | `bearerDidOpen(bearer: T): void;` | No description yet. |
+
+### CapabilitiesReceived
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L40`
+
+
+Provisioning Capabilities were received.
+
+
+```ts
+type CapabilitiesReceived = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `capabilities` | `ProvisioningCapabilities` | No description yet. |
+| `type` | `capabilitiesReceived` | No description yet. |
+
+### Complete
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L35`
+
+
+The provisioning process is complete.
+
+
+```ts
+type Complete = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `complete` | No description yet. |
+
+### CompositionDataPage
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-composition-data-status.ts#L24`
+
+
+A base protocol of a single Page of Composition Data. The Composition Data state contains information about a Node, the Elements it includes, and the supported models. The Composition Data is composed of a number of pages of information.
+
+
+```ts
+class CompositionDataPage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CompositionDataPage(): CompositionDataPage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `page` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+
+### ConfigAppKeyAdd
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-app-key-add.ts#L24`
+
+
+A `ConfigAppKeyAdd` is an acknowledged message used to add an `ApplicationKey` to the AppKey List on a Node and bind it to the `NetworkKey` identified by `NetworkKey.index`. The added Application Key can be used by the Node only as a pair with the specified Network Key. The Application Key is used to authenticate and decrypt messages it receives, as well as authenticate and encrypt messages it sends.
+
+
+```ts
+class ConfigAppKeyAdd extends AcknowledgedConfigMessage<this> & ConfigNetAndAppKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyAdd(networkKeyIndex: KeyIndex, applicationKeyIndex: KeyIndex, key: Data): ConfigAppKeyAdd;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `key` | `Data` | The 128-bit Application Key data. |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigAppKeyStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetAndAppKeyIndex` | `encodeNetAndAppKeyIndex(): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetAndAppKeyIndex` | `decodeNetAndAppKeyIndex(data: Data, offset: number): { applicationKeyIndex: KeyIndex; networkKeyIndex: KeyIndex };` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromApplicationKey` | `fromApplicationKey(applicationKey: ApplicationKey): ConfigAppKeyAdd;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigAppKeyAdd \| undefined;` | No description yet. |
+
+### ConfigAppKeyDelete
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-app-key-delete.ts#L24`
+
+
+A `ConfigAppKeyDelete` is an acknowledged message used to delete an ``ApplicationKey`` from the AppKey List on a Node. To remove the key from the local Node you may use ``MeshNetwork.removeApplicationKey()``. WARN: It is not guaranteed, that the target Node will remove the key from its            AppKey List. To make sure the Node gets excluded, use ``ConfigAppKeyUpdate``            to update the value of the key and skip the Node when distributing the new            value. After the Key Refresh Procedure is complete, the target Node will            effectively be excluded from the mesh network.
+
+
+```ts
+class ConfigAppKeyDelete extends AcknowledgedConfigMessage<this> & ConfigNetAndAppKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyDelete(networkKeyIndex: KeyIndex, applicationKeyIndex: KeyIndex): ConfigAppKeyDelete;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigAppKeyStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetAndAppKeyIndex` | `encodeNetAndAppKeyIndex(): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetAndAppKeyIndex` | `decodeNetAndAppKeyIndex(data: Data, offset: number): { applicationKeyIndex: KeyIndex; networkKeyIndex: KeyIndex };` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromApplicationKey` | `fromApplicationKey(applicationKey: ApplicationKey): ConfigAppKeyDelete;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigAppKeyDelete \| undefined;` | No description yet. |
+
+### ConfigAppKeyGet
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-app-key-get.ts#L18`
+
+
+A `ConfigAppKeyGet` is an acknowledged message used to report all ``ApplicationKey``s known to the Node that are bound to the given ``NetworkKey``. The response to this message is a ``ConfigNetKeyList`` message.
+
+
+```ts
+class ConfigAppKeyGet extends AcknowledgedConfigMessage<this> & ConfigNetKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyGet(networkKeyIndex: KeyIndex): ConfigAppKeyGet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigAppKeyList` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigAppKeyGet \| undefined;` | No description yet. |
+| `fromNetworkKey` | `fromNetworkKey(networkKey: NetworkKey): ConfigAppKeyGet;` | No description yet. |
+
+### ConfigAppKeyList
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-app-key-list.ts#L19`
+
+
+A `ConfigAppKeyList` is an unacknowledged message reporting all ``ApplicationKey``s bound to requested ``NetworkKey`` that are known to the Node.
+
+
+```ts
+class ConfigAppKeyList extends ConfigResponse<this> & ConfigStatusMessage<this> & ConfigNetKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyList(status: ConfigMessageStatus, networkKeyIndex: KeyIndex, applicationKeyIndexes: KeyIndex[]): ConfigAppKeyList;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndexes` | `KeyIndex[]` | Application Key Indexes bound to the Network Key known to the Node. |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `status` | `ConfigMessageStatus` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigAppKeyList \| undefined;` | No description yet. |
+| `responseTo` | `responseTo(request: ConfigAppKeyGet, applicationKeys: ApplicationKey[]): ConfigAppKeyList;` | No description yet. |
+| `responseToWithStatus` | `responseToWithStatus(request: ConfigAppKeyGet, status: ConfigMessageStatus): ConfigAppKeyList;` | No description yet. |
+
+### ConfigAppKeyStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-app-key-status.ts#L21`
+
+
+A `ConfigAppKeyStatus` is an unacknowledged message used to report a status for the requesting message, based on the `NetworkKey.index` identifying the `NetworkKey` on the NetKey List and on the `ApplicationKey.index` identifying the `ApplicationKey` on the AppKey List.
+
+
+```ts
+class ConfigAppKeyStatus extends ConfigResponse<this> & ConfigStatusMessage<this> & ConfigNetAndAppKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigAppKeyStatus(networkKeyIndex: KeyIndex, applicationKeyIndex: KeyIndex, status: ConfigMessageStatus): ConfigAppKeyStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `status` | `ConfigMessageStatus` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetAndAppKeyIndex` | `encodeNetAndAppKeyIndex(): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetAndAppKeyIndex` | `decodeNetAndAppKeyIndex(data: Data, offset: number): { applicationKeyIndex: KeyIndex; networkKeyIndex: KeyIndex };` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromApplicationKey` | `fromApplicationKey(applicationKey: ApplicationKey): ConfigAppKeyStatus;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigAppKeyStatus \| undefined;` | No description yet. |
+| `responseTo` | `responseTo(request: ConfigNetAndAppKeyMessage, status: ConfigMessageStatus): ConfigAppKeyStatus;` | No description yet. |
+
+### ConfigCompositionDataGet
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-composition-data-get.ts#L4`
+
+
+```ts
+class ConfigCompositionDataGet extends AcknowledgedConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigCompositionDataGet(page: number): ConfigCompositionDataGet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `page` | `number` | Page number of the Composition Data to get. |
+| `responseType` | `typeof ConfigCompositionDataStatus` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigCompositionDataGet \| undefined;` | No description yet. |
+
+### ConfigCompositionDataStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-composition-data-status.ts#L35`
+
+
+```ts
+class ConfigCompositionDataStatus extends ConfigResponse
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigCompositionDataStatus($page: CompositionDataPage): ConfigCompositionDataStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `page` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigCompositionDataStatus \| undefined;` | No description yet. |
+
+### ConfigDefaultTtlGet
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-default-ttl-get.ts#L4`
+
+
+```ts
+class ConfigDefaultTtlGet extends AcknowledgedConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigDefaultTtlGet(): ConfigDefaultTtlGet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigDefaultTtlStatus` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigDefaultTtlGet \| undefined;` | No description yet. |
+
+### ConfigDefaultTtlStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-default-ttl-status.ts#L3`
+
+
+```ts
+class ConfigDefaultTtlStatus extends ConfigResponse
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigDefaultTtlStatus(ttl: number): ConfigDefaultTtlStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `ttl` | `number` | The Time To Live (TTL) value. Valid value is in range 1...127. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigDefaultTtlStatus \| undefined;` | No description yet. |
+
+### ConfigModelAppBind
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-model-app-bind.ts#L19`
+
+
+```ts
+class ConfigModelAppBind extends AcknowledgedConfigMessage<this> & ConfigAppKeyMessage<this> & ConfigAnyModelMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigModelAppBind(applicationKeyIndex: KeyIndex, elementAddress: Address, modelIdentifier: number, companyIdentifier: number \| undefined): ConfigModelAppBind;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `companyIdentifier` | `number \| undefined` | No description yet. |
+| `elementAddress` | `Address` | No description yet. |
+| `modelIdentifier` | `number` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigModelAppStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `modelId` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromApplicationKey` | `fromApplicationKey(applicationKey: ApplicationKey, model: Model): ConfigModelAppBind \| undefined;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigModelAppBind \| undefined;` | No description yet. |
+
+### ConfigModelAppStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-model-app-status.ts#L20`
+
+
+```ts
+class ConfigModelAppStatus extends ConfigResponse<this> & ConfigStatusMessage<this> & ConfigAppKeyMessage<this> & ConfigAnyModelMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigModelAppStatus(applicationKeyIndex: KeyIndex, elementAddress: Address, modelIdentifier: number, status: ConfigMessageStatus, companyIdentifier: number \| undefined): ConfigModelAppStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `companyIdentifier` | `number \| undefined` | No description yet. |
+| `elementAddress` | `Address` | No description yet. |
+| `modelIdentifier` | `number` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `status` | `ConfigMessageStatus` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `modelId` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `confirm` | `confirm<T>(request: T): ConfigModelAppStatus;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigModelAppStatus \| undefined;` | No description yet. |
+| `responseTo` | `responseTo<T>(request: T, status: ConfigMessageStatus): ConfigModelAppStatus;` | No description yet. |
+
+### ConfigModelAppUnbind
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-model-app-unbind.ts#L19`
+
+
+```ts
+class ConfigModelAppUnbind extends AcknowledgedConfigMessage<this> & ConfigAppKeyMessage<this> & ConfigAnyModelMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigModelAppUnbind(applicationKeyIndex: KeyIndex, elementAddress: Address, modelIdentifier: number, companyIdentifier: number \| undefined): ConfigModelAppUnbind;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeyIndex` | `KeyIndex` | No description yet. |
+| `companyIdentifier` | `number \| undefined` | No description yet. |
+| `elementAddress` | `Address` | No description yet. |
+| `modelIdentifier` | `number` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigModelAppStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `modelId` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromApplicationKey` | `fromApplicationKey(applicationKey: ApplicationKey, model: Model): ConfigModelAppUnbind \| undefined;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigModelAppUnbind \| undefined;` | No description yet. |
+
+### ConfigNetKeyAdd
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-net-key-add.ts#L20`
+
+
+A `ConfigNetKeyAdd` is an acknowledged message used to add an ``NetworkKey`` to the NetKey List on a Node. The Network Key is used to authenticate and decrypt messages it receives, as well as authenticate and encrypt messages it sends.
+
+
+```ts
+class ConfigNetKeyAdd extends AcknowledgedConfigMessage<this> & ConfigNetKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNetKeyAdd(networkKeyIndex: KeyIndex, key: Data): ConfigNetKeyAdd;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `key` | `Data` | The 128-bit Application Key data. |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigNetKeyStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigNetKeyAdd \| undefined;` | No description yet. |
+| `fromNetworkKey` | `fromNetworkKey(networkKey: NetworkKey): ConfigNetKeyAdd;` | No description yet. |
+
+### ConfigNetKeyDelete
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-net-key-delete.ts#L24`
+
+
+`ConfigNetKeyDelete` is an acknowledged message used to delete an `NetworkKey` from the NetKey List on a Node. To remove the key from the local Node you may use `MeshNetwork.remove()`. WARN: It is not guaranteed, that the target Node will remove the key from its            NetKey List. To make sure the Node gets excluded, use ``ConfigNetKeyUpdate``            to update the value of the key and skip the Node when distributing the new            value. After the Key Refresh Procedure is complete, the target Node will            effectively be excluded from the mesh network.
+
+
+```ts
+class ConfigNetKeyDelete extends AcknowledgedConfigMessage<this> & ConfigNetKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNetKeyDelete(networkKeyIndex: KeyIndex): ConfigNetKeyDelete;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigNetKeyStatus` | The Type of the response message. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigNetKeyDelete \| undefined;` | No description yet. |
+| `fromNetworkKey` | `fromNetworkKey(networkKey: NetworkKey): ConfigNetKeyDelete;` | No description yet. |
+
+### ConfigNetKeyStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-net-key-status.ts#L19`
+
+
+A `ConfigNetKeyStatus` is an unacknowledged message used to report the status of the operation on the NetKey List.
+
+
+```ts
+class ConfigNetKeyStatus extends ConfigResponse<this> & ConfigStatusMessage<this> & ConfigNetKeyMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNetKeyStatus(networkKeyIndex: KeyIndex, status: ConfigMessageStatus): ConfigNetKeyStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `networkKeyIndex` | `KeyIndex` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `status` | `ConfigMessageStatus` | No description yet. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isSuccess` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `message` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `encodeNetKeyIndex` | `encodeNetKeyIndex(): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `decodeNetKeyIndex` | `decodeNetKeyIndex(data: Data, offset: number): KeyIndex;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigNetKeyStatus \| undefined;` | No description yet. |
+| `fromNetworkKey` | `fromNetworkKey(networkKey: NetworkKey): ConfigNetKeyStatus;` | No description yet. |
+| `responseTo` | `responseTo(request: ConfigNetKeyMessage, status: ConfigMessageStatus): ConfigNetKeyStatus;` | No description yet. |
+
+### ConfigNodeReset
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-node-reset.ts#L4`
+
+
+```ts
+class ConfigNodeReset extends AcknowledgedConfigMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNodeReset(): ConfigNodeReset;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof ConfigNodeResetStatus` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigNodeReset \| undefined;` | No description yet. |
+
+### ConfigNodeResetStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-node-reset-status.ts#L3`
+
+
+```ts
+class ConfigNodeResetStatus extends ConfigResponse
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConfigNodeResetStatus(): ConfigNodeResetStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `encode` | `encode(indexes: KeyIndex[], limit?: number): Data;` | No description yet. |
+| `decode` | `decode(data: Data, offset: number, limit?: number): KeyIndex[];` | No description yet. |
+| `fromData` | `fromData(parameters: Data): ConfigNodeResetStatus \| undefined;` | No description yet. |
+
+### Element
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/element.ts#L38`
+
+
+An Element is an addressable entity within a `Node`. Each Node has at least one element, the Primary Element, and may have one or more additional secondary elements. The number and structure of elements is static and does not change throughout the lifetime of a node (that is, as long as the node is part of a network). The Primary Element is addressed using the first Unicast Address assigned to the Node during provisioning. Each additional secondary element is addressed using the subsequent addresses. These unicast element addresses allow nodes to identify which element within a node is transmitting or receiving a message.
+
+
+```ts
+class Element
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Element(name: string \| undefined, location: Location, models: Model[]): Element;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `index` | `number` | Numeric order of the Element within this Node. |
+| `name` | `string \| undefined` | UTF-8 human-readable name of the Element. |
+| `parentNode` | `Node \| undefined` | Parent Node. This may be `undefined` if the Element was obtained in Composition Data and has not yet been added to a Node. |
+| `isPrimary` | `unknown` | No description yet. |
+| `location` | `unknown` | No description yet. |
+| `models` | `unknown` | No description yet. |
+| `unicastAddress` | `unknown` | No description yet. |
+| `primaryElement` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addModel` | `addModel(model: Model): void;` | No description yet. |
+| `addPrimaryElementModels` | `addPrimaryElementModels(meshNetwork: MeshNetwork, _publisher: MeshNetworkManager): void;` | No description yet. |
+| `containsModelWithSigModelId` | `containsModelWithSigModelId(sigModelId: number): boolean;` | No description yet. |
+| `insertModel` | `insertModel(model: Model, i: number): void;` | No description yet. |
+| `modelWithModelId` | `modelWithModelId(modelId: number): Model \| undefined;` | No description yet. |
+| `removePrimaryElementModels` | `removePrimaryElementModels(): void;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): Element;` | No description yet. |
+| `fromLocation` | `fromLocation(location: Location): Element;` | No description yet. |
+
+### ElementData
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models-array/elements.ts#L16`
+
+
+```ts
+class ElementData
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ElementData(index: number, location: Location, models: ModelData[]): ElementData;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `index` | `number` | Numeric order of the Element within this Node. |
+| `location` | `Location` | Description of the Element's location. |
+| `models` | `ModelData[]` | An array of Model objects in the Element. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromCompositionData` | `fromCompositionData(compositionData: Data, offset: number, index: number): { elementData: ElementData; offset: number } \| undefined;` | No description yet. |
+| `fromElement` | `fromElement(element: Element): ElementData;` | No description yet. |
+
+### Elements
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/mesh-models-array/elements.ts#L135`
+
+### Failed
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L48`
+
+
+The provisioning has failed because of a local error.
+
+
+```ts
+type Failed = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `error` | `Error` | No description yet. |
+| `type` | `failed` | No description yet. |
+
+### GattBearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/gatt-bearer.ts#L10`
+
+
+The GATT bearer is responsible for sending and receiving mesh messages to and from the GATT Proxy Node.
+
+
+```ts
+class GattBearer extends BaseGattProxyBearer<typeof MeshProxyService, this> & MeshBearer<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `GattBearer(name: string \| undefined, uuid: UUID, centralManager: CBCentralManager): GattBearer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `basePeripheral` | `CBPeripheral` | No description yet. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void & (handler: Partial<E>) => () => void` | No description yet. |
+| `centralManager` | `CBCentralManager` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void & (event: K, args: Parameters<GattBearerHandler[K]>) => void` | No description yet. |
+| `identifier` | `UUID` | The UUID associated with the peer. |
+| `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
+| `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
+| `name` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
+| `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
+| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
+| `close` | `close(): void;` | No description yet. |
+| `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
+| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
+| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
+| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
+| `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
+| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
+| `open` | `open(): void;` | No description yet. |
+| `readRSSI` | `readRSSI(): void;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+| `fromPeripheral` | `fromPeripheral(peripheral: CBPeripheral, centralManager: CBCentralManager): GattBearer;` | No description yet. |
+
+### GattBearerError
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/gatt-bearer-error.ts#L4`
+
+
+Set of errors that may be thrown from the GATT bearer.
+
+
+```ts
+class GattBearerError extends Error
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `deviceNotSupported` | `GattBearerError` | The connected device does not have services required by the Bearer. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### GattBearerHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/gatt-bearer-handler.ts#L9`
+
+
+This class extends `BearerHandler` and adds GATT specific event handlers.
+
+
+```ts
+class GattBearerHandler extends BearerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `GattBearerHandler(): GattBearerHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bearerDidClose` | `bearerDidClose(bearer: Bearer, error?: Error): void;` | No description yet. |
+| `bearerDidConnect` | `bearerDidConnect(bearer: Bearer): void;` | No description yet. |
+| `bearerDidDiscoverServices` | `bearerDidDiscoverServices(bearer: Bearer): void;` | No description yet. |
+| `bearerDidOpen` | `bearerDidOpen(bearer: Bearer): void;` | No description yet. |
+| `bearerDidReadRSSI` | `bearerDidReadRSSI(bearer: Bearer, RSSI: Long): void;` | No description yet. |
+
+### GenericOnOffGet
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/generic/generic-on-off-get.ts#L4`
+
+
+```ts
+class GenericOnOffGet extends StaticAcknowledgedMeshMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `GenericOnOffGet(): GenericOnOffGet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof GenericOnOffStatus` | The Type of the response message. |
+| `opCode` | `number` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(parameters: Data): undefined;` | No description yet. |
+
+### GenericOnOffSet
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/generic/generic-on-off-set.ts#L14`
+
+
+```ts
+class GenericOnOffSet extends StaticAcknowledgedMeshMessage<this> & TransactionMessage<this> & TransitionMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `GenericOnOffSet(isOn: boolean, transitionTime: TransitionTime \| undefined, delay: number \| undefined): GenericOnOffSet;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `delay` | `number \| undefined` | Message execution delay in 5 millisecond steps. |
+| `isOn` | `boolean` | The new state of Generic OnOff Server. |
+| `opCode` | `number` | The message Op Code. |
+| `responseType` | `typeof GenericOnOffStatus` | The Type of the response message. |
+| `tid` | `number` | Transaction identifier. If not set, this field will automatically be set when the message is being sent or received. |
+| `transitionTime` | `TransitionTime \| undefined` | The time that an element will take to transition to the target state from the present state. |
+| `opCode` | `number` | The message Op Code. |
+| `continueTransaction` | `unknown` | No description yet. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `responseOpCode` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromData` | `fromData(parameters: Data): GenericOnOffSet \| undefined;` | No description yet. |
+
+### GenericOnOffStatus
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/generic/generic-on-off-status.ts#L11`
+
+
+```ts
+class GenericOnOffStatus extends StaticMeshResponse<this> & TransitionStatusMessage<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `GenericOnOffStatus(isOn: boolean, remainingTime: TransitionTime \| undefined, targetState?: boolean): GenericOnOffStatus;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `isOn` | `boolean` | The present state of Generic OnOff Server. |
+| `opCode` | `number` | The message Op Code. |
+| `remainingTime` | `TransitionTime \| undefined` | No description yet. |
+| `targetState` | `boolean` | The target state of Generic OnOff Server. |
+| `opCode` | `number` | The message Op Code. |
+| `isAcknowledged` | `unknown` | No description yet. |
+| `isSegmented` | `unknown` | No description yet. |
+| `isVendorMessage` | `unknown` | No description yet. |
+| `parameters` | `unknown` | No description yet. |
+| `security` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): GenericOnOffStatus \| undefined;` | No description yet. |
+| `fromIsOn` | `fromIsOn(isOn: boolean): GenericOnOffStatus;` | No description yet. |
+| `withStateAndTime` | `withStateAndTime(isOn: boolean, targetState: boolean, remainingTime: TransitionTime): GenericOnOffStatus;` | No description yet. |
+
+### Group
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/group.ts#L15`
+
+
+The Group object represents a user-defined group of Nodes, identified by Group Address or Virtual Label. A group may be given a human-readable name. In Mesh Configuration Database a Group may have a parent Group, but this is not reflected in the Mesh Profile specification. Groups cannot form circle relationships.
+
+
+```ts
+class Group
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Group(): Group;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$groupName` | `string` | No description yet. |
+| `address` | `MeshAddress` | The address of the group. |
+| `groupAddress` | `string` | The address property contains a 4-character hexadecimal string from 0xC000 to 0xFEFF or a 32-character hexadecimal string of virtual label UUID, and is the address of the group. |
+| `meshNetwork` | `MeshNetwork` | No description yet. |
+| `parentAddress` | `string` | The parentAddress property contains a 4-character hexadecimal string or a 32-character hexadecimal string and represents an address of a parent Group in which this group is included. The value of "0000" indicates that the group is not included in another group (i.e., the group has no parent). |
+| `groupName` | `unknown` | No description yet. |
+| `isUsed` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: Group): boolean;` | No description yet. |
+| `isDirectChildOf` | `isDirectChildOf(parent: Group): boolean;` | No description yet. |
+| `isDirectParentOf` | `isDirectParentOf(child: Group): boolean;` | No description yet. |
+
+### HeartbeatMessage
+
+**Kind:** Class
+
+**Source:** `packages/core/src/layers/lower-transport-layer/heart-beat-message.ts#L5`
+
+
+```ts
+class HeartbeatMessage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `HeartbeatMessage(opCode: number, source: Address, destination: Address, features: NodeFeatures, initialTtl: number, transportPdu: Data, ivIndex: number, receivedTtl?: number): HeartbeatMessage;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `destination` | `Address` | The destination Address. This can be either Unicast or Group Address. |
+| `features` | `NodeFeatures` | Currently active features of the Node. - If the Relay feature is set, the Relay feature of a Node is in use. - If the Proxy feature is set, the GATT Proxy feature of a Node is in use. - If the Friend feature is set, the Friend feature of a Node is in use. - If the Low Power feature is set, the Node has active relationship with a Friend Node. |
+| `initialTtl` | `number` | Initial TTL used when sending the message. |
+| `ivIndex` | `number` | The IV Index used to encode this message. |
+| `opCode` | `number` | Message Op Code. |
+| `receivedTtl` | `number` | TTL value with which the Heartbeat message was received. This is set to `undefined` for outgoing Heartbeat messages. |
+| `source` | `Address` | The Unicast Address of the originating Node. |
+| `transportPdu` | `Data` | The raw data of Upper Transport Layer PDU. |
+| `opCode` | `number` | No description yet. |
+| `hops` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromControlMessage` | `fromControlMessage(message: ControlMessage): HeartbeatMessage \| undefined;` | No description yet. |
+
+### InputAction
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/oob.ts#L138`
+
+### InputOob
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/provisioning/oob.ts#L206`
+
+
+```ts
+interface InputOob
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `action` | `InputAction` | No description yet. |
+| `size` | `number` | No description yet. |
+| `type` | `inputOob` | No description yet. |
+
+### InputOobActions
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/oob.ts#L16`
+
+
+A set of supported Input Out-of-band actions.
+
+
+```ts
+class InputOobActions extends OptionSet<UInt16>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `InputOobActions(value?: number): InputOobActions;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `inputAlphanumeric` | `InputOobActions` | No description yet. |
+| `inputNumeric` | `InputOobActions` | No description yet. |
+| `push` | `InputOobActions` | No description yet. |
+| `twist` | `InputOobActions` | No description yet. |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(flag: number): boolean;` | No description yet. |
+| `equals` | `equals(other: OptionSet<number>): boolean;` | No description yet. |
+| `insert` | `insert(flag: number): OptionSet<number>;` | No description yet. |
+| `intersect` | `intersect(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `isDisjoint` | `isDisjoint(other: OptionSet<number>): boolean;` | No description yet. |
+| `isDisjointWithArray` | `isDisjointWithArray(others: OptionSet<number>[]): boolean;` | No description yet. |
+| `remove` | `remove(flag: number): OptionSet<number>;` | No description yet. |
+| `subtract` | `subtract(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `toggle` | `toggle(flag: number): OptionSet<number>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `union` | `union(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `empty` | `empty<F>(): OptionSet<F>;` | No description yet. |
+| `fromData` | `fromData(data: Data, offset: number): InputOobActions;` | No description yet. |
+
+### isGroupRanges
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models-array/ranges.ts#L31`
+
+
+```ts
+function isGroupRanges(ranges: AddressRange[]): boolean;
+```
+
+### isUnicastRanges
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models-array/ranges.ts#L21`
+
+
+```ts
+function isUnicastRanges(ranges: AddressRange[]): boolean;
+```
+
+### isValidRanges
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models-array/ranges.ts#L11`
+
+
+```ts
+function isValidRanges(ranges: (AddressRange | SceneRange)[]): boolean;
+```
+
+### IvIndexObserver
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/mesh-network.ts#L52`
+
+
+An observer class for the IV Index changes in the mesh network. WARNING: This class is for advanced users and should be used with caution. The IV Index is managed internally by the library. Tracking changes to the IV Index is not necessary for most applications.
+
+
+```ts
+class IvIndexObserver
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `IvIndexObserver(): IvIndexObserver;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `ivIndexDidChange` | `ivIndexDidChange(ivIndex: IvIndex): void;` | No description yet. |
+
+### mergedRanges
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models-array/ranges.ts#L50`
+
+
+```ts
+function mergedRanges<K, T>(ranges: T[]): T[];
+```
+
+### MeshAddress
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/mesh-address.ts#L4`
+
+
+```ts
+class MeshAddress
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshAddress(address: Address, virtualLabel: UUID \| undefined): MeshAddress;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `address` | `Address` | 16-bit address. |
+| `virtualLabel` | `UUID \| undefined` | Virtual Label UUID. |
+| `hex` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equal` | `equal(other: unknown): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromAddress` | `fromAddress(address: Address): MeshAddress;` | No description yet. |
+| `fromHex` | `fromHex(hex: string): MeshAddress \| undefined;` | No description yet. |
+| `fromVirtualLabel` | `fromVirtualLabel(virtualLabel: UUID): MeshAddress;` | No description yet. |
+
+### MeshBearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer.ts#L161`
+
+
+A mesh bearer is used to send mesh messages to provisioned nodes.
+
+
+```ts
+class MeshBearer extends Bearer
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshBearer(): MeshBearer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void` | No description yet. |
+| `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `close` | `close(): void \| Error;` | No description yet. |
+| `open` | `open(): void \| Error;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+
+### MeshData
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/mesh-data.ts#L13`
+
+
+The Mesh Network configuration saved internally. It contains the Mesh Network and additional data that are not in the JSON schema, but are used by in the app.
+
+
+```ts
+class MeshData
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshData(): MeshData;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `meshNetwork` | `MeshNetwork \| undefined` | Mesh Network state. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `decode` | `decode(json: Record<string, unknown>, storage: Storage): boolean;` | No description yet. |
+| `encode` | `encode(): SerializeObjectProperties<MeshNetwork> \| undefined;` | No description yet. |
+
+### MeshDataCtor
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/mesh-models/mesh-network-manager.ts#L53`
+
+
+```ts
+type MeshDataCtor<T> = () => T;
+```
+
+### MeshNetwork
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/mesh-network.ts#L63`
+
+
+```ts
+class MeshNetwork
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshNetwork(name: string, $storage: Storage, uuid: UUID): MeshNetwork;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `applicationKeys` | `ApplicationKey[]` | No description yet. |
+| `groups` | `Group[]` | An array of Groups in the network. |
+| `isPartial` | `boolean` | Whether the configuration contains full information about the mesh network, or only partial. In partial configuration Nodes' Device Keys can be `nil`. |
+| `ivIndexObserver` | `IvIndexObserver` | No description yet. |
+| `networkExclusions` | `ExclusionList[]` | No description yet. |
+| `networkKeys` | `NetworkKey[]` | No description yet. |
+| `nodes` | `Node[]` | An array of Nodes in the network. |
+| `provisioners` | `Provisioner[]` | An array of provisioner objects that includes information about known Provisioners and ranges of addresses and scenes that have been allocated to these Provisioners. |
+| `scenes` | `Scene[]` | An array of Scenes in the network. |
+| `uuid` | `UUID` | Random 128-bit UUID allows differentiation among multiple mesh networks. |
+| `ivIndex` | `unknown` | No description yet. |
+| `localElements` | `unknown` | No description yet. |
+| `localProvisioner` | `unknown` | No description yet. |
+| `meshName` | `unknown` | No description yet. |
+| `nextAvailableApplicationKeyIndex` | `unknown` | No description yet. |
+| `nextAvailableNetworkKeyIndex` | `unknown` | No description yet. |
+| `timestamp` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addApplicationKey` | `addApplicationKey(key: ApplicationKey): void;` | No description yet. |
+| `addApplicationKeyWithProperties` | `addApplicationKeyWithProperties(applicationKey: Data, name: string, index?: KeyIndex): ApplicationKey \| MeshNetworkError;` | No description yet. |
+| `addGroup` | `addGroup(_group: Group): MeshNetworkError \| undefined;` | No description yet. |
+| `addNetworkKey` | `addNetworkKey(key: NetworkKey): void;` | No description yet. |
+| `addNetworkKeyWithName` | `addNetworkKeyWithName(networkKey: Data, name: string, index?: KeyIndex): NetworkKey \| MeshNetworkError;` | No description yet. |
+| `addNode` | `addNode(node: Node): void \| MeshNetworkError;` | No description yet. |
+| `addProvisioner` | `addProvisioner(provisioner: Provisioner): Promise<void>;` | No description yet. |
+| `addProvisionerWithAddress` | `addProvisionerWithAddress(provisioner: Provisioner, unicastAddress?: Address): Promise<void>;` | No description yet. |
+| `containsGroup` | `containsGroup(group: Group): boolean;` | No description yet. |
+| `containsNode` | `containsNode(node: Node): boolean;` | No description yet. |
+| `containsNodeWithUuid` | `containsNodeWithUuid(uuid: UUID): boolean;` | No description yet. |
+| `containsProvisioner` | `containsProvisioner(provisioner: Provisioner): boolean;` | No description yet. |
+| `containsProvisionerWithUuid` | `containsProvisionerWithUuid(uuid: UUID): boolean;` | No description yet. |
+| `copy` | `copy(configuration: ExportConfiguration): MeshNetwork;` | No description yet. |
+| `encode` | `encode(): SerializeObjectProperties<MeshNetwork>;` | No description yet. |
+| `isAddressAvailableForNode` | `isAddressAvailableForNode(address: Address, node: Node): boolean;` | No description yet. |
+| `isAddressRangeAvailable` | `isAddressRangeAvailable(range: AddressRange): boolean;` | No description yet. |
+| `matchesNetworkId` | `matchesNetworkId(networkId: Data): boolean;` | No description yet. |
+| `matchesNetworkIdentity` | `matchesNetworkIdentity(networkIdentity: NetworkIdentity): boolean;` | No description yet. |
+| `matchesNodeIdentity` | `matchesNodeIdentity(nodeIdentity: NodeIdentity): boolean;` | No description yet. |
+| `nextAvailableGroupAddress` | `nextAvailableGroupAddress(provisioner: Provisioner): Address \| undefined;` | No description yet. |
+| `nextAvailableUnicastAddressForProvisioner` | `nextAvailableUnicastAddressForProvisioner(provisioner: Provisioner): Address \| undefined;` | No description yet. |
+| `nextAvailableUnicastAddressStartingFrom` | `nextAvailableUnicastAddressStartingFrom(elementsCount: number, provisioner: Provisioner, offset: Address): Address \| undefined;` | No description yet. |
+| `nodeForProvisioner` | `nodeForProvisioner(provisioner: Provisioner): Node \| undefined;` | No description yet. |
+| `nodeMatchingNodeIdentity` | `nodeMatchingNodeIdentity(nodeIdentity: NodeIdentity): Node \| undefined;` | No description yet. |
+| `nodeWithAddress` | `nodeWithAddress(address: Address): Node \| undefined;` | No description yet. |
+| `nodeWithUuid` | `nodeWithUuid(uuid: UUID): Node \| undefined;` | No description yet. |
+| `removeApplicationKeyWithKeyIndex` | `removeApplicationKeyWithKeyIndex(index: KeyIndex, force: boolean): ApplicationKey \| MeshNetworkError;` | No description yet. |
+| `removeGroup` | `removeGroup(_group: Group): MeshNetworkError \| undefined;` | No description yet. |
+| `removeNetworkKeyWithKeyIndex` | `removeNetworkKeyWithKeyIndex(index: KeyIndex, force: boolean): NetworkKey \| MeshNetworkError;` | No description yet. |
+| `removeNode` | `removeNode(node: Node): void;` | No description yet. |
+| `removeNodeWithUuid` | `removeNodeWithUuid(uuid: UUID): Node \| undefined;` | No description yet. |
+| `updateTimestamp` | `updateTimestamp(): void;` | No description yet. |
+| `copy` | `copy(network: MeshNetwork, configuration: ExportConfiguration): MeshNetwork;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>, storage: Storage): MeshNetwork;` | No description yet. |
+
+### MeshNetworkCtor
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/mesh-models/mesh-network-manager.ts#L57`
+
+
+```ts
+type MeshNetworkCtor<T> = (args: any) => T;
+```
+
+### MeshNetworkManager
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/mesh-network-manager.ts#L147`
+
+
+The main object responsible for managing the mesh network.
+
+
+```ts
+class MeshNetworkManager<MD, MN> extends BindableTinyEmitter<AttentionTimerHandler & MeshNetworkHandler> implements NetworkParametersProvider
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshNetworkManager<MD, MN>(storage: Storage, MeshDataClass: MeshDataCtor<MD>, MeshNetworkClass: MeshNetworkCtor<MN>, handlerQueue: DispatchQueue): MeshNetworkManager<MD, MN>;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(AttentionTimerHandler & MeshNetworkHandler)[K]>) => void` | No description yet. |
+| `handlerQueue` | `DispatchQueue` | A queue to call handler methods on. |
+| `networkParameters` | `NetworkParameters` | Network parameters. |
+| `off` | `(event: K, fn?: (AttentionTimerHandler & MeshNetworkHandler)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (AttentionTimerHandler & MeshNetworkHandler)[K]) => () => void` | No description yet. |
+| `proxyFilter` | `ProxyFilter` | The Proxy Filter state. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `isNetworkCreated` | `unknown` | No description yet. |
+| `localElements` | `unknown` | No description yet. |
+| `logger` | `unknown` | No description yet. |
+| `meshNetwork` | `unknown` | No description yet. |
+| `networkManager` | `unknown` | No description yet. |
+| `networkManagerHandler` | `unknown` | No description yet. |
+| `storage` | `unknown` | No description yet. |
+| `transmitter` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bearerDidDeliverData` | `bearerDidDeliverData(_bearer: Bearer, data: Data, type: PduType): void;` | No description yet. |
+| `clear` | `clear(): Promise<void>;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisioner` | `createNewMeshNetworkWithNameAndProvisioner(name: string, provisioner: Provisioner): MeshNetwork \| MeshNetworkError;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisionerName` | `createNewMeshNetworkWithNameAndProvisionerName(name: string, provisionerName: string): MeshNetwork \| MeshNetworkError;` | No description yet. |
+| `ensureNetworkKey` | `ensureNetworkKey(networkKey: NetworkKey): void;` | No description yet. |
+| `export` | `export(): Promise<Data>;` | No description yet. |
+| `load` | `load(): Promise<void>;` | No description yet. |
+| `provisionUnprovisionedDevice` | `provisionUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, bearer: ProvisioningBearer): MeshNetworkError \| ProvisioningManager;` | No description yet. |
+| `publish` | `publish(message: MeshMessage, model: Model): Promise<MessageHandle \| undefined>;` | No description yet. |
+| `save` | `save(): Promise<void>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToAddress` | `sendAcknowledgedConfigMessageToAddress(message: { completion?: (result: Result<ConfigResponse, Error>) => void; destination: Address; initialTtl?: number; message: AcknowledgedConfigMessage; networkKey?: NetworkKey }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToNode` | `sendAcknowledgedConfigMessageToNode(message: { completion?: (result: Result<ConfigResponse, Error>) => void; initialTtl?: number; message: AcknowledgedConfigMessage; networkKey?: NetworkKey; node: Node }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedMeshMessageToModel` | `sendAcknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: number; localElement?: Element; message: AcknowledgedMeshMessage; model: Model }): Promise<MeshResponse>;` | No description yet. |
+| `sendMeshMessageToMeshAddress` | `sendMeshMessageToMeshAddress(message: { applicationKey: ApplicationKey; destination: MeshAddress; initialTtl?: number; localElement?: Element; message: MeshMessage }): Promise<void>;` | No description yet. |
+| `sendProxyConfigurationMessage` | `sendProxyConfigurationMessage(message: ProxyConfigurationMessage): Promise<void>;` | No description yet. |
+| `sendUnacknowledgedMeshMessageToModel` | `sendUnacknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: number; localElement?: Element; message: UnacknowledgedMeshMessage; model: Model }): Promise<void>;` | No description yet. |
+
+### MessageHandle
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/message-handle.ts#L8`
+
+
+```ts
+class MessageHandle
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MessageHandle(message: MeshMessage, source: Address, destination: MeshAddress, manager: NetworkManager): MessageHandle;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `destination` | `MeshAddress` | The destination Address. This can be any type of Address. |
+| `manager` | `NetworkManager` | No description yet. |
+| `opCode` | `number` | The Op Code of the message. |
+| `source` | `Address` | The source Unicast Address. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `cancel` | `cancel(): Promise<void>;` | No description yet. |
+
+### Model
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/model.ts#L38`
+
+
+A Model defines the basic functionality of a `Node`. A Node may include one or more `Element`, each with one or mode models. A model defines the required states, the messages that act upon those states, and any associated behavior. Two Models with the same `Model.modelId` cannot be located on the same Element. A Model may extend another Model. Models in Extend relationship may share states. A Model which does not extend any other Model is called a *base* Model. Models in Extend relationship located on the same Element share the Subscription List.
+
+
+```ts
+class Model
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Model(modelId: number, $subscribe: string[], $bind: KeyIndex[], handler?: ModelHandler): Model;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `handler` | `ModelHandler` | The model message handler. This is non-`undefined` for supported local Models and `undefined` for Models of remote Nodes. |
+| `modelId` | `SigModelId` | Bluetooth SIG or vendor-assigned model identifier. In case of vendor models the 2 most significant bytes of this property are the Company Identifier, as registered in Bluetooth SIG Assigned Numbers database. For Bluetooth SIG defined models these 2 bytes are `0x0000`. Use `Model.modelIdentifier` to get the 16-bit model identifier and `Model.companyIdentifier` to obtain the Company Identifier. Use `Model.isBluetoothSIGAssigned` to check whether the Model is defined by Bluetooth SIG. |
+| `parentElement` | `Element \| undefined` | Parent Element. |
+| `applicationKeys` | `unknown` | No description yet. |
+| `bind` | `unknown` | No description yet. |
+| `boundApplicationKeys` | `unknown` | No description yet. |
+| `companyIdentifier` | `unknown` | No description yet. |
+| `companyName` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `isBridgeConfigurationClient` | `unknown` | No description yet. |
+| `isBridgeConfigurationServer` | `unknown` | No description yet. |
+| `isConfigurationClient` | `unknown` | No description yet. |
+| `isConfigurationServer` | `unknown` | No description yet. |
+| `isDirectedForwardingConfigurationClient` | `unknown` | No description yet. |
+| `isDirectedForwardingConfigurationServer` | `unknown` | No description yet. |
+| `isGenericOnOffServer` | `unknown` | No description yet. |
+| `isHealthClient` | `unknown` | No description yet. |
+| `isHealthServer` | `unknown` | No description yet. |
+| `isLargeCompositionDataClient` | `unknown` | No description yet. |
+| `isLargeCompositionDataServer` | `unknown` | No description yet. |
+| `isOnDemandPrivateProxyClient` | `unknown` | No description yet. |
+| `isOnDemandPrivateProxyServer` | `unknown` | No description yet. |
+| `isOpcodesAggregatorClient` | `unknown` | No description yet. |
+| `isOpcodesAggregatorServer` | `unknown` | No description yet. |
+| `isPrivateBeaconClient` | `unknown` | No description yet. |
+| `isPrivateBeaconServer` | `unknown` | No description yet. |
+| `isRemoteProvisioningClient` | `unknown` | No description yet. |
+| `isRemoteProvisioningServer` | `unknown` | No description yet. |
+| `isSarConfigurationClient` | `unknown` | No description yet. |
+| `isSarConfigurationServer` | `unknown` | No description yet. |
+| `isSceneClient` | `unknown` | No description yet. |
+| `modelIdentifier` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `publish` | `unknown` | No description yet. |
+| `relatedModels` | `unknown` | No description yet. |
+| `requiresDeviceKey` | `unknown` | No description yet. |
+| `subscribe` | `unknown` | No description yet. |
+| `subscriptions` | `unknown` | No description yet. |
+| `supportsDeviceKey` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindApplicationKeyWithIndex` | `bindApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `copyFrom` | `copyFrom(model: Model): void;` | No description yet. |
+| `extendsDirectly` | `extendsDirectly(_other: Model): boolean;` | No description yet. |
+| `isSubscribedToGroup` | `isSubscribedToGroup(group: Group): boolean;` | No description yet. |
+| `isSubscribedToMeshAddress` | `isSubscribedToMeshAddress(address: MeshAddress): boolean;` | No description yet. |
+| `unbindApplicationKeyWithIndex` | `unbindApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): Model;` | No description yet. |
+| `fromSigModelId` | `fromSigModelId(sigModelId: SigModelId): Model;` | No description yet. |
+| `fromSigModelIdAndHandler` | `fromSigModelIdAndHandler(sigModelId: number, handler: ModelHandler): Model;` | No description yet. |
+
+### ModelData
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models-array/elements.ts#L90`
+
+
+```ts
+class ModelData
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ModelData(modelId: number): ModelData;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `modelId` | `number` | No description yet. |
+| `companyIdentifier` | `unknown` | No description yet. |
+| `isBluetoothSIGAssigned` | `unknown` | No description yet. |
+| `modelIdentifier` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromModel` | `fromModel(model: Model): ModelData;` | No description yet. |
+| `fromSigModelId` | `fromSigModelId(sigModelId: number): ModelData;` | No description yet. |
+| `fromVendorModelId` | `fromVendorModelId(vendorModelId: number, companyId: number): ModelData;` | No description yet. |
+
+### ModelHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/model-handler.ts#L41`
+
+
+Model handler defines the functionality of a `Model` on the Local Node. Model Delegates are assigned to the Models during setting up the `MeshNetworkManager.localElements`. The Model Delegate must declare a map of mesh message type supported by this Model. Whenever a mesh message matching any of the declared Op Codes is received, and the Model instance is bound to the Application Key used to encrypt the message, one of the message handlers will be called: * `ModelDelegate.modelDidReceiveUnacknowledgedMessage()` * `ModelDelegate.modelDidReceiveAcknowledgedMessage()` * `ModelDelegate.modelDidReceiveResponse()` The Model Delegate also specifies should the Model support subscription and defines publication composer for automatic publications.
+
+
+```ts
+class ModelHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ModelHandler(): ModelHandler;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$isSubscriptionSupported` | `boolean` | A flag whether this Model supports subscription mechanism. When set to `false`, the library will return error `ConfigMessageStatus.notASubscribeModel` whenever subscription change was initiated. |
+| `$messageTypes` | `Map<number, { fromData: (_: Data) => MeshMessage \| undefined }>` | A map of mesh message types that the associated Model may receive and handle. It should not contain types of messages that this Model only sends. Items of this map are used to instantiate a message when an Access PDU with given opcode is received. The key in the map should be the opcode and the value the message type supported by the handler. |
+| `isSubscriptionSupported` | `unknown` | No description yet. |
+| `messageTypes` | `unknown` | No description yet. |
+| `publicationMessageComposer` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `decode` | `decode(accessPdu: AccessPdu): MeshMessage \| undefined;` | No description yet. |
+| `modelDidReceiveAcknowledgedMessage` | `modelDidReceiveAcknowledgedMessage(model: Model, request: AcknowledgedMeshMessage, source: Address, destination: MeshAddress): Error \| MeshResponse;` | No description yet. |
+| `modelDidReceiveMessage` | `modelDidReceiveMessage(model: Model, message: MeshMessage, source: Address, destination: MeshAddress, request?: AcknowledgedMeshMessage): MeshResponse \| undefined;` | No description yet. |
+| `modelDidReceiveResponse` | `modelDidReceiveResponse(model: Model, response: MeshResponse, request: AcknowledgedMeshMessage, source: Address): void;` | No description yet. |
+| `modelDidReceiveUnacknowledgedMessage` | `modelDidReceiveUnacknowledgedMessage(model: Model, message: UnacknowledgedMeshMessage, source: Address, destination: MeshAddress): void;` | No description yet. |
+| `publish` | `publish(message: MeshMessage, manager: MeshNetworkManager): Promise<MessageHandle \| undefined>;` | No description yet. |
+| `publishUsing` | `publishUsing(manager: MeshNetworkManager): Promise<MessageHandle \| undefined>;` | No description yet. |
+
+### NetworkIdentity
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/mesh-models/network-identity.ts#L14`
+
+
+The Network Identity contains information from Network Identity or Private Network Identity beacon. Network Identities can be matched to Network Keys in the network.
+
+
+```ts
+interface NetworkIdentity
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(networkKey: NetworkKey): boolean;` | No description yet. |
+
+### NetworkKey
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/network-key.ts#L46`
+
+
+```ts
+class NetworkKey extends Key
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkKey(name: string, index: KeyIndex, key: Data): NetworkKey;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$index` | `KeyIndex` | No description yet. |
+| `$key` | `Data` | 128-bit key. |
+| `$name` | `string` | No description yet. |
+| `index` | `unknown` | No description yet. |
+| `isPrimary` | `unknown` | No description yet. |
+| `isSecondary` | `unknown` | No description yet. |
+| `key` | `unknown` | No description yet. |
+| `keys` | `unknown` | No description yet. |
+| `minSecurity` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `networkId` | `unknown` | No description yet. |
+| `oldKey` | `unknown` | No description yet. |
+| `oldKeys` | `unknown` | No description yet. |
+| `oldNetworkId` | `unknown` | No description yet. |
+| `phase` | `unknown` | No description yet. |
+| `timestamp` | `unknown` | No description yet. |
+| `transmitKeys` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `equals` | `equals(other: NetworkKey): boolean;` | No description yet. |
+| `isUsedInMeshNetwork` | `isUsedInMeshNetwork(meshNetwork: MeshNetwork): boolean;` | No description yet. |
+| `lowerSecurity` | `lowerSecurity(): void;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): NetworkKey;` | No description yet. |
+| `fromName` | `fromName(name: string, index: KeyIndex, key: Data): NetworkKey \| MeshNetworkError;` | No description yet. |
+| `primaryNetworkKey` | `primaryNetworkKey(): NetworkKey;` | No description yet. |
+
+### NetworkKeyDerivatives
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/network-key.ts#L20`
+
+
+```ts
+class NetworkKeyDerivatives
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkKeyDerivatives(key: Data): NetworkKeyDerivatives;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `beaconKey` | `Data` | The Beacon Key. |
+| `encryptionKey` | `Data` | The Encryption Key. |
+| `identityKey` | `Data` | The Identity Key. |
+| `nid` | `number` | Network identifier. |
+| `privacyKey` | `Data` | The Privacy Key. |
+| `privateBeaconKey` | `Data` | The Private Beacon Key. |
+
+### NetworkKeys
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/mesh-models-array/network-keys.ts#L3`
+
+### NetworkParameters
+
+**Kind:** Class
+
+**Source:** `packages/core/src/layers/network-parameters.ts#L229`
+
+
+```ts
+class NetworkParameters
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkParameters(): NetworkParameters;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `allowIvIndexRecoveryOver42` | `boolean` | According to Bluetooth Mesh Profile 1.0.1, section 3.10.5, if the IV Index of the mesh network increased by more than 42 since the last connection (which can take at least 48 weeks), the Node should be re-provisioned. However, as this library can be used to provision other Nodes, it should not be blocked from sending messages to the network only because the phone wasn't connected to the network for that time. This flag can disable this check, effectively allowing such connection. The same can be achieved by clearing the app data (uninstalling and reinstalling the app) and importing the mesh network. With no "previous" IV Index, the library will accept any IV Index received in the Secure Network beacon upon connection to the GATT Proxy Node. |
+| `ivUpdateTestMode` | `boolean` | IV Update Test Mode enables efficient testing of the IV Update procedure. The IV Update test mode removes the 96-hour limit; all other behavior of the device are unchanged. |
+| `default` | `NetworkParameters` | A set of default network parameters. Example: ```ts meshNetworkManager.networkParameters = NetworkParameters.default ``` |
+| `acknowledgmentMessageInterval` | `unknown` | No description yet. |
+| `acknowledgmentMessageTimeout` | `unknown` | No description yet. |
+| `completeAcknowledgmentTimerInterval` | `unknown` | No description yet. |
+| `defaultTtl` | `unknown` | No description yet. |
+| `discardTimeout` | `unknown` | No description yet. |
+| `multicastRetransmissionsInterval` | `unknown` | No description yet. |
+| `sarAcknowledgmentDelayIncrement` | `unknown` | No description yet. |
+| `sarAcknowledgmentRetransmissionsCount` | `unknown` | No description yet. |
+| `sarDiscardTimeout` | `unknown` | No description yet. |
+| `sarMulticastRetransmissionsCount` | `unknown` | No description yet. |
+| `sarMulticastRetransmissionsIntervalStep` | `unknown` | No description yet. |
+| `sarReceiverSegmentIntervalStep` | `unknown` | No description yet. |
+| `sarSegmentIntervalStep` | `unknown` | No description yet. |
+| `sarSegmentsThreshold` | `unknown` | No description yet. |
+| `sarUnicastRetransmissionsCount` | `unknown` | No description yet. |
+| `sarUnicastRetransmissionsIntervalIncrement` | `unknown` | No description yet. |
+| `sarUnicastRetransmissionsIntervalStep` | `unknown` | No description yet. |
+| `sarUnicastRetransmissionsWithoutProgressCount` | `unknown` | No description yet. |
+| `segmentReceptionInterval` | `unknown` | No description yet. |
+| `segmentTransmissionInterval` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `acknowledgmentMessageIntervalForTtl` | `acknowledgmentMessageIntervalForTtl(ttl: number, segmentCount: Long): number;` | No description yet. |
+| `acknowledgmentTimerInterval` | `acknowledgmentTimerInterval(segN: number): number;` | No description yet. |
+| `unicastRetransmissionsInterval` | `unicastRetransmissionsInterval(ttl: number): number;` | No description yet. |
+| `basic` | `basic(builder: (config: NetworkParametersConfig) => void): NetworkParameters;` | No description yet. |
+
+### NetworkParametersConfig
+
+**Kind:** Class
+
+**Source:** `packages/core/src/layers/network-parameters.ts#L6`
+
+
+The builder allows easy configuration of `NetworkParameters`.
+
+
+```ts
+class NetworkParametersConfig
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkParametersConfig(): NetworkParametersConfig;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `networkParameters` | `NetworkParameters` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `build` | `build(): NetworkParameters;` | No description yet. |
+| `discardAcknowledgedMessages` | `discardAcknowledgedMessages(timeout: number): void;` | No description yet. |
+| `discardIncompleteSegmentedMessages` | `discardIncompleteSegmentedMessages(timeout: number): void;` | No description yet. |
+| `retransmitAcknowledgedMessage` | `retransmitAcknowledgedMessage(interval: number): void;` | No description yet. |
+| `retransmitAllSegmentsToGroupAddress` | `retransmitAllSegmentsToGroupAddress(total: Long, interval: number): void;` | No description yet. |
+| `retransmitSegmentAcknowledgmentMessages` | `retransmitSegmentAcknowledgmentMessages(count: number, threshold: number): void;` | No description yet. |
+| `retransmitUnacknowledgedSegmentsToUnicastAddress` | `retransmitUnacknowledgedSegmentsToUnicastAddress(retransmissionsCount: number, retransmissionsWithoutProgressCount: number, interval: number, increment: number): void;` | No description yet. |
+| `setDefaultTtl` | `setDefaultTtl(ttl: number): void;` | No description yet. |
+| `transmitSegmentAcknowledgmentMessage` | `transmitSegmentAcknowledgmentMessage(segmentReceptionInterval: number, acknowledgmentDelayIncrement: number): void;` | No description yet. |
+| `transmitSegments` | `transmitSegments(interval: number): void;` | No description yet. |
+
+### NetworkTransmit
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/node.ts#L82`
+
+
+The object represents parameters of the transmissions of network layer messages originating from a mesh node.
+
+
+```ts
+class NetworkTransmit
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkTransmit(count: number, interval: number): NetworkTransmit;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `count` | `number` | Number of transmissions for network messages. The value is in range from 1 to 8. |
+| `interval` | `number` | The interval (in milliseconds) between retransmissions (from 10 to 320 ms in 10 ms steps). |
+| `steps` | `unknown` | No description yet. |
+| `timeInterval` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `decode` | `decode(jv: Record<string, unknown>): NetworkTransmit;` | No description yet. |
+| `fromFixingIncorrectNetworkTransmit` | `fromFixingIncorrectNetworkTransmit(incorrectNetworkTransmit: NetworkTransmit): NetworkTransmit;` | No description yet. |
+| `fromRequest` | `fromRequest(request: ConfigNetworkTransmitSet): NetworkTransmit;` | No description yet. |
+| `fromStatus` | `fromStatus(status: ConfigNetworkTransmitStatus): NetworkTransmit;` | No description yet. |
+
+### Node
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/node.ts#L135`
+
+
+```ts
+class Node
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Node(name: string \| undefined, unicastAddress: Address, elements: number): Node;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$appKeys` | `NodeKey[]` | An array of Node Network Key objects that include information about the Network Keys known to this node. |
+| `$elements` | `Element[]` | An array of node's elements. |
+| `$netKeys` | `NodeKey[]` | No description yet. |
+| `$networkTransmit` | `NetworkTransmit \| undefined` | No description yet. |
+| `companyIdentifier` | `number \| undefined` | The 16-bit Company Identifier (CID) assigned by the Bluetooth SIG. The value of this property is obtained from node composition data. |
+| `deviceKey` | `Data \| undefined` | 128-bit device key for this Node. |
+| `features` | `NodeFeaturesState \| undefined` | Node's features. |
+| `heartbeatSubscription` | `HeartbeatSubscription \| undefined` | The Heartbeat Subscription object represents parameters that define receiving of periodical Heartbeat transport control messages. |
+| `meshNetwork` | `MeshNetwork \| undefined` | No description yet. |
+| `minimumNumberOfReplayProtectionList` | `number` | The minimum number of Replay Protection List (RPL) entries for this node. The value of this property is obtained from node composition data. |
+| `productIdentifier` | `number \| undefined` | The 16-bit vendor-assigned Product Identifier (PID). The value of this property is obtained from node composition data. |
+| `security` | `Security` | The level of security for the subnet on which the node has been originally provisioner. |
+| `uuid` | `UUID` | Unique Node Identifier. |
+| `versionIdentifier` | `number \| undefined` | The 16-bit vendor-assigned Version Identifier (VID). The value of this property is obtained from node composition data. |
+| `appKeys` | `unknown` | No description yet. |
+| `applicationKeys` | `unknown` | No description yet. |
+| `defaultTtl` | `unknown` | No description yet. |
+| `elements` | `unknown` | No description yet. |
+| `elementsCount` | `unknown` | No description yet. |
+| `isCompositionDataReceived` | `unknown` | No description yet. |
+| `isConfigComplete` | `unknown` | No description yet. |
+| `isExcluded` | `unknown` | No description yet. |
+| `isLocalProvisioner` | `unknown` | No description yet. |
+| `isProvisioner` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `netKeys` | `unknown` | No description yet. |
+| `networkKeys` | `unknown` | No description yet. |
+| `networkTransmit` | `unknown` | No description yet. |
+| `primaryElement` | `unknown` | No description yet. |
+| `primaryUnicastAddress` | `unknown` | No description yet. |
+| `ttl` | `unknown` | No description yet. |
+| `unicastAddressRange` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addApplicationKey` | `addApplicationKey(applicationKey: ApplicationKey): void;` | No description yet. |
+| `addApplicationKeyWithIndex` | `addApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `addElement` | `addElement(element: Element): void;` | No description yet. |
+| `addElements` | `addElements(elements: Element[]): void;` | No description yet. |
+| `addNetworkKey` | `addNetworkKey(networkKey: NetworkKey): void;` | No description yet. |
+| `addNetworkKeyWithIndex` | `addNetworkKeyWithIndex(networkKeyIndex: KeyIndex): void;` | No description yet. |
+| `applyCompositionData` | `applyCompositionData(compositionData: ConfigCompositionDataStatus): void;` | No description yet. |
+| `containsElementsWithAddressesOverlapping` | `containsElementsWithAddressesOverlapping(range: AddressRange): boolean;` | No description yet. |
+| `containsElementWithAddress` | `containsElementWithAddress(address: Address): boolean;` | No description yet. |
+| `elementWithAddress` | `elementWithAddress(address: Address): Element \| undefined;` | No description yet. |
+| `equals` | `equals(other: Node): boolean;` | No description yet. |
+| `knowsApplicationKey` | `knowsApplicationKey(applicationKey: ApplicationKey): boolean;` | No description yet. |
+| `knowsApplicationKeyIndex` | `knowsApplicationKeyIndex(applicationKeyIndex: KeyIndex): boolean;` | No description yet. |
+| `knowsNetworkKey` | `knowsNetworkKey(networkKey: NetworkKey): boolean;` | No description yet. |
+| `knowsNetworkKeyIndex` | `knowsNetworkKeyIndex(networkKeyIndex: KeyIndex): boolean;` | No description yet. |
+| `removeApplicationKeyWithIndex` | `removeApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `removeNetworkKeyWithIndex` | `removeNetworkKeyWithIndex(networkKeyIndex: KeyIndex): void;` | No description yet. |
+| `setApplicationKeys` | `setApplicationKeys(applicationKeys: ApplicationKey[]): void;` | No description yet. |
+| `setApplicationKeysWithIndexes` | `setApplicationKeysWithIndexes(applicationKeyIndexes: KeyIndex[]): void;` | No description yet. |
+| `setElements` | `setElements(elements: Element[]): void;` | No description yet. |
+| `setNetworkKeys` | `setNetworkKeys(networkKeys: NetworkKey[]): void;` | No description yet. |
+| `setNetworkKeysWithIndexes` | `setNetworkKeysWithIndexes(networkKeyIndexes: KeyIndex[]): void;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): Node;` | No description yet. |
+| `forProvisionerWithAddress` | `forProvisionerWithAddress(provisioner: Provisioner, address: Address): Node;` | No description yet. |
+| `forUnprovisionedDevice` | `forUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, n: number, deviceKey: Data, security: Security, networkKey: NetworkKey, address: Address): Node;` | No description yet. |
+| `withAssignedNetworkKeyAndAddress` | `withAssignedNetworkKeyAndAddress(name: string \| undefined, uuid: UUID, deviceKey: Data, security: Security, networkKey: NetworkKey, address: Address): Node;` | No description yet. |
+
+### NodeIdentity
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/mesh-models/node-identity.ts#L19`
+
+
+The Node Identity contains information from Node Identity or Private Node Identity beacon. It can be used to match advertising device to a specific `Node` in the network.
+
+
+```ts
+interface NodeIdentity
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(node: Node): boolean;` | No description yet. |
+
+### NodeKey
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/node.ts#L51`
+
+
+```ts
+class NodeKey
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NodeKey($index: KeyIndex, $updated: boolean): NodeKey;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `index` | `unknown` | No description yet. |
+| `updated` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `decode` | `decode(jv: Record<string, unknown>): NodeKey;` | No description yet. |
+
+### Nodes
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/mesh-models-array/nodes.ts#L4`
+
+### NoOob
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/provisioning/oob.ts#L193`
+
+
+```ts
+interface NoOob
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `noOob` | No description yet. |
+
+### OobType
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/oob.ts#L80`
+
+
+A set of supported Out-Of-Band types.
+
+
+```ts
+class OobType extends OptionSet<UInt8>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `OobType(value?: number): OobType;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `onlyOobAuthenticatedProvisioningSupported` | `OobType` | Only OOB authenticated provisioning supported. |
+| `staticOobInformationAvailable` | `OobType` | Static OOB Information is available. |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(flag: number): boolean;` | No description yet. |
+| `equals` | `equals(other: OptionSet<number>): boolean;` | No description yet. |
+| `insert` | `insert(flag: number): OptionSet<number>;` | No description yet. |
+| `intersect` | `intersect(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `isDisjoint` | `isDisjoint(other: OptionSet<number>): boolean;` | No description yet. |
+| `isDisjointWithArray` | `isDisjointWithArray(others: OptionSet<number>[]): boolean;` | No description yet. |
+| `remove` | `remove(flag: number): OptionSet<number>;` | No description yet. |
+| `subtract` | `subtract(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `toggle` | `toggle(flag: number): OptionSet<number>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `union` | `union(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `empty` | `empty<F>(): OptionSet<F>;` | No description yet. |
+| `fromData` | `fromData<F>(data: Data, offset: number): OptionSet<F>;` | No description yet. |
+
+### OutputAction
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/oob.ts#L116`
+
+### OutputOob
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/provisioning/oob.ts#L201`
+
+
+```ts
+interface OutputOob
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `action` | `OutputAction` | No description yet. |
+| `size` | `number` | No description yet. |
+| `type` | `outputOob` | No description yet. |
+
+### OutputOobActions
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/oob.ts#L47`
+
+
+A set of supported Output Out-of-band actions.
+
+
+```ts
+class OutputOobActions extends OptionSet<UInt16>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `OutputOobActions(value?: number): OutputOobActions;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `beep` | `OutputOobActions` | No description yet. |
+| `blink` | `OutputOobActions` | No description yet. |
+| `outputAlphanumeric` | `OutputOobActions` | No description yet. |
+| `outputNumeric` | `OutputOobActions` | No description yet. |
+| `vibrate` | `OutputOobActions` | No description yet. |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(flag: number): boolean;` | No description yet. |
+| `equals` | `equals(other: OptionSet<number>): boolean;` | No description yet. |
+| `insert` | `insert(flag: number): OptionSet<number>;` | No description yet. |
+| `intersect` | `intersect(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `isDisjoint` | `isDisjoint(other: OptionSet<number>): boolean;` | No description yet. |
+| `isDisjointWithArray` | `isDisjointWithArray(others: OptionSet<number>[]): boolean;` | No description yet. |
+| `remove` | `remove(flag: number): OptionSet<number>;` | No description yet. |
+| `subtract` | `subtract(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `toggle` | `toggle(flag: number): OptionSet<number>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `union` | `union(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `empty` | `empty<F>(): OptionSet<F>;` | No description yet. |
+| `fromData` | `fromData(data: Data, offset: number): OutputOobActions;` | No description yet. |
+
+### Page0
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-messages/base/configuration/config-composition-data-status.ts#L81`
+
+
+Composition Data Page 0 shall be present on a Node. Composition Data Page 0 shall not change during a term of a Node on the network.
+
+
+```ts
+class Page0 extends CompositionDataPage
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Page0(page: number, companyIdentifier: number, productIdentifier: number, versionIdentifier: number, minimumNumberOfReplayProtectionList: number, features: NodeFeaturesState, elements: ElementData[]): Page0;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `companyIdentifier` | `number` | The 16-bit Company Identifier (CID) assigned by the Bluetooth SIG. Company Identifiers are published in [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers/). |
+| `elements` | `ElementData[]` | An array of Node's Elements. |
+| `features` | `NodeFeaturesState` | Node's features. The Page 0 of the Composition Data does not provide information whether a feature is enabled or disabled, just whether it is supported or not. Read the state of each feature using corresponding Config message. |
+| `minimumNumberOfReplayProtectionList` | `number` | The minimum number of Replay Protection List (RPL) entries for this node. |
+| `page` | `number` | No description yet. |
+| `productIdentifier` | `number` | The 16-bit vendor-assigned Product Identifier (PID). |
+| `versionIdentifier` | `number` | The 16-bit vendor-assigned Version Identifier (VID). |
+| `parameters` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromData` | `fromData(parameters: Data): Page0 \| undefined;` | No description yet. |
+| `fromNode` | `fromNode(node: Node): Page0;` | No description yet. |
+
+### PBGattBearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/pb-gatt-bearer.ts#L10`
+
+
+The PB GATT bearer is responsible for sending and receiving mesh provisioning messages to and from the GATT Proxy Node.
+
+
+```ts
+class PBGattBearer extends BaseGattProxyBearer<typeof MeshProvisioningService, this> & ProvisioningBearer<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PBGattBearer(name: string \| undefined, uuid: UUID, centralManager: CBCentralManager): PBGattBearer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `basePeripheral` | `CBPeripheral` | No description yet. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void & (handler: Partial<E>) => () => void` | No description yet. |
+| `centralManager` | `CBCentralManager` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void & (event: K, args: Parameters<GattBearerHandler[K]>) => void` | No description yet. |
+| `identifier` | `UUID` | The UUID associated with the peer. |
+| `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
+| `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
+| `name` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
+| `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
+| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
+| `close` | `close(): void;` | No description yet. |
+| `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
+| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
+| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
+| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
+| `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
+| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
+| `open` | `open(): void;` | No description yet. |
+| `readRSSI` | `readRSSI(): void;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+| `fromPeripheral` | `fromPeripheral(peripheral: CBPeripheral, centralManager: CBCentralManager): PBGattBearer;` | No description yet. |
+
+### PduType
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/bearer/bearer.ts#L17`
+
+### PduTypes
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer.ts#L100`
+
+
+A set of supported PDU types by the bearer object.
+
+
+```ts
+class PduTypes extends Number
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `EPSILON` | `number` | The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1 that is representable as a Number value, which is approximately: 2.2204460492503130808472633361816 x 10‍−‍16. |
+| `MAX_SAFE_INTEGER` | `number` | The value of the largest integer n such that n and n + 1 are both exactly representable as a Number value. The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1. |
+| `MAX_VALUE` | `number` | The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. |
+| `meshBeacon` | `PduTypes` | Set, if the bearer supports Mesh Beacons. |
+| `MIN_SAFE_INTEGER` | `number` | The value of the smallest integer n such that n and n − 1 are both exactly representable as a Number value. The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)). |
+| `MIN_VALUE` | `number` | The closest number to zero that can be represented in JavaScript. Equal to approximately 5.00E-324. |
+| `NaN` | `number` | A value that is not a number. In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function. |
+| `NEGATIVE_INFINITY` | `number` | A value that is less than the largest negative number that can be represented in JavaScript. JavaScript displays NEGATIVE_INFINITY values as -infinity. |
+| `networkPdu` | `PduTypes` | Set, if the bearer supports Network PDUs. |
+| `POSITIVE_INFINITY` | `number` | A value greater than the largest number that can be represented in JavaScript. JavaScript displays POSITIVE_INFINITY values as infinity. |
+| `provisioningPdu` | `PduTypes` | Set, if the bearer supports Provisioning PDUs. |
+| `proxyConfiguration` | `PduTypes` | Set, if the bearer supports proxy filter configuration. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toExponential` | `toExponential(fractionDigits?: number): string;` | No description yet. |
+| `toFixed` | `toFixed(fractionDigits?: number): string;` | No description yet. |
+| `toLocaleString` | `toLocaleString(locales?: string \| string[], options?: NumberFormatOptions): string;` | No description yet. |
+| `toPrecision` | `toPrecision(precision?: number): string;` | No description yet. |
+| `toString` | `toString(radix?: number): string;` | No description yet. |
+| `valueOf` | `valueOf(): number;` | No description yet. |
+| `isFinite` | `isFinite(number: unknown): boolean;` | No description yet. |
+| `isInteger` | `isInteger(number: unknown): boolean;` | No description yet. |
+| `isNaN` | `isNaN(number: unknown): boolean;` | No description yet. |
+| `isSafeInteger` | `isSafeInteger(number: unknown): boolean;` | No description yet. |
+| `parseFloat` | `parseFloat(string: string): number;` | No description yet. |
+| `parseInt` | `parseInt(string: string, radix?: number): number;` | No description yet. |
+
+### Period
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/publish.ts#L17`
+
+
+The Publishing Period state determines the interval at which status messages are periodically published by a Model.
+
+
+```ts
+class Period
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Period(): Period;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `interval` | `number` | The interval between subsequent publications in seconds. |
+| `numberOfSteps` | `number` | The number of steps, in range 0...63. |
+| `resolution` | `StepResolution` | The resolution of the number of steps. |
+
+### PrivateNetworkIdentity
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/network-identity.ts#L71`
+
+
+Representation of Private Network Identity advertising packet.
+
+
+```ts
+class PrivateNetworkIdentity implements NetworkIdentity
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PrivateNetworkIdentity(hash: Data, random: Data): PrivateNetworkIdentity;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `hash` | `Data` | Function of the included random number and identity information. |
+| `random` | `Data` | 64-bit random number. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(networkKey: NetworkKey): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromAdvertisementData` | `fromAdvertisementData(advertisementData: Record<string, unknown>): PrivateNetworkIdentity \| null;` | No description yet. |
+
+### PrivateNodeIdentity
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/node-identity.ts#L115`
+
+
+Representation of Private Node Identity advertising packet.
+
+
+```ts
+class PrivateNodeIdentity implements NodeIdentity
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PrivateNodeIdentity(hash: Data, random: Data): PrivateNodeIdentity;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `hash` | `Data` | Function of the included random number and identity information. |
+| `random` | `Data` | 64-bit random number. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(node: Node): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromAdvertisementData` | `fromAdvertisementData(advertisementData: Record<string, unknown>): PrivateNodeIdentity \| null;` | No description yet. |
+
+### Provisioner
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/provisioner.ts#L35`
+
+
+Representation of a Provisioner in the mesh network. A Provisioner is an entity that is able to provision other device to the mesh network by assigning them Unicast Addresses and providing a Network Key in a secure way. A Provisioner with a Unicast Address assigned may also configure devices and becomes a Node of a network on its own. Each Provisioner has assigned 3 ranges: * Unicast Address range - set of Unicast Addresses which may assign to new   Nodes during provisioning, * Group Address range - set of Group Addresses which the Provisioner may use   to define new groups. * Scene range - set of Scene numbers which it may use to define new scenes. The Provisioner should not assign addresses from outside of its ranges to avoid conflicts with other Provisioners.
+
+
+```ts
+class Provisioner
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Provisioner(name: string, uuid: UUID, allocatedUnicastRange: AddressRange[], allocatedGroupRange: AddressRange[], allocatedSceneRange: SceneRange[]): Provisioner;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `allocatedGroupRange` | `AddressRange[]` | An array of group range objects. |
+| `allocatedSceneRange` | `SceneRange[]` | An array of scene range objects. |
+| `allocatedUnicastRange` | `AddressRange[]` | An array of unicast range objects. |
+| `meshNetwork` | `MeshNetwork` | No description yet. |
+| `uuid` | `UUID` | Provisioner's UUID. If the Provisioner has a corresponding Node, the Node's UUID will be equal to this one. |
+| `isValid` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `node` | `unknown` | No description yet. |
+| `primaryUnicastAddress` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `hasAllocatedAddressRange` | `hasAllocatedAddressRange(range: AddressRange): boolean;` | No description yet. |
+| `hasOverlappingGroupRanges` | `hasOverlappingGroupRanges(provisioner: Provisioner): boolean;` | No description yet. |
+| `hasOverlappingRanges` | `hasOverlappingRanges(provisioner: Provisioner): boolean;` | No description yet. |
+| `hasOverlappingSceneRanges` | `hasOverlappingSceneRanges(provisioner: Provisioner): boolean;` | No description yet. |
+| `hasOverlappingUnicastRanges` | `hasOverlappingUnicastRanges(provisioner: Provisioner): boolean;` | No description yet. |
+| `maxElementCount` | `maxElementCount(address: Address): Long;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): Provisioner;` | No description yet. |
+| `fromName` | `fromName(name: string): Provisioner;` | No description yet. |
+| `fromNameWithRanges` | `fromNameWithRanges(name: string, allocatedUnicastRange: AddressRange[], allocatedGroupRange: AddressRange[], allocatedSceneRange: SceneRange[]): Provisioner;` | No description yet. |
+
+### Provisioning
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L30`
+
+
+Provisioning has been started.
+
+
+```ts
+type Provisioning = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `provisioning` | No description yet. |
+
+### ProvisioningBearer
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer.ts#L169`
+
+
+A provisioning bearer is used to send provisioning PDUs to unprovisioned devices.
+
+
+```ts
+class ProvisioningBearer extends Bearer
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProvisioningBearer(): ProvisioningBearer;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void` | No description yet. |
+| `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
+| `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `close` | `close(): void \| Error;` | No description yet. |
+| `open` | `open(): void \| Error;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+
+### ProvisioningCapabilities
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/provisioning-capabilities.ts#L11`
+
+### ProvisioningError
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L148`
+
+
+Set of errors which may be thrown during provisioning a device.
+
+
+```ts
+class ProvisioningError extends Error
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `cause` | `unknown` | No description yet. |
+| `code` | `string` | No description yet. |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `addressNotSpecified` | `ProvisioningError` | Throws when the Unicast Address has not been set. |
+| `confirmationFailed` | `ProvisioningError` | Thrown when confirmation value received from the device does not match calculated value. Authentication failed. |
+| `invalidOobValueFormat` | `ProvisioningError` | Thrown when the provided alphanumeric value could not be converted into bytes using ASCII encoding. |
+| `invalidPdu` | `ProvisioningError` | The received PDU is invalid. |
+| `invalidPublicKey` | `ProvisioningError` | The received Public Key is invalid or equal to Provisioner's Public Key. |
+| `invalidState` | `ProvisioningError` | Thrown when the ProvisioningManager is in invalid state. |
+| `networkKeyNotSpecified` | `ProvisioningError` | Throws when the Network Key has not been set. |
+| `noAddressAvailable` | `ProvisioningError` | Thrown when no available Unicast Address was found in the Provisioner's range that could be allocated for the device. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+| `unsupportedAlgorithm` | `ProvisioningError` | Thrown when an unsupported algorithm has been selected for provisioning. |
+| `unsupportedDevice` | `ProvisioningError` | Thrown when the Unprovisioned Device is not supported by the manager. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `keyGenerationFailed` | `keyGenerationFailed(error: Error): ProvisioningError;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+| `remoteError` | `remoteError(error: RemoteProvisioningError): ProvisioningError;` | No description yet. |
+
+### ProvisioningHandler
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-manager.ts#L44`
+
+
+The handler for receiving provisioning events. The handler must also provide user input during the provisioning process related to Input or Output OOB.
+
+
+```ts
+type ProvisioningHandler = unknown;
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `authenticationActionRequired` | `authenticationActionRequired(action: AuthAction): void;` | No description yet. |
+| `inputComplete` | `inputComplete(): void;` | No description yet. |
+| `provisioningState` | `provisioningState(unprovisionedDevice: UnprovisionedDevice, state: ProvisioningState): void;` | No description yet. |
+
+### ProvisioningManager
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/provisioning-manager.ts#L84`
+
+
+The manager responsible for provisioning a new device into the mesh network. To create an instance of a `ProvisioningManager` use `MeshNetworkManager.provisionUnprovisionedDevice()`. Provisioning is initiated by calling `identifyAndAttractFor()`. This method will make the provisioned device to blink, make sound or attract in any supported way, so that the user could verify which device is being provisioned. The target device will return `ProvisioningCapabilities`, returned to `handler` as `ProvisioningState.capabilitiesReceived()`. User needs to set the `unicastAddress` (by default set to `suggestedUnicastAddress`), `networkKey` and call `provision()`. If user interaction is required during provisioning process corresponding delegate callbacks will be invoked. The provisioning is completed when `ProvisioningState.complete` state is returned.
+
+
+```ts
+class ProvisioningManager extends BindableTinyEmitter<ProvisioningHandler> implements BearerHandler, BearerDataHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProvisioningManager(unprovisionedDevice: UnprovisionedDevice, bearer: ProvisioningBearer, meshNetwork: MeshNetwork): ProvisioningManager;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$provisioningCapabilities` | `ProvisioningCapabilities` | No description yet. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<ProvisioningHandler[K]>) => void` | No description yet. |
+| `logger` | `LoggerHandler` | The logger handler will be called whenever a new log entry is created. |
+| `networkKey` | `NetworkKey` | The Network Key to be sent to the device during provisioning. Setting this property is mandatory before calling `provision()`. |
+| `off` | `(event: K, fn?: ProvisioningHandler[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: ProvisioningHandler[K]) => () => void` | No description yet. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `unicastAddress` | `Address` | The Unicast Address that will be assigned to the device. After device capabilities are received, the address is automatically set to the first available unicast address from Provisioner's range. |
+| `isDeviceSupported` | `unknown` | No description yet. |
+| `isUnicastAddressValid` | `unknown` | No description yet. |
+| `provisioningCapabilities` | `unknown` | No description yet. |
+| `state` | `unknown` | No description yet. |
+| `suggestedUnicastAddress` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `authValueReceived` | `authValueReceived(value: Data): void;` | No description yet. |
+| `bearerDidClose` | `bearerDidClose(_bearer: Bearer, _error?: Error): void;` | No description yet. |
+| `bearerDidDeliverData` | `bearerDidDeliverData(_bearer: Bearer, data: Data, _type: PduType): void;` | No description yet. |
+| `bearerDidOpen` | `bearerDidOpen(_bearer: Bearer): void;` | No description yet. |
+| `identify` | `identify(attentionTimer: number): void \| ProvisioningError \| BearerError;` | No description yet. |
+| `obtainAuthValue` | `obtainAuthValue(): void;` | No description yet. |
+| `provision` | `provision(algorithm: Algorithm, publicKey: PublicKey, authenticationMethod: AuthenticationMethod): ProvisioningError \| BearerError \| undefined;` | No description yet. |
+| `reset` | `reset(): void;` | No description yet. |
+
+### ProvisioningState
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L50`
+
+### ProvisioningStateType
+
+**Kind:** Enumeration
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L6`
+
+
+```ts
+enum ProvisioningStateType {
+  capabilitiesReceived,
+  complete,
+  failed,
+  provisioning,
+  ready,
+  requestingCapabilities,
+}
+```
+
+#### Members
+| Name | Description |
+| --- | --- |
+| `capabilitiesReceived` | No description yet. |
+| `complete` | No description yet. |
+| `failed` | No description yet. |
+| `provisioning` | No description yet. |
+| `ready` | No description yet. |
+| `requestingCapabilities` | No description yet. |
+
+### ProxyProtocolHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/gatt/proxy-protocol-handler.ts#L28`
+
+
+This helper class allows segmentation and reassembly (SAR) using the Proxy Protocol defined in Bluetooth Mesh Profile 1.0.1.
+
+
+```ts
+class ProxyProtocolHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProxyProtocolHandler(): ProxyProtocolHandler;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `reassemble` | `reassemble(data: Data): { data: Data; messageType: PduType } \| undefined;` | No description yet. |
+| `segment` | `segment(data: Data, messageType: PduType, mtu: Long): Data[];` | No description yet. |
+
+### PublicKey
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/public-key.ts#L28`
+
+
+The type of Device Public key to be used. This enumeration is used to specify the Public Key type during provisioning in `ProvisioningManager.provision()`.
+
+### PublicKeyMethod
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/public-key.ts#L10`
+
+### PublicKeyType
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/public-key.ts#L68`
+
+
+The type of Public Key information.
+
+
+```ts
+class PublicKeyType extends OptionSet<UInt8>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PublicKeyType(value?: number): PublicKeyType;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `publicKeyOobInformationAvailable` | `PublicKeyType` | Public Key OOB Information is available. |
+| `rawValue` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(flag: number): boolean;` | No description yet. |
+| `equals` | `equals(other: OptionSet<number>): boolean;` | No description yet. |
+| `insert` | `insert(flag: number): OptionSet<number>;` | No description yet. |
+| `intersect` | `intersect(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `isDisjoint` | `isDisjoint(other: OptionSet<number>): boolean;` | No description yet. |
+| `isDisjointWithArray` | `isDisjointWithArray(others: OptionSet<number>[]): boolean;` | No description yet. |
+| `remove` | `remove(flag: number): OptionSet<number>;` | No description yet. |
+| `subtract` | `subtract(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `toggle` | `toggle(flag: number): OptionSet<number>;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `union` | `union(other: OptionSet<number>): OptionSet<number>;` | No description yet. |
+| `empty` | `empty<F>(): OptionSet<F>;` | No description yet. |
+| `fromData` | `fromData<F>(data: Data, offset: number): OptionSet<F>;` | No description yet. |
+
+### PublicNetworkIdentity
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/network-identity.ts#L27`
+
+
+Representation of Network ID advertising packet.
+
+
+```ts
+class PublicNetworkIdentity implements NetworkIdentity
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PublicNetworkIdentity(networkId: Data): PublicNetworkIdentity;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `networkId` | `Data` | The Network ID is 64-bit network identifier derived from the Network Key. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(networkKey: NetworkKey): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromAdvertisementData` | `fromAdvertisementData(advertisementData: Record<string, unknown>): PublicNetworkIdentity \| null;` | No description yet. |
+
+### PublicNodeIdentity
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/node-identity.ts#L48`
+
+
+Representation of Node Identity advertising packet.
+
+
+```ts
+class PublicNodeIdentity implements NodeIdentity
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `PublicNodeIdentity(hash: Data, random: Data): PublicNodeIdentity;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `hash` | `Data` | Function of the included random number and identity information. |
+| `random` | `Data` | 64-bit random number. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `matches` | `matches(node: Node): boolean;` | No description yet. |
+| `toString` | `toString(): string;` | No description yet. |
+| `fromAdvertisementData` | `fromAdvertisementData(advertisementData: Record<string, unknown>): PublicNodeIdentity \| null;` | No description yet. |
+
+### Publish
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/publish.ts#L59`
+
+
+The Publishing object defines the publication configuration for a Model. When a Model is configured for publishing, it will sent messages whenever a state of the Model has changed, or periodically. The Publish object defines the destination address and the Application Key to encrypt the messages, together with other settings. To set the publication on a Model, send the `ConfigModelPublicationSet` or `ConfigModelPublicationVirtualAddressSet` messages to the Configuration Server model on the Node. The *Set* messages are confirmed with a `ConfigModelPublicationStatus`.
+
+
+```ts
+class Publish
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Publish(): Publish;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `address` | `string` | Publication address for the Model. It's 4 or 32-character long hexadecimal string. |
+| `credentials` | `Long` | An integer 0 o 1 that represents whether master security (0) materials or friendship security material (1) are used. |
+| `index` | `KeyIndex` | An Application Key index, indicating which Application Key to use for the publication. |
+| `period` | `Period` | The interval between subsequent publications. |
+| `retransmit` | `Retransmit` | The object describes the number of times a message is published and the interval between retransmissions of the published message. |
+| `ttl` | `number` | An integer from 0 to 127 that represents the Time To Live (TTL) value for the outgoing publish message. 255 means default TTL value. |
+| `publicationAddress` | `unknown` | No description yet. |
+
+### rangesContains
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models-array/ranges.ts#L111`
+
+
+```ts
+function rangesContains<E>(ranges: RangeObject<E>[], range: RangeObject<E>): boolean;
+```
+
+### Ready
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L18`
+
+
+Provisioning Manager is ready to start.
+
+
+```ts
+type Ready = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `ready` | No description yet. |
+
+### RemoteProvisioningError
+
+**Kind:** Unknown
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L220`
+
+### RequestingCapabilities
+
+**Kind:** Type alias
+
+**Source:** `packages/core/src/provisioning/provisioning-state.ts#L23`
+
+
+The manager is requesting Provisioning Capabilities from the device.
+
+
+```ts
+type RequestingCapabilities = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `requestingCapabilities` | No description yet. |
+
+### Scene
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/scene.ts#L20`
+
+
+A Scene represents a set of states stored with a Scene Number. A Scene is identified by a `SceneNumber` and may have a human-readable name associated. A Node having a Scene Server model can store the states of other models and restore them on demand. A Node with a Scene Client can recall Scenes on other Nodes. Use `Scene.elements` to get list of `Element's with the given Scene in their Scene Register.
+
+
+```ts
+class Scene
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Scene(): Scene;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$addresses` | `Address[]` | Addresses of Elements whose Scene Register state contains this Scene. |
+| `meshNetwork` | `MeshNetwork` | No description yet. |
+| `name` | `string` | UTF-8 human-readable name of the Scene. |
+| `number` | `SceneNumber` | Scene number. |
+| `addresses` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `removeNode` | `removeNode(node: Node): void;` | No description yet. |
+
+### SceneRange
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/scene-range.ts#L15`
+
+
+The range of `SceneNumber`s assigned to a `Provisioner`.
+
+
+```ts
+class SceneRange extends RangeObject<SceneNumber>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `SceneRange(range: ClosedRange<SceneNumber>): SceneRange;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `allScenes` | `SceneRange` | A range containing all valid Scene Numbers. |
+| `count` | `unknown` | No description yet. |
+| `firstScene` | `unknown` | No description yet. |
+| `isValid` | `unknown` | No description yet. |
+| `lastScene` | `unknown` | No description yet. |
+| `lowerBound` | `unknown` | No description yet. |
+| `range` | `unknown` | No description yet. |
+| `upperBound` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `contains` | `contains(value: SceneNumber): boolean;` | No description yet. |
+| `containsRange` | `containsRange(range: RangeObject<SceneNumber>): boolean;` | No description yet. |
+| `overlaps` | `overlaps(other: RangeObject<SceneNumber>): boolean;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): SceneRange;` | No description yet. |
+
+### serviceData
+
+**Kind:** Function
+
+**Source:** `packages/core/src/mesh-models/node-identity.ts#L29`
+
+
+```ts
+function serviceData(advertisementData: Record<string, unknown>): Data | undefined;
+```
+
+### StaticOob
+
+**Kind:** Interface
+
+**Source:** `packages/core/src/provisioning/oob.ts#L197`
+
+
+```ts
+interface StaticOob
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `type` | `staticOob` | No description yet. |
+
+### StoredWithSceneModelHandler
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/model-handler.ts#L236`
+
+
+The Model Handler which should be used for Models that allow storing the state with a Scene. In addition to handling messages, the Model Handler should also store and recall the current state whenever ``StoredWithSceneModelHandler.store()`` and ``StoredWithSceneModelHandler.recall()`` calls are received. Whenever the state changes due to any other reason than receiving a Scene Recall message, the handler should call ``StoredWithSceneModelHandler.networkDidExitStoredWithSceneState()`` to clear the Current State in the Scene Server model.
+
+
+```ts
+class StoredWithSceneModelHandler extends ModelHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `StoredWithSceneModelHandler(): StoredWithSceneModelHandler;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$isSubscriptionSupported` | `boolean` | A flag whether this Model supports subscription mechanism. When set to `false`, the library will return error `ConfigMessageStatus.notASubscribeModel` whenever subscription change was initiated. |
+| `$messageTypes` | `Map<number, { fromData: (_: Data) => MeshMessage \| undefined }>` | A map of mesh message types that the associated Model may receive and handle. It should not contain types of messages that this Model only sends. Items of this map are used to instantiate a message when an Access PDU with given opcode is received. The key in the map should be the opcode and the value the message type supported by the handler. |
+| `isSubscriptionSupported` | `unknown` | No description yet. |
+| `messageTypes` | `unknown` | No description yet. |
+| `publicationMessageComposer` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `decode` | `decode(accessPdu: AccessPdu): MeshMessage \| undefined;` | No description yet. |
+| `modelDidReceiveAcknowledgedMessage` | `modelDidReceiveAcknowledgedMessage(model: Model, request: AcknowledgedMeshMessage, source: Address, destination: MeshAddress): Error \| MeshResponse;` | No description yet. |
+| `modelDidReceiveMessage` | `modelDidReceiveMessage(model: Model, message: MeshMessage, source: Address, destination: MeshAddress, request?: AcknowledgedMeshMessage): MeshResponse \| undefined;` | No description yet. |
+| `modelDidReceiveResponse` | `modelDidReceiveResponse(model: Model, response: MeshResponse, request: AcknowledgedMeshMessage, source: Address): void;` | No description yet. |
+| `modelDidReceiveUnacknowledgedMessage` | `modelDidReceiveUnacknowledgedMessage(model: Model, message: UnacknowledgedMeshMessage, source: Address, destination: MeshAddress): void;` | No description yet. |
+| `publish` | `publish(message: MeshMessage, manager: MeshNetworkManager): Promise<MessageHandle \| undefined>;` | No description yet. |
+| `publishUsing` | `publishUsing(manager: MeshNetworkManager): Promise<MessageHandle \| undefined>;` | No description yet. |
+| `recall` | `recall(scene: SceneNumber, transitionTime?: TransitionTime, delay?: number): void;` | No description yet. |
+| `store` | `store(scene: SceneNumber): void;` | No description yet. |
+
+### Transmitter
+
+**Kind:** Class
+
+**Source:** `packages/core/src/bearer/bearer.ts#L83`
+
+
+A transmitter is responsible for delivering messages to the mesh network.
+
+
+```ts
+class Transmitter
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Transmitter(): Transmitter;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+
+### UnknownNode
+
+**Kind:** Class
+
+**Source:** `packages/core/src/mesh-models/unknown-node.ts#L21`
+
+
+A class representing an unknown Node connected as a GATT Proxy Node. An Unknown Node is a Node from which a message Proxy Configuration has been received, but the mesh network has no information about it. The Unknown Node has fixed security level set to `Security.insecure`, a single empty Element and only one `NetworkKey`, the one used to encrypt the Proxy Configuration message. All other properties are unknown. NOTE: It is not possible to request its Composition Data, as the Device Key is not known.
+
+
+```ts
+class UnknownNode extends Node
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `UnknownNode(pdu: NetworkPdu, meshNetwork: MeshNetwork): UnknownNode;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$appKeys` | `NodeKey[]` | An array of Node Network Key objects that include information about the Network Keys known to this node. |
+| `$elements` | `Element[]` | An array of node's elements. |
+| `$netKeys` | `NodeKey[]` | No description yet. |
+| `$networkTransmit` | `NetworkTransmit \| undefined` | No description yet. |
+| `companyIdentifier` | `number \| undefined` | The 16-bit Company Identifier (CID) assigned by the Bluetooth SIG. The value of this property is obtained from node composition data. |
+| `deviceKey` | `Data \| undefined` | 128-bit device key for this Node. |
+| `features` | `NodeFeaturesState \| undefined` | Node's features. |
+| `heartbeatSubscription` | `HeartbeatSubscription \| undefined` | The Heartbeat Subscription object represents parameters that define receiving of periodical Heartbeat transport control messages. |
+| `meshNetwork` | `MeshNetwork \| undefined` | No description yet. |
+| `minimumNumberOfReplayProtectionList` | `number` | The minimum number of Replay Protection List (RPL) entries for this node. The value of this property is obtained from node composition data. |
+| `productIdentifier` | `number \| undefined` | The 16-bit vendor-assigned Product Identifier (PID). The value of this property is obtained from node composition data. |
+| `security` | `Security` | The level of security for the subnet on which the node has been originally provisioner. |
+| `uuid` | `UUID` | Unique Node Identifier. |
+| `versionIdentifier` | `number \| undefined` | The 16-bit vendor-assigned Version Identifier (VID). The value of this property is obtained from node composition data. |
+| `appKeys` | `unknown` | No description yet. |
+| `applicationKeys` | `unknown` | No description yet. |
+| `defaultTtl` | `unknown` | No description yet. |
+| `elements` | `unknown` | No description yet. |
+| `elementsCount` | `unknown` | No description yet. |
+| `isCompositionDataReceived` | `unknown` | No description yet. |
+| `isConfigComplete` | `unknown` | No description yet. |
+| `isExcluded` | `unknown` | No description yet. |
+| `isLocalProvisioner` | `unknown` | No description yet. |
+| `isProvisioner` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `netKeys` | `unknown` | No description yet. |
+| `networkKeys` | `unknown` | No description yet. |
+| `networkTransmit` | `unknown` | No description yet. |
+| `primaryElement` | `unknown` | No description yet. |
+| `primaryUnicastAddress` | `unknown` | No description yet. |
+| `ttl` | `unknown` | No description yet. |
+| `unicastAddressRange` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addApplicationKey` | `addApplicationKey(applicationKey: ApplicationKey): void;` | No description yet. |
+| `addApplicationKeyWithIndex` | `addApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `addElement` | `addElement(element: Element): void;` | No description yet. |
+| `addElements` | `addElements(elements: Element[]): void;` | No description yet. |
+| `addNetworkKey` | `addNetworkKey(networkKey: NetworkKey): void;` | No description yet. |
+| `addNetworkKeyWithIndex` | `addNetworkKeyWithIndex(networkKeyIndex: KeyIndex): void;` | No description yet. |
+| `applyCompositionData` | `applyCompositionData(compositionData: ConfigCompositionDataStatus): void;` | No description yet. |
+| `containsElementsWithAddressesOverlapping` | `containsElementsWithAddressesOverlapping(range: AddressRange): boolean;` | No description yet. |
+| `containsElementWithAddress` | `containsElementWithAddress(address: Address): boolean;` | No description yet. |
+| `elementWithAddress` | `elementWithAddress(address: Address): Element \| undefined;` | No description yet. |
+| `equals` | `equals(other: Node): boolean;` | No description yet. |
+| `knowsApplicationKey` | `knowsApplicationKey(applicationKey: ApplicationKey): boolean;` | No description yet. |
+| `knowsApplicationKeyIndex` | `knowsApplicationKeyIndex(applicationKeyIndex: KeyIndex): boolean;` | No description yet. |
+| `knowsNetworkKey` | `knowsNetworkKey(networkKey: NetworkKey): boolean;` | No description yet. |
+| `knowsNetworkKeyIndex` | `knowsNetworkKeyIndex(networkKeyIndex: KeyIndex): boolean;` | No description yet. |
+| `removeApplicationKeyWithIndex` | `removeApplicationKeyWithIndex(applicationKeyIndex: KeyIndex): void;` | No description yet. |
+| `removeNetworkKeyWithIndex` | `removeNetworkKeyWithIndex(networkKeyIndex: KeyIndex): void;` | No description yet. |
+| `setApplicationKeys` | `setApplicationKeys(applicationKeys: ApplicationKey[]): void;` | No description yet. |
+| `setApplicationKeysWithIndexes` | `setApplicationKeysWithIndexes(applicationKeyIndexes: KeyIndex[]): void;` | No description yet. |
+| `setElements` | `setElements(elements: Element[]): void;` | No description yet. |
+| `setNetworkKeys` | `setNetworkKeys(networkKeys: NetworkKey[]): void;` | No description yet. |
+| `setNetworkKeysWithIndexes` | `setNetworkKeysWithIndexes(networkKeyIndexes: KeyIndex[]): void;` | No description yet. |
+| `decode` | `decode(jv: Record<string, unknown>): Node;` | No description yet. |
+| `forProvisionerWithAddress` | `forProvisionerWithAddress(provisioner: Provisioner, address: Address): Node;` | No description yet. |
+| `forUnprovisionedDevice` | `forUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, n: number, deviceKey: Data, security: Security, networkKey: NetworkKey, address: Address): Node;` | No description yet. |
+| `withAssignedNetworkKeyAndAddress` | `withAssignedNetworkKeyAndAddress(name: string \| undefined, uuid: UUID, deviceKey: Data, security: Security, networkKey: NetworkKey, address: Address): Node;` | No description yet. |
+
+### UnprovisionedDevice
+
+**Kind:** Class
+
+**Source:** `packages/core/src/provisioning/unprovisioned-device.ts#L21`
+
+
+A class representing an unprovisioned device.
+
+
+```ts
+class UnprovisionedDevice
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `UnprovisionedDevice(name: string \| undefined, uuid: UUID, oobInformation: OobInformation): UnprovisionedDevice;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | Returns the human-readable name of the device. |
+| `oobInformation` | `OobInformation` | Information that points to out-of-band (OOB) information needed for provisioning. |
+| `uuid` | `UUID` | Returns the Mesh Beacon UUID of an Unprovisioned Device. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `fromAdvertisementData` | `fromAdvertisementData(name: string \| undefined, advertisementData: Record<string, unknown>): UnprovisionedDevice \| undefined;` | No description yet. |
+
+### unprovisionedDeviceUUID
+
+**Kind:** Function
+
+**Source:** `packages/core/src/provisioning/unprovisioned-device.ts#L5`
+
+
+```ts
+function unprovisionedDeviceUUID(data: Record<string, unknown>): UUID | undefined;
+```

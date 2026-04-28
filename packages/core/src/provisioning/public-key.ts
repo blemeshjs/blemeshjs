@@ -1,4 +1,4 @@
-import { isEnumCase, OptionSet, UInt8 } from "@mesh-link-js/utils";
+import { isEnumCase, OptionSet, UInt8 } from "@blemeshjs/utils";
 import { ProvisioningPdu } from "./provisioning-pdu.js";
 
 /**

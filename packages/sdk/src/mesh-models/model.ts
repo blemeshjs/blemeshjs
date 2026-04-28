@@ -5,12 +5,12 @@ import {
   ConfigNodeReset,
   Model as $Model,
   ApplicationKey,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 import { hasMixin } from "ts-mixer";
 import { ModelExtension } from "../types";
 import { NodeError } from "../types";
 import { createProxy, keysOf } from "../types";
-import { ConfigMessage, ConfigMessageStatus } from "@mesh-link-js/utils";
+import { ConfigMessage, ConfigMessageStatus } from "@blemeshjs/utils";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager";
 
 export type Model = ReturnType<typeof InternalModel.toProxy>;

@@ -1,6 +1,6 @@
-import { GenericOnOffGet, GenericOnOffSet, GenericOnOffStatus, Model } from "@mesh-link-js/core";
+import { GenericOnOffGet, GenericOnOffSet, GenericOnOffStatus, Model } from "@blemeshjs/core";
 import { sendMessageToModel } from "./helper";
-import { AccessError, TransitionTime, MeshMessage, StepResolution } from "@mesh-link-js/utils";
+import { AccessError, TransitionTime, MeshMessage, StepResolution } from "@blemeshjs/utils";
 import { action, makeObservable, observable } from "mobx";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager";
 

@@ -18,9 +18,9 @@ import {
   NetworkKeys,
   ConfigNetKeyAdd,
   ApplicationKey,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 import { hasMixin } from "ts-mixer";
-import { BindableTinyEmitter, ConfigMessageStatus, ConfigMessage } from "@mesh-link-js/utils";
+import { BindableTinyEmitter, ConfigMessageStatus, ConfigMessage } from "@blemeshjs/utils";
 import { action, computed, makeObservable, observable } from "mobx";
 import { MeshNetworkManager } from "../mesh-network";
 import { InternalElement } from "./element.js";

@@ -7,7 +7,7 @@ import {
   isEnumCase,
   KeyIndex,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Mixin } from "ts-mixer";
 import { NetworkKey } from "../../../mesh-models/index.js";
 import { concatUint8Arrays } from "uint8array-extras";

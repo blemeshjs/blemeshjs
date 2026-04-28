@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { Data, IvIndex, MeshAddress, Storage } from "@mesh-link-js/utils";
+import { Data, IvIndex, MeshAddress, Storage } from "@blemeshjs/utils";
 import { hexToUint8Array, stringToUint8Array } from "uint8array-extras";
 import { ConfigAppKeyAdd, MeshNetworkManager, PduType } from "../src/index.js";
 import { AccessPdu } from "../src/layers/access-layer/access-pdu.js";

@@ -7,7 +7,7 @@ import { NodeElements } from "./node-elements";
 import { NodeKeys } from "./node-keys";
 import { toastError } from "@/app/helpers/error";
 import { useMutation } from "@tanstack/react-query";
-import { CompanyIdentifier, toPaddedHex16 } from "@mesh-link-js/utils";
+import { CompanyIdentifier, toPaddedHex16 } from "@blemeshjs/utils";
 
 export const NodeItem = observer(() => {
   const { selectedNode, setSelectedNode, expandedKeys, setExpandedKeys } = useControlStore();

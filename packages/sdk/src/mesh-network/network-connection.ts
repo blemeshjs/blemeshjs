@@ -6,7 +6,7 @@ import {
   MeshNetwork,
   PduType,
   PduTypes,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 import {
   BackgroundTimer,
   BindableTinyEmitter,
@@ -18,7 +18,7 @@ import {
   CBCentralManagerHandler,
   CBCentralManagerState,
   CBPeripheral,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { logger } from "../types";
 import { hasMixin, Mixin } from "ts-mixer";
 import { networkIdentity, nodeIdentity } from "./helpers.js";
@@ -219,7 +219,7 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
   /**
    * Maximum number of connections that ``NetworkConnection`` can handle.
    *
-   * NOTE: In Mesh Link JS app this value is set to 1 due to UI limitations.
+   * NOTE: In BLEMeshJS app this value is set to 1 due to UI limitations.
    * When applying in 3rd party app, higher values should work.
    */
   public static maxConnections = 1;

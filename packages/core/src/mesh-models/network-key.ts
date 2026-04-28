@@ -8,8 +8,8 @@ import {
   assertDirectInstanceOf,
   Key,
   MeshCDB,
-} from "@mesh-link-js/utils";
-import { Crypto } from "@mesh-link-js/crypto";
+} from "@blemeshjs/utils";
+import { Crypto } from "@blemeshjs/crypto";
 import { Security } from "./security.js";
 import { areUint8ArraysEqual, hexToUint8Array, uint8ArrayToHex } from "uint8array-extras";
 import { createModelSchema, custom, primitive, SKIP } from "serializr";

@@ -1,0 +1,64 @@
+---
+title: Crypto Package
+description: Mesh cryptographic helpers layered on top of the shared utility and protocol packages.
+icon: Shield
+---
+
+This page is auto-generated from `packages/crypto/src/**` and the public exports exposed by `@blemeshjs/crypto`.
+
+> Update TSDoc comments in source, then run `yarn workspace docs api:generate`. Normal docs `dev`, `build`, and `types:check` runs regenerate these pages automatically.
+
+## Package overview
+
+| Field | Value |
+| --- | --- |
+| Package | `@blemeshjs/crypto` |
+| Entry point | `packages/crypto/src/index.ts` |
+| Source tree | `packages/crypto/src/**` |
+
+
+## Export map
+
+| Export | Kind | Summary |
+| --- | --- | --- |
+| [Crypto](#crypto) | Class | A helper class for handling cryptography. Method implementation is based on Security toolbox and other parts from the Bluetooth Mesh Protocol 1.1. It is backwards compatible with older versions of the specification. |
+
+## Exported API
+
+### Crypto
+
+**Kind:** Class
+
+**Source:** `packages/crypto/src/crypto.ts#L35`
+
+
+A helper class for handling cryptography. Method implementation is based on Security toolbox and other parts from the Bluetooth Mesh Protocol 1.1. It is backwards compatible with older versions of the specification.
+
+
+```ts
+class Crypto
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `Crypto(): Crypto;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `authenticate` | `authenticate(pdu: Uint8Array, key: Uint8Array): boolean;` | No description yet. |
+| `calculateAid` | `calculateAid(key: Uint8Array): number;` | No description yet. |
+| `calculateConfirmation` | `calculateConfirmation(confirmationInputs: Uint8Array, sharedSecret: Uint8Array, random: Uint8Array, authValue: Uint8Array, algorithm: Algorithm): Uint8Array;` | No description yet. |
+| `calculateHash` | `calculateHash(data: Uint8Array, key: Uint8Array): Uint8Array;` | No description yet. |
+| `calculateKeyDerivatives` | `calculateKeyDerivatives(key: Uint8Array): { beaconKey: Uint8Array; encryptionKey: Uint8Array; identityKey: Uint8Array; nid: number; privacyKey: Uint8Array; privateBeaconKey: Uint8Array };` | No description yet. |
+| `calculateKeys` | `calculateKeys(confirmationInputs: Uint8Array, sharedSecret: Uint8Array, provisionerRandom: Uint8Array, deviceRandom: Uint8Array, algorithm: Algorithm): { deviceKey: Uint8Array; sessionKey: Uint8Array; sessionNonce: Uint8Array };` | No description yet. |
+| `calculateNetworkId` | `calculateNetworkId(key: Uint8Array): Uint8Array;` | No description yet. |
+| `calculateSharedSecret` | `calculateSharedSecret(privateKey: Uint8Array, publicKey: Uint8Array): string;` | No description yet. |
+| `calculateVirtualAddress` | `calculateVirtualAddress(virtualLabel: UUID): Address;` | No description yet. |
+| `decodeAndAuthenticate` | `decodeAndAuthenticate(pdu: Uint8Array, key: Uint8Array): { ivIndex: IvIndex; keyRefreshFlag: boolean } \| undefined;` | No description yet. |
+| `decrypt` | `decrypt(data: Uint8Array, key: Uint8Array, nonce: Uint8Array, mic: Uint8Array, aad?: Uint8Array<ArrayBufferLike>): Uint8Array<ArrayBufferLike> \| undefined;` | No description yet. |
+| `encrypt` | `encrypt(data: Uint8Array, key: Uint8Array, nonce: Uint8Array, micSize: number, aad?: Uint8Array<ArrayBufferLike>): Uint8Array;` | No description yet. |
+| `generateKey` | `generateKey(): Uint8Array<ArrayBufferLike>;` | No description yet. |
+| `generateKeyPair` | `generateKeyPair(_algorithm: Algorithm): { privateKey: string; publicKey: string };` | No description yet. |
+| `generateRandom` | `generateRandom(sizeInBits: number): Uint8Array;` | No description yet. |
+| `obfuscate` | `obfuscate(data: Uint8Array, random: Uint8Array, ivIndex: number, privacyKey: Uint8Array): Uint8Array;` | No description yet. |

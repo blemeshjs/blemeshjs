@@ -1,3 +1,3 @@
-import { Key } from "@mesh-link-js/utils";
+import { Key } from "@blemeshjs/utils";
 
 export type NewKey = Pick<Key, "key" | "name" | "index">;

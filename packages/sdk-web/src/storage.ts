@@ -1,10 +1,10 @@
-import { Data, Storage } from "@mesh-link-js/sdk";
+import { Data, Storage } from "@blemeshjs/sdk";
 import { stringToUint8Array, uint8ArrayToString } from "uint8array-extras";
 
 export class BrowserStorage extends Storage<string> {
   private readonly namespace: string;
 
-  constructor(namespace: string = "mesh-link-js") {
+  constructor(namespace: string = "blemeshjs") {
     super();
     this.namespace = namespace;
   }

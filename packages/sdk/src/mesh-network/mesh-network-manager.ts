@@ -7,7 +7,7 @@ import {
   Element as $Element,
   Model as $Model,
   Group,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 import { NetworkConnection } from "./network-connection.js";
 import Long from "long";
 import {
@@ -24,12 +24,12 @@ import {
   CBCentralManager,
   SceneNumber,
   Storage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { ProvisioningManager } from "./provision.js";
 import { ClassInstance, logger } from "../types";
 import { CoreMeshNetworkManager } from "./core-mesh-network-manager.js";
 import { computed, makeObservable } from "mobx";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { InternalModel } from "../mesh-models";
 import { GenericOnOffClientHandler } from "../mesh-model-handlers/generic-on-off-client-handler.js";
 import { GenericOnOffServerHandler } from "../mesh-model-handlers/generic-on-off-server-handler.js";
@@ -256,13 +256,13 @@ export class MeshNetworkManager {
 
   public createNewMeshNetwork = async (): Promise<MeshNetwork> => {
     const provisioner = Provisioner.fromNameWithRanges(
-      "MeshLinkJS",
+      "BLEMeshJS",
       [new AddressRange(new ClosedRange(new Address(0x0001), new Address(0x199a)))],
       [new AddressRange(new ClosedRange(new Address(0xc000), new Address(0xcc9a)))],
       [new SceneRange(new ClosedRange(new SceneNumber(0x0001), new SceneNumber(0x3333)))],
     );
     const network = this.$coreMeshNetworkManager.createNewMeshNetworkWithNameAndProvisioner(
-      "Mesh Link JS Network",
+      "BLEMeshJS Network",
       provisioner,
     );
 

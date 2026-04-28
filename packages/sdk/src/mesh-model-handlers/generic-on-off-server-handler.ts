@@ -1,4 +1,4 @@
-import { StoredWithSceneModelHandler, Model, MeshAddress } from "@mesh-link-js/core";
+import { StoredWithSceneModelHandler, Model, MeshAddress } from "@blemeshjs/core";
 import {
   SceneNumber,
   MeshMessage,
@@ -9,7 +9,7 @@ import {
   UInt8,
   Data,
   Address,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 
 export class GenericOnOffServerHandler extends StoredWithSceneModelHandler {
   store(_scene: SceneNumber): void {

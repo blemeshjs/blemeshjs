@@ -8,7 +8,7 @@ import {
   MeshCDB,
   isEnumCase,
   toPaddedHex16,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Element } from "./element.js";
 import { Clazz, createModelSchema, custom, list, object, primitive } from "serializr";
 import { isUndefined } from "lodash";

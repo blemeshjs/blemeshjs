@@ -13,7 +13,7 @@ import { useProvisioningStore } from "../hooks/useProvisioning";
 import { useMesh } from "./mesh-provider";
 import { useEffect, useMemo } from "react";
 import { toastError } from "../helpers/error";
-import { ScanError } from "@mesh-link-js/sdk-web";
+import { ScanError } from "@blemeshjs/sdk-web";
 import { useMutation } from "@tanstack/react-query";
 
 export function ProvisioningModal() {
@@ -29,10 +29,16 @@ export function ProvisioningModal() {
     setStatus("provisioning-scan");
     mesh.provision.scan({});
     const off = mesh.provision.on("scan:new-peripheral", (proxy) => {
+      setStatus("ready");
       mesh.provision.stopScan();
       setSelectedDevice(proxy);
       off();
     });
+  };
+
+  const resetScan = () => {
+    mesh.provision.stopScan();
+    reset();
   };
 
   useEffect(() => {
@@ -106,8 +112,11 @@ export function ProvisioningModal() {
                 variant="secondary"
                 className="rounded-xl shadow-surface items-center justify-center p-4 w-full"
               >
-                {!selectedDevice && (
+                {!selectedDevice && status !== "provisioning-scan" && (
                   <p className="text-sm text-muted text-center">No device discovered.</p>
+                )}
+                {status === "provisioning-scan" && (
+                  <p className="text-sm text-muted text-center">Waiting for devices...</p>
                 )}
                 {selectedDevice && (
                   <ListBox aria-label="devices" selectionMode="none">
@@ -130,10 +139,11 @@ export function ProvisioningModal() {
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button
-                isDisabled={status === "provisioning-scan" || provisioning}
-                onPress={startScan}
+                isDisabled={provisioning || status === "provisioning-scan"}
+                onPress={status === "ready" ? resetScan : startScan}
+                variant={status === "ready" ? "danger" : "primary"}
               >
-                <BluetoothSearching /> Scan for devices
+                <BluetoothSearching /> {status === "ready" ? "Reset" : "Scan for devices"}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

@@ -1,4 +1,4 @@
-import { ConfigResponse, Data, TimeInterval, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { ConfigResponse, Data, TimeInterval, UInt32, UInt8 } from "@blemeshjs/utils";
 import { Node } from "../../../mesh-models/node.js";
 
 export class ConfigNetworkTransmitStatus extends ConfigResponse {

@@ -1,4 +1,4 @@
-import { Address, BackgroundTimer, BindableTinyEmitter } from "@mesh-link-js/utils";
+import { Address, BackgroundTimer, BindableTinyEmitter } from "@blemeshjs/utils";
 import {
   DiscoveredUnprovisionedPeripheral,
   ProvisionScanOptions,
@@ -19,14 +19,10 @@ import {
   PublicKey,
   UnprovisionedDevice,
   unprovisionedDeviceUUID,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 import { hasMixin } from "ts-mixer";
-import { Crypto } from "@mesh-link-js/crypto";
-import {
-  CBCentralManager,
-  CBCentralManagerState,
-  MeshProvisioningService,
-} from "@mesh-link-js/utils";
+import { Crypto } from "@blemeshjs/crypto";
+import { CBCentralManager, CBCentralManagerState, MeshProvisioningService } from "@blemeshjs/utils";
 import { CoreMeshNetworkManager } from "./core-mesh-network-manager";
 
 type ProvisionStatus =
@@ -173,7 +169,7 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     super();
   }
 
-  private performScan = ({ timeout = 10000 }: ProvisionScanOptions) => {
+  private performScan = ({ timeout }: ProvisionScanOptions) => {
     this.$scanSubscription = this.centralManager.on(
       "centralManagerDidDiscoverPeripheral",
       (central, peripheral, RSSI, advertisementData) => {
@@ -243,10 +239,12 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
         this.emit("ble:error", error instanceof Error ? error : new Error(String(error)));
       });
 
-    this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
-      this.stopScan();
-      this.emit("ble:error", ScanError.ScanTimeout);
-    });
+    if (timeout) {
+      this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
+        this.stopScan();
+        this.emit("ble:error", ScanError.ScanTimeout);
+      });
+    }
   };
 
   public scan = (options: ProxyScanOptions) => {

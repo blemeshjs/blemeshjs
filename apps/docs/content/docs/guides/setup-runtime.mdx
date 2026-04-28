@@ -1,0 +1,34 @@
+---
+title: Setup Runtime
+description: Set up the runtime.
+icon: Hammer
+---
+
+## Install required packages
+
+<Tabs items={["Web", "React Native", "Node"]}>
+  <Tab value="Web">
+    ```bash
+    yarn add @blemeshjs/sdk-web
+    ```
+  </Tab>
+  <Tab value="React Native">Coming soon!</Tab>
+  <Tab value="Node">Coming soon!</Tab>
+</Tabs>
+
+## Create the mesh manager
+
+<Tabs items={["Web", "React Native", "Node"]}>
+  <Tab value="Web">
+    ```ts
+    import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-web";
+
+    const mesh = await createMesh(MeshNetworkManager.instance);
+    ```
+  </Tab>
+  <Tab value="React Native">Coming soon!</Tab>
+  <Tab value="Node">Coming soon!</Tab>
+</Tabs>
+
+This configures the shared manager with the transport and storage implementation.
+

@@ -7,7 +7,7 @@ import {
   CBPeripheral,
   CBPeripheralState,
   CBService,
-} from "@mesh-link-js/sdk";
+} from "@blemeshjs/sdk";
 import { base64ToUint8Array, uint8ArrayToHex } from "uint8array-extras";
 import Long from "long";
 import { WebCBCharacteristic } from "./characteristic.js";

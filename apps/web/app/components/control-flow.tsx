@@ -18,7 +18,7 @@ import { useMount } from "react-use";
 import { ProvisioningModal } from "./provisioning-modal";
 import { AddGroupModal } from "./add-group-modal";
 import { toastError } from "../helpers/error";
-import { ScanError } from "@mesh-link-js/sdk-web";
+import { ScanError } from "@blemeshjs/sdk-web";
 import { GroupItem } from "./control/group-item";
 import { useSettingsStore } from "../hooks/useSettings";
 import { FeatureTab } from "../types/settings";

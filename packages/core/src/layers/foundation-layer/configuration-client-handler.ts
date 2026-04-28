@@ -5,7 +5,7 @@ import {
   AcknowledgedMeshMessage,
   MeshResponse,
   UnacknowledgedMeshMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Model } from "../../mesh-models/model.js";
 import { MeshAddress, MeshNetwork } from "../../mesh-models/index.js";
 import {

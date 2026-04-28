@@ -24,7 +24,7 @@ import {
   UInt32,
   UInt8,
   UnacknowledgedConfigMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshAddress, MeshNetwork, MessageHandle, Node } from "../mesh-models/index.js";
 import { Model } from "../mesh-models/model.js";
 import { NetworkParametersProvider } from "./network-parameters-provider.js";

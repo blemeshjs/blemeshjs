@@ -18,8 +18,8 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mesh Link JS Dashboard",
-  description: "Bluetooth mesh development dashboard for building new mesh-link-js SDK features.",
+  title: "BLEMeshJS Dashboard",
+  description: "Bluetooth mesh development dashboard for building new blemeshjs SDK features.",
 };
 
 export default function RootLayout({

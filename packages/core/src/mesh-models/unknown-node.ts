@@ -1,10 +1,10 @@
 import { NetworkPdu } from "../layers/network-layer/network-pdu.js";
 import { MeshNetwork } from "./mesh-network.js";
-import { UUID } from "@mesh-link-js/utils";
+import { UUID } from "@blemeshjs/utils";
 import { Security } from "./security.js";
 import { Node, NodeKey } from "./node.js";
 import { Element } from "./element.js";
-import { Location } from "@mesh-link-js/utils";
+import { Location } from "@blemeshjs/utils";
 
 /**
  * A class representing an unknown Node connected as a GATT Proxy Node.

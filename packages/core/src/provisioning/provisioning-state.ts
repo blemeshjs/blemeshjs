@@ -1,4 +1,4 @@
-import { BigUInt, Data, isEnumCase, UInt8 } from "@mesh-link-js/utils";
+import { BigUInt, Data, isEnumCase, UInt8 } from "@blemeshjs/utils";
 import { ProvisioningCapabilities } from "./provisioning-capabilities.js";
 import Long from "long";
 import { InputAction, OutputAction } from "./oob.js";

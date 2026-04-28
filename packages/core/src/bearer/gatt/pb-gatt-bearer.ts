@@ -1,7 +1,7 @@
 import { Mixin } from "ts-mixer";
 import { BaseGattProxyBearer } from "./base-gatt-proxy-bearer.js";
 import { PduTypes, ProvisioningBearer } from "../bearer.js";
-import { CBCentralManager, CBPeripheral, MeshProvisioningService, UUID } from "@mesh-link-js/utils";
+import { CBCentralManager, CBPeripheral, MeshProvisioningService, UUID } from "@blemeshjs/utils";
 
 /**
  * The PB GATT bearer is responsible for sending and receiving mesh

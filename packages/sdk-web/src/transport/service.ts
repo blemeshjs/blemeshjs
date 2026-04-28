@@ -5,7 +5,7 @@ import {
   CBService,
   MeshProvisioningService,
   MeshProxyService,
-} from "@mesh-link-js/sdk";
+} from "@blemeshjs/sdk";
 import { WebCBCharacteristic } from "./characteristic.js";
 
 export class WebCBService extends CBService {

@@ -1,7 +1,7 @@
 import { toastError } from "@/app/helpers/error";
 import { useControlStore } from "@/app/hooks/useControl";
 import { Button, ButtonGroup, Label, Slider, Surface, Switch } from "@heroui/react";
-import { GenericOnOff } from "@mesh-link-js/sdk";
+import { GenericOnOff } from "@blemeshjs/sdk";
 import { useMutation } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";

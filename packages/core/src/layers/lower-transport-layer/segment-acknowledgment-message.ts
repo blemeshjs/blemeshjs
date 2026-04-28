@@ -7,7 +7,7 @@ import {
   UInt16,
   UInt32,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { NetworkKey } from "../../mesh-models/network-key.js";
 import { LowerTransportPdu, LowerTransportPduType } from "./lower-transport-pdu.js";
 import { concatUint8Arrays } from "uint8array-extras";

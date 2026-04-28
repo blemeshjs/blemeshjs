@@ -1,4 +1,4 @@
-import { KeyIndex } from "@mesh-link-js/utils";
+import { KeyIndex } from "@blemeshjs/utils";
 import { NetworkKey, ApplicationKey, Node } from "../mesh-models/index.js";
 
 export namespace Nodes {

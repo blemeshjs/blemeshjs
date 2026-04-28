@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { CoreMeshNetworkManager } from "./core-mesh-network-manager.js";
-import type { Storage } from "@mesh-link-js/utils";
+import type { Storage } from "@blemeshjs/utils";
 
 function makeStorage(): Storage {
   let data: Uint8Array | undefined;

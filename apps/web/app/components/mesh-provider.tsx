@@ -1,6 +1,6 @@
 "use client";
 
-import { MeshNetworkManager, createBrowserMesh } from "@mesh-link-js/sdk-web";
+import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-web";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const MeshContext = createContext<MeshNetworkManager | null>(null);
@@ -11,7 +11,7 @@ export const MeshProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let mounted = true;
 
-    createBrowserMesh(MeshNetworkManager.instance).then((instance) => {
+    createMesh({}).then((instance) => {
       if (mounted) setMesh(instance);
     });
 

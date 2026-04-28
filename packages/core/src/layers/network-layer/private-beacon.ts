@@ -1,8 +1,8 @@
-import { Data, IvIndex, KeyRefreshPhase } from "@mesh-link-js/utils";
+import { Data, IvIndex, KeyRefreshPhase } from "@blemeshjs/utils";
 import { NetworkBeaconPdu } from "./network-beacon-pdu.js";
 import { NetworkKey } from "../../mesh-models/network-key.js";
 import { BeaconType } from "./beacon-pdu.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { uint8ArrayToHex } from "uint8array-extras";
 
 export class PrivateBeacon extends NetworkBeaconPdu {

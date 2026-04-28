@@ -1,10 +1,17 @@
 import { WebCBPeripheral } from "./peripheral.js";
-import { CBCentralManager, CBCentralManagerState, CBPeripheral, UUID } from "@mesh-link-js/sdk";
+import {
+  CBCentralManager,
+  CBCentralManagerState,
+  CBPeripheral,
+  ScanError,
+  UUID,
+} from "@blemeshjs/sdk";
 import { uint8ArrayToBase64 } from "uint8array-extras";
 
 export class WebCBCentralManager extends CBCentralManager {
   public state: CBCentralManagerState = CBCentralManagerState.unknown;
-  public scanObject: BluetoothLEScan | null = null;
+  private scanObject: BluetoothDevice | null = null;
+  private abortController: AbortController | null = null;
   private peripheralCache = new Map<string, WebCBPeripheral>();
   private activeConnections = new Set<string>();
   private advertisementListener?: (event: Event) => void;
@@ -42,7 +49,7 @@ export class WebCBCentralManager extends CBCentralManager {
       this.emit("centralManagerDidUpdateState", this, newState);
 
       // Stop scan if Bluetooth becomes unavailable
-      if (newState !== CBCentralManagerState.poweredOn && this.scanObject?.active) {
+      if (newState !== CBCentralManagerState.poweredOn && this.scanObject?.watchingAdvertisements) {
         this.stopScan().catch((error) => {
           console.error("Failed to stop scan after Bluetooth state change:", error);
         });
@@ -55,10 +62,11 @@ export class WebCBCentralManager extends CBCentralManager {
   }
 
   scanForPeripherals(serviceUUIDs?: string[]) {
+    serviceUUIDs = serviceUUIDs?.map((uuid) => uuid.toLowerCase());
     return this.scanForPeripheralsInternal(serviceUUIDs);
   }
 
-  private async scanForPeripheralsInternal(_serviceUUIDs?: string[]): Promise<void> {
+  private async scanForPeripheralsInternal(serviceUUIDs?: string[]): Promise<void> {
     if (this.state !== CBCentralManagerState.poweredOn) {
       throw new Error("Bluetooth is unavailable for scanning");
     }
@@ -66,13 +74,12 @@ export class WebCBCentralManager extends CBCentralManager {
     try {
       await this.stopScan();
 
-      const options: BluetoothLEScanOptions = {
-        acceptAllAdvertisements: true,
-        keepRepeatedDevices: true,
+      const options: RequestDeviceOptions = {
+        acceptAllDevices: !serviceUUIDs?.length,
+        filters: [{ services: serviceUUIDs }],
       };
 
       this.advertisementListener = (event: Event) => {
-        console.log(event)
         const adEvent = event as BluetoothAdvertisingEvent;
         const advertisementData = this.buildAdvertisementData(adEvent);
         const peripheral = this.getOrCreatePeripheral(
@@ -90,23 +97,28 @@ export class WebCBCentralManager extends CBCentralManager {
         );
       };
 
-      navigator.bluetooth.addEventListener("advertisementreceived", this.advertisementListener);
-
-      this.scanObject = await navigator.bluetooth.requestLEScan(options);
+      await navigator.bluetooth.requestDevice(options).then((device) => {
+        this.scanObject = device;
+        this.abortController = new AbortController();
+        device.addEventListener("advertisementreceived", this.advertisementListener!);
+        return device.watchAdvertisements({
+          signal: this.abortController.signal,
+        });
+      });
     } catch (error) {
       console.error("Scanning failed:", error);
-      throw error;
+      throw ScanError.UserCancelled;
     }
   }
 
   stopScan() {
-    if (this.scanObject?.active) {
-      this.scanObject.stop();
+    if (this.scanObject?.watchingAdvertisements) {
+      this.abortController?.abort();
       this.scanObject = null;
     }
 
     if (this.advertisementListener) {
-      navigator.bluetooth.removeEventListener("advertisementreceived", this.advertisementListener);
+      this.scanObject?.removeEventListener("advertisementreceived", this.advertisementListener);
       this.advertisementListener = undefined;
     }
     return Promise.resolve();
@@ -115,12 +127,7 @@ export class WebCBCentralManager extends CBCentralManager {
   async connect(peripheral: CBPeripheral) {
     if (!(peripheral instanceof WebCBPeripheral)) {
       const error = new Error("Unsupported peripheral implementation for WebCBCentralManager");
-      this.emit(
-        "centralManagerDidFailConnect",
-        this,
-        peripheral,
-        error,
-      );
+      this.emit("centralManagerDidFailConnect", this, peripheral, error);
       throw error;
     }
 
@@ -157,6 +164,7 @@ export class WebCBCentralManager extends CBCentralManager {
   }
 
   retrieveConnectedPeripherals(serviceUUIDs?: string[]): CBPeripheral[] {
+    serviceUUIDs = serviceUUIDs?.map((uuid) => uuid.toLowerCase());
     const peripherals = Array.from(this.peripheralCache.values()).filter((peripheral) =>
       this.activeConnections.has(peripheral.identifier.uuidString),
     );

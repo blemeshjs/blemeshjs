@@ -1,4 +1,4 @@
-import { Data } from "@mesh-link-js/utils";
+import { Data } from "@blemeshjs/utils";
 
 export enum BeaconType {
   unprovisionedDevice = 0,

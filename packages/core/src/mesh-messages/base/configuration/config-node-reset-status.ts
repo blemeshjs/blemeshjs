@@ -1,4 +1,4 @@
-import { ConfigResponse, Data, UInt32 } from "@mesh-link-js/utils";
+import { ConfigResponse, Data, UInt32 } from "@blemeshjs/utils";
 
 export class ConfigNodeResetStatus extends ConfigResponse {
   public static readonly opCode: UInt32 = 0x804a;

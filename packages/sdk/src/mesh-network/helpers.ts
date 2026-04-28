@@ -3,7 +3,7 @@ import {
   PrivateNetworkIdentity,
   PrivateNodeIdentity,
   PublicNodeIdentity,
-} from "@mesh-link-js/core";
+} from "@blemeshjs/core";
 
 /**
  * Attempts to create a node identity from advertisement data.

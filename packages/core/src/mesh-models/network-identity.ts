@@ -1,7 +1,7 @@
-import { Data } from "@mesh-link-js/utils";
+import { Data } from "@blemeshjs/utils";
 import { NetworkKey } from "./network-key.js";
 import { areUint8ArraysEqual, concatUint8Arrays, uint8ArrayToHex } from "uint8array-extras";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { serviceData } from "./node-identity.js";
 
 /**

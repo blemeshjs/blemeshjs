@@ -1,0 +1,117 @@
+---
+title: Glossary
+description: Plain-language definitions for the Bluetooth Mesh terms you see throughout the docs.
+icon: BookOpenText
+---
+
+Use this glossary when Bluetooth Mesh terms show up faster than you can absorb them.
+
+## A
+
+**Address**
+
+The destination used for publish and subscribe traffic. It can point to one element, a group, or a virtual target.
+
+**Application key**
+
+A key used to secure access-layer messages for specific models. In practice, it is part of what lets an already provisioned node accept and send model messages on the right network.
+
+## B
+
+**Bearer**
+
+The transport path that carries mesh traffic between your application and a device. In the current docs flow, that usually means a browser-driven BLE path underneath the connection or provisioning managers.
+
+## C
+
+**Connection manager**
+
+The `mesh.connection` surface on `MeshNetworkManager`. It is responsible for scanning for provisioned proxy devices, tracking connection state, and opening proxy connections.
+
+## E
+
+**Element**
+
+A functional part of a node. One physical device can expose multiple elements.
+
+Each element owns one or more models, which is why a single physical device can support several behaviors.
+
+## G
+
+**Group**
+
+An address that lets one published message target multiple nodes or models at once. Use groups when the problem is really one-to-many control, such as a room of lights.
+
+## M
+
+**Model**
+
+The behavior contract attached to an element. Models define what commands or state a device supports.
+
+If a node is the device, a model is one capability on that device, such as on/off or lightness.
+
+**Mesh network**
+
+The persistent topology and security state your application works against: nodes, keys, groups, scenes, and related configuration.
+
+**Mesh manager**
+
+The runtime-configured `MeshNetworkManager` instance used by the current docs flow. In the supported browser path, it is created with `createBrowserMesh(MeshNetworkManager.instance)`.
+
+It owns the higher-level runtime surfaces used throughout the docs, especially `mesh.connection` and `mesh.provision`.
+
+## N
+
+**Node**
+
+One physical mesh device, such as a light, switch, sensor, or gateway-connected target.
+
+A node may contain several elements, and each element may contain several models.
+
+## P
+
+**Provisioning**
+
+The secure onboarding process that adds a new device to the mesh network.
+
+This is more than a UI step. Provisioning changes persistent network state by assigning identity, security material, and topology information.
+
+**Provisioning manager**
+
+The `mesh.provision` surface on `MeshNetworkManager`. It is responsible for scanning for unprovisioned peripherals, opening the provisioning bearer, handling identify/capabilities/provisioning state, and reporting progress events.
+
+**Provisioned proxy**
+
+A device that is already part of the mesh network and can be discovered through the proxy connection flow. In the current docs flow, these are reported through `scan:new-proxy` events.
+
+**Publish**
+
+Sending a model message to an address.
+
+## S
+
+**Scan**
+
+The discovery step that finds nearby mesh-capable devices. In the current SDK flow, scanning is event-driven: the connection manager emits `scan:new-proxy` for provisioned devices, and the provisioning manager emits `scan:new-peripheral` for unprovisioned ones.
+
+**Scene**
+
+A saved multi-device state that can be recalled later.
+
+Scenes are useful when one action should restore several devices to a known combination of states.
+
+**Subscribe**
+
+Listening for model messages sent to an address.
+
+## U
+
+**Unprovisioned peripheral**
+
+A nearby device that is advertising as not yet joined to the mesh network. In the current docs flow, these are reported through `scan:new-peripheral` events and then handled by the provisioning manager.
+
+## V
+
+**Virtual address**
+
+An address derived from a label UUID instead of a simple numeric group value. Use it when multiple devices should share a logical target without relying only on a manually assigned group address.

@@ -1,0 +1,13 @@
+{
+  "title": "API",
+  "icon": "TrafficCone",
+  "pages": [
+    "index",
+    "sdk",
+    "core",
+    "utils",
+    "crypto",
+    "web",
+    "react-native"
+  ]
+}

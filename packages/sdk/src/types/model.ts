@@ -1,4 +1,4 @@
-import { Model } from "@mesh-link-js/core";
+import { Model } from "@blemeshjs/core";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager";
 
 export type ModelExtension<T> = ((

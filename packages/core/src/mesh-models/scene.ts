@@ -1,6 +1,6 @@
 import { Clazz, createModelSchema, custom, list, primitive } from "serializr";
 import { MeshNetwork } from "./mesh-network.js";
-import { Address, SceneNumber } from "@mesh-link-js/utils";
+import { Address, SceneNumber } from "@blemeshjs/utils";
 import { Node } from "./node.js";
 
 /**

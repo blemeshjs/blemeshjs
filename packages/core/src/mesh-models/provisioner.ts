@@ -1,4 +1,4 @@
-import { Address, assertDirectInstanceOf, Int64, UUID, MeshCDB } from "@mesh-link-js/utils";
+import { Address, assertDirectInstanceOf, Int64, UUID, MeshCDB } from "@blemeshjs/utils";
 import { MeshNetwork } from "./mesh-network.js";
 import { AddressRange } from "./address-range.js";
 import { Node } from "./node.js";

@@ -1,6 +1,6 @@
 import { useControlStore } from "@/app/hooks/useControl";
 import { Button, Disclosure, DisclosureGroup, Tabs } from "@heroui/react";
-import { Location } from "@mesh-link-js/utils";
+import { Location } from "@blemeshjs/utils";
 import { NodeModel } from "./node-model";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";

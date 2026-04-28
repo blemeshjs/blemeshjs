@@ -1,5 +1,5 @@
-import { Group } from "@mesh-link-js/core";
-import { Element, Model, Node } from "@mesh-link-js/sdk-web";
+import { Group } from "@blemeshjs/core";
+import { Element, Model, Node } from "@blemeshjs/sdk-web";
 import { immer } from "zustand/middleware/immer";
 import { create } from "zustand/react";
 

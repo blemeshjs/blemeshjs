@@ -10,7 +10,7 @@ import {
   UInt8,
   Location,
   MeshCDB,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Node } from "./node.js";
 import { Model } from "./model.js";
 import { MeshNetwork } from "./mesh-network.js";

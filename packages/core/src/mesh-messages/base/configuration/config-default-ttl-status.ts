@@ -1,4 +1,4 @@
-import { ConfigResponse, Data, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { ConfigResponse, Data, UInt32, UInt8 } from "@blemeshjs/utils";
 
 export class ConfigDefaultTtlStatus extends ConfigResponse {
   public static readonly opCode: UInt32 = 0x800e;

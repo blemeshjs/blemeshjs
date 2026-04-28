@@ -5,7 +5,7 @@ import {
   CBService,
   MeshProvisioningService,
   MeshProxyService,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { RNCBCharacteristic } from "./characteristic.js";
 import { Service } from "react-native-ble-plx";
 

@@ -1,4 +1,4 @@
-import { ClosedRange, DecodingError, RangeObject, MeshCDB, SceneNumber } from "@mesh-link-js/utils";
+import { ClosedRange, DecodingError, RangeObject, MeshCDB, SceneNumber } from "@blemeshjs/utils";
 import { z } from "zod";
 import { createModelSchema, custom } from "serializr";
 

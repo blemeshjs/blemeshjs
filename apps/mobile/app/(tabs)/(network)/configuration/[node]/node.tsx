@@ -20,7 +20,7 @@ import { withUniwind } from "uniwind";
 import { useImmer } from "use-immer";
 import { Alert, AlertDialog } from "@/components/my-alert";
 import { cn } from "heroui-native";
-import { CompanyIdentifier } from "@mesh-link-js/utils";
+import { CompanyIdentifier } from "@blemeshjs/utils";
 
 const StyledChevronRightIcon = withUniwind(ChevronRightIcon);
 

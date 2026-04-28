@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@blemeshjs/sdk-pro": "workspace:^",
+    "@blemeshjs/sdk-web": "workspace:^",
     "@heroui/react": "^3.0.1",
     "@heroui/styles": "^3.0.1",
-    "@mesh-link-js/sdk-pro": "workspace:^",
-    "@mesh-link-js/sdk-web": "workspace:^",
     "@tanstack/react-query": "^5.95.2",
     "formik": "^2.4.9",
     "immer": "^11.1.4",

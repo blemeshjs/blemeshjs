@@ -1,7 +1,7 @@
 import { AppText } from "@/components/app-text";
 import { useMesh } from "@/components/mesh-provider";
 import { MySafeAreaScrollView } from "@/components/my-safe-area-scroll-view";
-import { Location } from "@mesh-link-js/utils";
+import { Location } from "@blemeshjs/utils";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";

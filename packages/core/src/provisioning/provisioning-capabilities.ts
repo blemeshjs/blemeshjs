@@ -1,4 +1,4 @@
-import { UInt8 } from "@mesh-link-js/utils";
+import { UInt8 } from "@blemeshjs/utils";
 import { InputOobActions, OobType, OutputOobActions } from "./oob.js";
 import { PublicKeyType } from "./public-key.js";
 import { Algorithms } from "./algorithm.js";

@@ -1,4 +1,4 @@
-import { AcknowledgedConfigMessage, Data, TimeInterval, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { AcknowledgedConfigMessage, Data, TimeInterval, UInt32, UInt8 } from "@blemeshjs/utils";
 import { NetworkTransmit } from "../../../mesh-models/node.js";
 import { ConfigNetworkTransmitStatus } from "./config-network-transmit-status.js";
 

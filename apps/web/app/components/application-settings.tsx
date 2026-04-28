@@ -92,7 +92,7 @@ export const ApplicationSettings = observer(() => {
   return (
     <Card>
       <Card.Header>
-        <Card.Title className="font-semibold">MESH LINK JS SDK DASHBOARD</Card.Title>
+        <Card.Title className="font-semibold">BLEMeshJS SDK DASHBOARD</Card.Title>
         <Card.Description className="flex items-center gap-2 text-xs">
           Provision and control Bluetooth Mesh networks directly from your browser.
         </Card.Description>

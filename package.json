@@ -5,7 +5,7 @@
     "packages/*",
     "apps/*"
   ],
-  "name": "mesh-link-js",
+  "name": "blemeshjs",
   "version": "1.0.0",
   "scripts": {
     "build": "turbo run build --filter=!./packages/sdk-react-native --filter=!./apps/mobile --filter=!./apps/docs",

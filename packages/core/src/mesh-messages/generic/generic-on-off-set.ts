@@ -7,7 +7,7 @@ import {
   TransitionTime,
   UInt32,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { GenericOnOffStatus } from "./generic-on-off-status.js";
 import { concatUint8Arrays } from "uint8array-extras";
 

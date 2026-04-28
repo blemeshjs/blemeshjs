@@ -1,0 +1,715 @@
+---
+title: SDK Package
+description: High-level mesh manager, model extensions, and shared SDK types used across runtimes.
+icon: BookOpenText
+---
+
+This page is auto-generated from `packages/sdk/src/**` and the public exports exposed by `@blemeshjs/sdk`.
+
+> Update TSDoc comments in source, then run `yarn workspace docs api:generate`. Normal docs `dev`, `build`, and `types:check` runs regenerate these pages automatically.
+
+## Package overview
+
+| Field | Value |
+| --- | --- |
+| Package | `@blemeshjs/sdk` |
+| Entry point | `packages/sdk/src/index.ts` |
+| Source tree | `packages/sdk/src/**` |
+
+
+## Package notes
+
+This package also re-exports symbols from `@blemeshjs/utils`. This page focuses on the runtime-specific exports declared in packages/sdk/src/**.
+
+## Export map
+
+| Export | Kind | Summary |
+| --- | --- | --- |
+| [ClassInstance](#classinstance) | Type alias | No description yet. |
+| [CompositeLogger](#compositelogger) | Class | No description yet. |
+| [ConnectionStatus](#connectionstatus) | Type alias | No description yet. |
+| [ConsoleLogger](#consolelogger) | Class | No description yet. |
+| [CoreMeshNetworkManager](#coremeshnetworkmanager) | Class | No description yet. |
+| [createProxy](#createproxy) | Function | No description yet. |
+| [DiscoveredProxyPeripheral](#discoveredproxyperipheral) | Type alias | No description yet. |
+| [DiscoveredUnprovisionedPeripheral](#discoveredunprovisionedperipheral) | Type alias | No description yet. |
+| [Element](#element) | Type alias | No description yet. |
+| [GenericOnOff](#genericonoff) | Variable | No description yet. |
+| [InternalElement](#internalelement) | Class | No description yet. |
+| [InternalModel](#internalmodel) | Class | No description yet. |
+| [InternalNode](#internalnode) | Class | No description yet. |
+| [keysOf](#keysof) | Function | No description yet. |
+| [logger](#logger) | Variable | No description yet. |
+| [MeshNetworkManager](#meshnetworkmanager) | Class | No description yet. |
+| [Model](#model) | Type alias | No description yet. |
+| [ModelExtension](#modelextension) | Type alias | No description yet. |
+| [NetworkConnection](#networkconnection) | Class | No description yet. |
+| [NetworkConnectionEvents](#networkconnectionevents) | Type alias | No description yet. |
+| [networkIdentity](#networkidentity) | Function | No description yet. |
+| [NewKey](#newkey) | Type alias | No description yet. |
+| [Node](#node) | Type alias | No description yet. |
+| [NodeError](#nodeerror) | Class | No description yet. |
+| [NodeEvents](#nodeevents) | Type alias | No description yet. |
+| [nodeIdentity](#nodeidentity) | Function | No description yet. |
+| [ProvisioningManager](#provisioningmanager) | Class | No description yet. |
+| [ProvisionScanOptions](#provisionscanoptions) | Type alias | No description yet. |
+| [ProxyScanOptions](#proxyscanoptions) | Type alias | No description yet. |
+| [ScanError](#scanerror) | Class | No description yet. |
+| [ScanOptions](#scanoptions) | Type alias | No description yet. |
+
+## Exported API
+
+### ClassInstance
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/index.ts#L8`
+
+
+```ts
+type ClassInstance<T> = T extends { prototype: infer R } ? R : never;
+```
+
+### CompositeLogger
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/types/logger.ts#L54`
+
+
+```ts
+class CompositeLogger extends LoggerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CompositeLogger(handlers: LoggerHandler[]): CompositeLogger;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `d` | `d(category: LogCategory, message: string): void;` | No description yet. |
+| `e` | `e(category: LogCategory, message: string): void;` | No description yet. |
+| `i` | `i(category: LogCategory, message: string): void;` | No description yet. |
+| `log` | `log(message: string, category: LogCategory, level: LogLevel): void;` | No description yet. |
+| `v` | `v(category: LogCategory, message: string): void;` | No description yet. |
+| `w` | `w(category: LogCategory, message: string): void;` | No description yet. |
+
+### ConnectionStatus
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-network/network-connection.ts#L29`
+
+
+```ts
+type ConnectionStatus = "connecting" | "discovering-services" | "initializing" | "connected" | "disconnected";
+```
+
+### ConsoleLogger
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/types/logger.ts#L3`
+
+
+```ts
+class ConsoleLogger extends LoggerHandler
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ConsoleLogger(minLevel: LogLevel): ConsoleLogger;` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `d` | `d(category: LogCategory, message: string): void;` | No description yet. |
+| `e` | `e(category: LogCategory, message: string): void;` | No description yet. |
+| `i` | `i(category: LogCategory, message: string): void;` | No description yet. |
+| `log` | `log(message: string, category: LogCategory, level: LogLevel): void;` | No description yet. |
+| `v` | `v(category: LogCategory, message: string): void;` | No description yet. |
+| `w` | `w(category: LogCategory, message: string): void;` | No description yet. |
+
+### CoreMeshNetworkManager
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-network/core-mesh-network-manager.ts#L13`
+
+
+```ts
+class CoreMeshNetworkManager extends MeshNetworkManager
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `CoreMeshNetworkManager(storage: Storage, MeshDataClass: MeshDataCtor<MeshData>, MeshNetworkClass: MeshNetworkCtor<MeshNetwork>): CoreMeshNetworkManager;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bearerDidDeliverData` | `(_bearer: Bearer, data: Data, type: PduType) => void` | This method should be called whenever a PDU has been received from the mesh network using any bearer. When a complete Mesh Message is received and reassembled, the delegate's `MeshNetworkDelegate.meshNetworkManager()` will be called. For easier integration with `GattBearer`, instead of calling this method, set the manager as Bearer's `Bearer.dataDelegate`. |
+| `handlerQueue` | `DispatchQueue` | A queue to call handler methods on. |
+| `networkParameters` | `NetworkParameters` | Network parameters. |
+| `proxyFilter` | `ProxyFilter` | The Proxy Filter state. |
+| `$instance` | `CoreMeshNetworkManager` | No description yet. |
+| `isNetworkCreated` | `unknown` | No description yet. |
+| `localElements` | `unknown` | No description yet. |
+| `localProvisionerNode` | `unknown` | No description yet. |
+| `logger` | `unknown` | No description yet. |
+| `meshNetwork` | `unknown` | No description yet. |
+| `networkManager` | `unknown` | No description yet. |
+| `networkManagerHandler` | `unknown` | No description yet. |
+| `nodes` | `unknown` | No description yet. |
+| `storage` | `unknown` | No description yet. |
+| `transmitter` | `unknown` | No description yet. |
+| `instance` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `clear` | `clear(): Promise<void>;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisioner` | `createNewMeshNetworkWithNameAndProvisioner(name: string, provisioner: Provisioner): any;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisionerName` | `createNewMeshNetworkWithNameAndProvisionerName(name: string, provisionerName: string): any;` | No description yet. |
+| `ensureNetworkKey` | `ensureNetworkKey(networkKey: NetworkKey): void;` | No description yet. |
+| `export` | `export(): Promise<Data>;` | No description yet. |
+| `load` | `load(): Promise<void>;` | No description yet. |
+| `provisionUnprovisionedDevice` | `provisionUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, bearer: ProvisioningBearer): any;` | No description yet. |
+| `publish` | `publish(message: MeshMessage, model: Model): Promise<MessageHandle \| undefined>;` | No description yet. |
+| `save` | `save(): Promise<void>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToAddress` | `sendAcknowledgedConfigMessageToAddress(message: { completion?: (result: Result<ConfigResponse, Error>) => void; destination: Address; initialTtl?: any; message: AcknowledgedConfigMessage; networkKey?: NetworkKey }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToNode` | `sendAcknowledgedConfigMessageToNode(message: { completion?: (result: Result<ConfigResponse, Error>) => void; initialTtl?: any; message: AcknowledgedConfigMessage; networkKey?: NetworkKey; node: Node }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedMeshMessageToModel` | `sendAcknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: any; localElement?: Element; message: AcknowledgedMeshMessage; model: Model }): Promise<MeshResponse>;` | No description yet. |
+| `sendMeshMessageToMeshAddress` | `sendMeshMessageToMeshAddress(message: { applicationKey: ApplicationKey; destination: MeshAddress; initialTtl?: any; localElement?: Element; message: MeshMessage }): Promise<void>;` | No description yet. |
+| `sendProxyConfigurationMessage` | `sendProxyConfigurationMessage(message: ProxyConfigurationMessage): Promise<void>;` | No description yet. |
+| `sendUnacknowledgedMeshMessageToModel` | `sendUnacknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: any; localElement?: Element; message: UnacknowledgedMeshMessage; model: Model }): Promise<void>;` | No description yet. |
+| `initialize` | `initialize(storage: Storage): CoreMeshNetworkManager;` | No description yet. |
+
+### createProxy
+
+**Kind:** Function
+
+**Source:** `packages/sdk/src/types/proxy.ts#L2`
+
+
+```ts
+function createProxy<TInternal, TPublic, TAllowedMethods, TAllowedProps>(node: TInternal, api: TPublic, allowedMethods: TAllowedMethods, allowedProps: TAllowedProps): TPublic & Pick<TInternal, TAllowedMethods[number]> & Pick<TInternal, TAllowedProps[number]>;
+```
+
+### DiscoveredProxyPeripheral
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/scan.ts#L17`
+
+
+```ts
+type DiscoveredProxyPeripheral = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `device` | `GattBearer` | No description yet. |
+| `rssi` | `Int32` | No description yet. |
+
+### DiscoveredUnprovisionedPeripheral
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/scan.ts#L11`
+
+
+```ts
+type DiscoveredUnprovisionedPeripheral = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bearer` | `ProvisioningBearer[]` | No description yet. |
+| `device` | `UnprovisionedDevice` | No description yet. |
+| `rssi` | `number[]` | No description yet. |
+
+### Element
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-models/element.ts#L7`
+
+
+```ts
+type Element = ReturnType<typeof toProxy>;
+```
+
+### GenericOnOff
+
+**Kind:** Variable
+
+**Source:** `packages/sdk/src/model-extensions/generic-on-off.ts#L7`
+
+
+```ts
+const GenericOnOff: (model: Model, coreMeshNetworkManager: CoreMeshNetworkManager) => { remainingTime: TransitionTime | undefined; state: boolean | undefined; targetState: boolean | undefined; get: any; set: any; toDelay: any; toTransitionTime: any } & { key: string };
+```
+
+### InternalElement
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-models/element.ts#L8`
+
+
+```ts
+class InternalElement
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `models` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `toProxy` | `toProxy(element: Element, coreMeshNetworkManager: CoreMeshNetworkManager): InternalElement & Pick<Element, never> & Pick<Element, "name" \| "index" \| "location" \| "unicastAddress">;` | No description yet. |
+
+### InternalModel
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-models/model.ts#L18`
+
+
+```ts
+class InternalModel
+```
+
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `bindApplicationKey` | `bindApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
+| `unbindApplicationKey` | `unbindApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
+| `use` | `use<T>(ext: ModelExtension<T>): T;` | No description yet. |
+| `toProxy` | `toProxy(model: Model, coreMeshNetworkManager: CoreMeshNetworkManager): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "boundApplicationKeys" \| "applicationKeys">;` | No description yet. |
+
+### InternalNode
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-models/node.ts#L37`
+
+
+```ts
+class InternalNode extends BindableTinyEmitter<NodeEvents>
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<NodeEvents[K]>) => void` | No description yet. |
+| `off` | `(event: K, fn?: NodeEvents[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: NodeEvents[K]) => () => void` | No description yet. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `applicationKeysWithKnownToNetworkKeys` | `unknown` | No description yet. |
+| `applicationKeysWithUnknownNetworkKeys` | `unknown` | No description yet. |
+| `availableApplicationKeys` | `unknown` | No description yet. |
+| `availableNetworkKeys` | `unknown` | No description yet. |
+| `elements` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addApplicationKey` | `addApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
+| `addNetworkKey` | `addNetworkKey(networkKey: NetworkKey): Promise<void>;` | No description yet. |
+| `discover` | `discover(): Promise<void>;` | No description yet. |
+| `getCompositionData` | `getCompositionData(): Promise<void>;` | No description yet. |
+| `getTtl` | `getTtl(): Promise<void>;` | No description yet. |
+| `readAppKeys` | `readAppKeys(): Promise<void>;` | No description yet. |
+| `readApplicationKeysBoundToNetworkKey` | `readApplicationKeysBoundToNetworkKey(networkKey: NetworkKey): Promise<void>;` | No description yet. |
+| `removeApplicationKey` | `removeApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
+| `removeNetworkKey` | `removeNetworkKey(networkKey: NetworkKey): Promise<void>;` | No description yet. |
+| `reset` | `reset(): Promise<void>;` | No description yet. |
+| `toProxy` | `toProxy(node: Node, coreMeshNetworkManager: CoreMeshNetworkManager): InternalNode & Pick<Node, never> & Pick<Node, "name" \| "companyIdentifier" \| "applicationKeys" \| "uuid" \| "isConfigComplete" \| "elementsCount" \| "primaryUnicastAddress" \| "deviceKey" \| "defaultTtl" \| "isLocalProvisioner" \| "isProvisioner" \| "networkKeys" \| "isCompositionDataReceived">;` | No description yet. |
+
+### keysOf
+
+**Kind:** Function
+
+**Source:** `packages/sdk/src/types/proxy.ts#L44`
+
+
+```ts
+function keysOf<T>(): (keys: K) => K;
+```
+
+### logger
+
+**Kind:** Variable
+
+**Source:** `packages/sdk/src/types/logger.ts#L66`
+
+
+```ts
+const logger: CompositeLogger;
+```
+
+### MeshNetworkManager
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-network/mesh-network-manager.ts#L39`
+
+
+```ts
+class MeshNetworkManager
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `MeshNetworkManager(): MeshNetworkManager;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `$centralManager` | `CBCentralManager` | No description yet. |
+| `$connection` | `NetworkConnection` | No description yet. |
+| `$coreMeshNetworkManager` | `CoreMeshNetworkManager` | No description yet. |
+| `provision` | `ProvisioningManager` | No description yet. |
+| `$instance` | `unknown` | No description yet. |
+| `allNodes` | `unknown` | No description yet. |
+| `applicationKeys` | `unknown` | No description yet. |
+| `configuredNodes` | `unknown` | No description yet. |
+| `connection` | `unknown` | No description yet. |
+| `groups` | `unknown` | No description yet. |
+| `isNetworkCreated` | `unknown` | No description yet. |
+| `logger` | `unknown` | No description yet. |
+| `meshNetwork` | `unknown` | No description yet. |
+| `networkKeyExists` | `unknown` | No description yet. |
+| `networkKeys` | `unknown` | No description yet. |
+| `nextAvailableApplicationKeyIndex` | `unknown` | No description yet. |
+| `nextAvailableGroupAddress` | `unknown` | No description yet. |
+| `nextAvailableNetworkKeyIndex` | `unknown` | No description yet. |
+| `notConfiguredNodes` | `unknown` | No description yet. |
+| `provisionerNode` | `unknown` | No description yet. |
+| `provisioners` | `unknown` | No description yet. |
+| `provisionersNodes` | `unknown` | No description yet. |
+| `instance` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `addApplicationKey` | `addApplicationKey(key: NewKey): Promise<void>;` | No description yet. |
+| `addApplicationKeys` | `addApplicationKeys(numberOfKeys: number): Promise<void>;` | No description yet. |
+| `addGroup` | `addGroup(_args: any): Promise<void>;` | No description yet. |
+| `addNetworkKey` | `addNetworkKey(key: NewKey): Promise<void>;` | No description yet. |
+| `createNewMeshNetwork` | `createNewMeshNetwork(): Promise<MeshNetwork>;` | No description yet. |
+| `export` | `export(): Promise<Data>;` | No description yet. |
+| `getElement` | `getElement(nodeUuid: string, elementIndex: number): InternalElement & Pick<Element, never> & Pick<Element, "name" \| "index" \| "location" \| "unicastAddress"> \| undefined;` | No description yet. |
+| `getGroup` | `getGroup(_groupAddress: string): any;` | No description yet. |
+| `getModel` | `getModel(nodeUuid: string, elementIndex: number, modelId: number): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "boundApplicationKeys" \| "applicationKeys"> \| undefined;` | No description yet. |
+| `getNode` | `getNode(uuid: string): InternalNode & Pick<Node, never> & Pick<Node, "name" \| "companyIdentifier" \| "applicationKeys" \| "uuid" \| "isConfigComplete" \| "elementsCount" \| "primaryUnicastAddress" \| "deviceKey" \| "defaultTtl" \| "isLocalProvisioner" \| "isProvisioner" \| "networkKeys" \| "isCompositionDataReceived"> \| undefined;` | No description yet. |
+| `init` | `init(centralManager: CBCentralManager, storage: Storage): void;` | No description yet. |
+| `meshNetworkDidChange` | `meshNetworkDidChange(): void;` | No description yet. |
+| `removeApplicationKey` | `removeApplicationKey(key: Key): Promise<void>;` | No description yet. |
+| `removeGroup` | `removeGroup(_group: any): Promise<void>;` | No description yet. |
+| `removeNetworkKey` | `removeNetworkKey(key: Key): Promise<void>;` | No description yet. |
+| `reset` | `reset(): Promise<void>;` | No description yet. |
+| `setup` | `setup(): Promise<void>;` | No description yet. |
+| `updateMeshNetwork` | `updateMeshNetwork(__namedParameters: { meshName?: string }): Promise<void>;` | No description yet. |
+| `getInstance` | `getInstance<T>(this: T): ClassInstance<T>;` | No description yet. |
+
+### Model
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-models/model.ts#L16`
+
+
+```ts
+type Model = ReturnType<typeof toProxy>;
+```
+
+### ModelExtension
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/model.ts#L4`
+
+
+```ts
+type ModelExtension<T> = (model: Model, coreMeshNetworkManager: CoreMeshNetworkManager) => T & { key: string };
+```
+
+### NetworkConnection
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-network/network-connection.ts#L177`
+
+
+```ts
+class NetworkConnection extends BindableTinyEmitter<NetworkConnectionEvents, this> & Bearer<this>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NetworkConnection($coreMeshNetworkManager: CoreMeshNetworkManager): NetworkConnection;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<NetworkConnectionEvents[K]>) => void` | No description yet. |
+| `isOpen` | `boolean` | A flag set to `true` when any of the underlying bearers is open. |
+| `meshNetwork` | `MeshNetwork` | The Mesh Network for this connection. |
+| `off` | `(event: K, fn?: NetworkConnectionEvents[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: NetworkConnectionEvents[K]) => () => void` | No description yet. |
+| `proxies` | `Map<string, GattBearer>` | The list of connected GATT Proxies. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `maxConnections` | `number` | Maximum number of connections that ``NetworkConnection`` can handle. NOTE: In BLEMeshJS app this value is set to 1 due to UI limitations. When applying in 3rd party app, higher values should work. |
+| `bleReady` | `unknown` | No description yet. |
+| `bleState` | `unknown` | No description yet. |
+| `centralManager` | `unknown` | No description yet. |
+| `isConnectionAutomatic` | `unknown` | No description yet. |
+| `isStarted` | `unknown` | No description yet. |
+| `logger` | `unknown` | No description yet. |
+| `name` | `unknown` | No description yet. |
+| `status` | `unknown` | No description yet. |
+| `supportedPduTypes` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `close` | `close(): void \| Error;` | No description yet. |
+| `connect` | `connect(proxy: DiscoveredProxyPeripheral): Promise<void>;` | No description yet. |
+| `open` | `open(): void;` | No description yet. |
+| `scan` | `scan(options: ScanOptions): void;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `stopScan` | `stopScan(): void;` | No description yet. |
+| `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
+| `use` | `use(bearer: GattBearer): void;` | No description yet. |
+| `to` | `to(meshNetwork: MeshNetwork, centralManager: CBCentralManager, coreMeshNetworkManager: CoreMeshNetworkManager): NetworkConnection;` | No description yet. |
+
+### NetworkConnectionEvents
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-network/network-connection.ts#L36`
+
+
+```ts
+type NetworkConnectionEvents = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `ble:error` | `(error: Error) => void` | No description yet. |
+| `ble:state-change` | `(state: CBCentralManagerState) => void` | No description yet. |
+| `connection:status` | `(status: ConnectionStatus) => void` | No description yet. |
+| `scan:new-proxy` | `(discoveredPeripheral: DiscoveredProxyPeripheral) => void` | No description yet. |
+
+### networkIdentity
+
+**Kind:** Function
+
+**Source:** `packages/sdk/src/mesh-network/helpers.ts#L22`
+
+
+```ts
+function networkIdentity(advertisementData: Record<string, unknown>): PublicNetworkIdentity | PrivateNetworkIdentity | null;
+```
+
+### NewKey
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/key.ts#L3`
+
+
+```ts
+type NewKey = Pick<Key, "key" | "name" | "index">;
+```
+
+### Node
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-models/node.ts#L35`
+
+
+```ts
+type Node = ReturnType<typeof toProxy>;
+```
+
+### NodeError
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/types/node.ts#L1`
+
+
+```ts
+class NodeError extends Error
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `NodeError(message: string): NodeError;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `cause` | `unknown` | No description yet. |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `NodeReset` | `NodeError` | No description yet. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `isError` | `isError(error: unknown): error is Error;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### NodeEvents
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/mesh-models/node.ts#L31`
+
+
+```ts
+type NodeEvents = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `node:reset` | `() => void` | No description yet. |
+
+### nodeIdentity
+
+**Kind:** Function
+
+**Source:** `packages/sdk/src/mesh-network/helpers.ts#L15`
+
+
+```ts
+function nodeIdentity(advertisementData: Record<string, unknown>): PublicNodeIdentity | PrivateNodeIdentity | null;
+```
+
+### ProvisioningManager
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/mesh-network/provision.ts#L116`
+
+
+```ts
+class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents>
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ProvisioningManager(): ProvisioningManager;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `centralManager` | `CBCentralManager` | The Bluetooth Central Manager used for provisioning scans. Must be set before calling scan() or connect(). |
+| `emit` | `(event: K, args: Parameters<RNProvisionEvents[K]>) => void` | No description yet. |
+| `off` | `(event: K, fn?: RNProvisionEvents[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: RNProvisionEvents[K]) => () => void` | No description yet. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `canProvisionDevice` | `unknown` | No description yet. |
+| `capabilitiesReceived` | `unknown` | No description yet. |
+| `device` | `unknown` | No description yet. |
+| `isAddressValid` | `unknown` | No description yet. |
+| `isDeviceSupported` | `unknown` | No description yet. |
+| `networkKey` | `unknown` | No description yet. |
+| `provisionerAvailable` | `unknown` | No description yet. |
+| `state` | `unknown` | No description yet. |
+| `unicastAddress` | `unknown` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `connect` | `connect(peripheral: DiscoveredUnprovisionedPeripheral): void;` | No description yet. |
+| `disconnect` | `disconnect(): void;` | No description yet. |
+| `identify` | `identify(attentionTimer: number): void;` | No description yet. |
+| `quick` | `quick(peripheral: DiscoveredUnprovisionedPeripheral): Promise<void>;` | No description yet. |
+| `scan` | `scan(options: ScanOptions): void;` | No description yet. |
+| `start` | `start(): void;` | No description yet. |
+| `stopScan` | `stopScan(): void;` | No description yet. |
+
+### ProvisionScanOptions
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/scan.ts#L9`
+
+
+```ts
+type ProvisionScanOptions = ScanOptions;
+```
+
+### ProxyScanOptions
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/scan.ts#L8`
+
+
+```ts
+type ProxyScanOptions = ScanOptions;
+```
+
+### ScanError
+
+**Kind:** Class
+
+**Source:** `packages/sdk/src/types/scan.ts#L22`
+
+
+```ts
+class ScanError extends Error
+```
+
+#### Constructors
+| Name | Signature | Description |
+| --- | --- | --- |
+| `constructor` | `ScanError(message: string): ScanError;` | No description yet. |
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `cause` | `unknown` | No description yet. |
+| `message` | `string` | No description yet. |
+| `name` | `string` | No description yet. |
+| `stack` | `string` | No description yet. |
+| `BleUnavailable` | `ScanError` | No description yet. |
+| `BleUnready` | `ScanError` | No description yet. |
+| `ScanTimeout` | `ScanError` | No description yet. |
+| `stackTraceLimit` | `number` | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. |
+| `UserCancelled` | `ScanError` | No description yet. |
+#### Methods
+| Name | Signature | Description |
+| --- | --- | --- |
+| `captureStackTrace` | `captureStackTrace(targetObject: object, constructorOpt?: Function): void;` | No description yet. |
+| `isError` | `isError(error: unknown): error is Error;` | No description yet. |
+| `prepareStackTrace` | `prepareStackTrace(err: Error, stackTraces: CallSite[]): any;` | No description yet. |
+
+### ScanOptions
+
+**Kind:** Type alias
+
+**Source:** `packages/sdk/src/types/scan.ts#L4`
+
+
+```ts
+type ScanOptions = unknown;
+```
+
+#### Properties
+| Name | Type | Description |
+| --- | --- | --- |
+| `timeout` | `number` | No description yet. |

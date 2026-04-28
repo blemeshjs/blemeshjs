@@ -6,7 +6,7 @@ import {
   UInt16,
   DecodingError,
   MeshCDB,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { z } from "zod";
 import { Node } from "./node.js";
 import { createModelSchema, custom } from "serializr";

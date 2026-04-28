@@ -1,4 +1,4 @@
-import { AcknowledgedConfigMessage, Data, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { AcknowledgedConfigMessage, Data, UInt32, UInt8 } from "@blemeshjs/utils";
 import { ConfigCompositionDataStatus } from "./config-composition-data-status.js";
 
 export class ConfigCompositionDataGet extends AcknowledgedConfigMessage {

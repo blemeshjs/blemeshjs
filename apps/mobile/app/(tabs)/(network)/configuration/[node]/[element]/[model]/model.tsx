@@ -13,7 +13,7 @@ import { GenericOnOffCell } from "./model/generic-on-off-cell";
 import { Alert, AlertDialog } from "@/components/my-alert";
 import { useImmer } from "use-immer";
 import { Button } from "heroui-native/button";
-import { ApplicationKey } from "@mesh-link-js/core";
+import { ApplicationKey } from "@blemeshjs/core";
 
 const StyledChevronRightIcon = withUniwind(ChevronRightIcon);
 const StyledTrashIcon = withUniwind(TrashIcon);

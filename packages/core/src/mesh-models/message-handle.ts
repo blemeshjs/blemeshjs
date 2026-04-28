@@ -1,4 +1,4 @@
-import { UInt32, MeshMessage, Address } from "@mesh-link-js/utils";
+import { UInt32, MeshMessage, Address } from "@blemeshjs/utils";
 import { MeshAddress } from "./mesh-address.js";
 
 type NetworkManager = {

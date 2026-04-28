@@ -4,7 +4,7 @@ import {
   StaticAcknowledgedProxyConfigurationMessage,
   StaticProxyConfigurationMessage,
   UInt8,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { FilterStatus } from "./filter-status.js";
 
 /**

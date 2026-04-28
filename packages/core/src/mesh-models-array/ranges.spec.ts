@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { AddressRange, SceneRange } from "../mesh-models/index.js";
 import { mergedRanges } from "./ranges.js";
-import { Address, ClosedRange, SceneNumber } from "@mesh-link-js/utils";
+import { Address, ClosedRange, SceneNumber } from "@blemeshjs/utils";
 
 describe("Ranges", () => {
   it("should merge address ranges properly", () => {

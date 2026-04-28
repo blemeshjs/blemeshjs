@@ -4,8 +4,8 @@ import {
   MeshDataCtor,
   MeshNetwork,
   MeshNetworkCtor,
-} from "@mesh-link-js/core";
-import { Storage } from "@mesh-link-js/utils";
+} from "@blemeshjs/core";
+import { Storage } from "@blemeshjs/utils";
 import { InternalNode } from "../mesh-models/node.js";
 import { computed, makeObservable } from "mobx";
 import { ClassInstance } from "../types/index.js";

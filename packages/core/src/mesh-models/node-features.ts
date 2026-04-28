@@ -1,4 +1,4 @@
-import { UInt16, MeshCDB } from "@mesh-link-js/utils";
+import { UInt16, MeshCDB } from "@blemeshjs/utils";
 import { createModelSchema, optional, primitive } from "serializr";
 import { z } from "zod";
 

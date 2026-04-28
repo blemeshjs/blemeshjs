@@ -1,4 +1,4 @@
-import { Int64, MeshMessage, UInt16, UInt8 } from "@mesh-link-js/utils";
+import { Int64, MeshMessage, UInt16, UInt8 } from "@blemeshjs/utils";
 import { LowerTransportPdu } from "./lower-transport-pdu.js";
 import Long from "long";
 

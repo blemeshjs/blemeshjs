@@ -1,8 +1,8 @@
-import { Data, Storage } from "@mesh-link-js/utils";
+import { Data, Storage } from "@blemeshjs/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { stringToUint8Array, uint8ArrayToString } from "uint8array-extras";
 
-const MESH_LINK_STORAGE_KEY = "MeshLinkJs";
+const MESH_LINK_STORAGE_KEY = "BLEMeshJS";
 export class RNAsyncStorage implements Storage {
   load = async (): Promise<Data | undefined> => {
     return AsyncStorage.getItem(MESH_LINK_STORAGE_KEY).then((data) => {

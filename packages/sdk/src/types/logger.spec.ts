@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ConsoleLogger, CompositeLogger } from "./logger.js";
-import { LogCategory, LogLevel, LoggerHandler } from "@mesh-link-js/utils";
+import { LogCategory, LogLevel, LoggerHandler } from "@blemeshjs/utils";
 
 describe("ConsoleLogger", () => {
   beforeEach(() => {

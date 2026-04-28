@@ -1,4 +1,4 @@
-import { Double, Int64, TimeInterval, UInt8 } from "@mesh-link-js/utils";
+import { Double, Int64, TimeInterval, UInt8 } from "@blemeshjs/utils";
 import Long from "long";
 /**
  * The builder allows easy configuration of `NetworkParameters`.

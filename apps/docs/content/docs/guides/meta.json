@@ -1,0 +1,9 @@
+{
+  "title": "Guides",
+  "icon": "Signpost",
+  "pages": [
+    "setup-runtime",
+    "provisioning",
+    "control-device"
+  ]
+}

@@ -1,5 +1,5 @@
 import { AddressRange, SceneRange } from "../mesh-models/index.js";
-import { ClosedRange, RangeObject } from "@mesh-link-js/utils";
+import { ClosedRange, RangeObject } from "@blemeshjs/utils";
 
 /**
  * Returns `true` if all the address ranges are valid. Valid address ranges

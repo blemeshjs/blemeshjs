@@ -10,7 +10,7 @@ import {
   readUInt16LE,
   UInt16,
   UInt32,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { ConfigModelAppStatus } from "./config-model-app-status.js";
 import { concatUint8Arrays } from "uint8array-extras";
 import { ApplicationKey } from "../../../mesh-models/index.js";

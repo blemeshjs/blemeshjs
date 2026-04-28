@@ -1,4 +1,4 @@
-import { Address, DecodingError, IvIndex, UInt32, MeshCDB } from "@mesh-link-js/utils";
+import { Address, DecodingError, IvIndex, UInt32, MeshCDB } from "@blemeshjs/utils";
 import { Node } from "./node.js";
 import { AddressRange } from "./address-range.js";
 import { produce } from "immer";

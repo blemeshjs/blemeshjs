@@ -1,4 +1,4 @@
-import { Int64 } from "@mesh-link-js/utils";
+import { Int64 } from "@blemeshjs/utils";
 import { BearerHandler } from "../bearer-handler.js";
 import { Bearer } from "../bearer.js";
 

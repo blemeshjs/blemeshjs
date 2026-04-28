@@ -9,8 +9,8 @@ import {
   Location,
   SceneNumber,
   ExportConfiguration,
-} from "@mesh-link-js/utils";
-import { Crypto } from "@mesh-link-js/crypto";
+} from "@blemeshjs/utils";
+import { Crypto } from "@blemeshjs/crypto";
 import { serialize } from "serializr";
 import { hexToUint8Array, stringToUint8Array } from "uint8array-extras";
 import {

@@ -1,4 +1,4 @@
-import { Address, MeshMessage } from "@mesh-link-js/utils";
+import { Address, MeshMessage } from "@blemeshjs/utils";
 import { MeshNetworkManager } from "./mesh-network-manager.js";
 import { Element } from "./element.js";
 import { MeshAddress } from "./mesh-address.js";

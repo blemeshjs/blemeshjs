@@ -1,8 +1,8 @@
 import { AppText } from "@/components/app-text";
 import { useMesh } from "@/components/mesh-provider";
 import { MySafeAreaScrollView } from "@/components/my-safe-area-scroll-view";
-import { RNNode } from "@mesh-link-js/sdk-react-native";
-import { CompanyIdentifier } from "@mesh-link-js/utils";
+import { RNNode } from "@blemeshjs/sdk-react-native";
+import { CompanyIdentifier } from "@blemeshjs/utils";
 import { useRouter } from "expo-router";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";

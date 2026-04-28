@@ -1,4 +1,4 @@
-import { Address, Data, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { Address, Data, UInt32, UInt8 } from "@blemeshjs/utils";
 import { NetworkKey } from "../../mesh-models/network-key.js";
 
 export enum LowerTransportPduType {

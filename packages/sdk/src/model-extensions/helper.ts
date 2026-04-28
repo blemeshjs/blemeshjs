@@ -1,10 +1,10 @@
-import { ConfigNodeReset, GenericOnOffStatus, Model } from "@mesh-link-js/core";
+import { ConfigNodeReset, GenericOnOffStatus, Model } from "@blemeshjs/core";
 import { hasMixin } from "ts-mixer";
 import {
   AcknowledgedMeshMessage,
   UnacknowledgedMeshMessage,
   ConfigMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { MeshNetworkManager } from "../mesh-network";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager";
 

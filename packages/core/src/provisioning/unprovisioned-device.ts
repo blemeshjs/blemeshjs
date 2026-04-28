@@ -1,4 +1,4 @@
-import { MeshProvisioningService, OobInformation, UUID } from "@mesh-link-js/utils";
+import { MeshProvisioningService, OobInformation, UUID } from "@blemeshjs/utils";
 import z from "zod";
 import { base64ToUint8Array, uint8ArrayToHex } from "uint8array-extras";
 

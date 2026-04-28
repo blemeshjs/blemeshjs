@@ -8,7 +8,7 @@ import {
   CBPeripheral,
   CBPeripheralState,
   CBService,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import Long from "long";
 import { BleError, BleErrorCode, Device, Subscription } from "react-native-ble-plx";
 import { RNCBService } from "./service.js";

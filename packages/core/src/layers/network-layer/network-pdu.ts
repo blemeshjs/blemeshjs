@@ -1,4 +1,4 @@
-import { Address, Data, IvIndex, packUInt32BE, UInt16, UInt32, UInt8 } from "@mesh-link-js/utils";
+import { Address, Data, IvIndex, packUInt32BE, UInt16, UInt32, UInt8 } from "@blemeshjs/utils";
 import { PduType } from "../../bearer/bearer.js";
 import { MeshNetwork } from "../../mesh-models/index.js";
 import { NetworkKey, NetworkKeyDerivatives } from "../../mesh-models/index.js";
@@ -6,7 +6,7 @@ import {
   LowerTransportPdu,
   LowerTransportPduType,
 } from "../lower-transport-layer/lower-transport-pdu.js";
-import { Crypto } from "@mesh-link-js/crypto";
+import { Crypto } from "@blemeshjs/crypto";
 import { concatUint8Arrays, uint8ArrayToHex } from "uint8array-extras";
 import Long from "long";
 

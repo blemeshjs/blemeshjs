@@ -15,7 +15,7 @@ import {
   TransactionMessage,
   ConfigMessage,
   ConfigAnyModelMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { random } from "lodash";
 import { NetworkManager } from "../network-manager.js";
 import { MeshAddress, MeshNetwork, MessageHandle } from "../../mesh-models/index.js";

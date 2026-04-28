@@ -8,7 +8,7 @@ import {
   SigModelId,
   Storage,
   Location,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Element } from "./element.js";
 import { Model } from "./model.js";
 import { stringToUint8Array, uint8ArrayToString } from "uint8array-extras";

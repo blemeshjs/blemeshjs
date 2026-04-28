@@ -5,7 +5,7 @@ import {
   CBCentralManagerState,
   CBPeripheral,
   CBPeripheralState,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { RNCBPeripheral } from "./peripheral.js";
 
 export class RNCBCentralManager extends CBCentralManager {

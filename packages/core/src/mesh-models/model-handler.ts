@@ -9,7 +9,7 @@ import {
   UInt32,
   UInt8,
   UnacknowledgedMeshMessage,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Model } from "./model.js";
 import { AccessPdu } from "../layers/access-layer/access-pdu.js";
 import { hasMixin } from "ts-mixer";

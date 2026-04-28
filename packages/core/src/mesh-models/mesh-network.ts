@@ -15,7 +15,7 @@ import {
   UUID,
   MeshCDB,
   ExportConfiguration,
-} from "@mesh-link-js/utils";
+} from "@blemeshjs/utils";
 import { Element } from "./element.js";
 import { Provisioner } from "./provisioner.js";
 import { Node } from "./node.js";

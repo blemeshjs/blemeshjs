@@ -1,0 +1,285 @@
+---
+title: Core Concepts
+description: Learn the Bluetooth Mesh building blocks you need before using this library.
+icon: Layers
+---
+
+Bluetooth Mesh becomes easier once you keep five terms straight: node, element, model, provisioning, and publish or subscribe.
+
+<Callout title="Understanding these concepts">
+  Read this page as a map, not a glossary. If you understand how a node contains elements, how
+  elements contain models, and how provisioning turns a nearby device into a trusted mesh
+  participant, the rest of the SDK gets much easier to reason about.
+</Callout>
+
+## At a glance
+
+| Term                | What it is                         | Why you care                                                     |
+| ------------------- | ---------------------------------- | ---------------------------------------------------------------- |
+| Node                | One physical mesh device           | This is the thing you discover, provision, and manage            |
+| Element             | A functional part inside a node    | Lets one device expose multiple independently-addressable roles  |
+| Model               | A behavior attached to an element  | This is where on/off, dimming, sensors, and vendor features live |
+| Provisioning        | The secure join process            | Turns an untrusted device into part of your network              |
+| Publish / Subscribe | How messages move through the mesh | Lets one sender target a device, a room, or many devices at once |
+
+## The mental model
+
+Think about a device as a small tree:
+
+- A physical device is a node.
+- A node contains one or more elements.
+- Each element contains one or more models.
+- Models send and receive the messages that actually do the work.
+
+If you can picture that, the rest of the SDK API reads naturally.
+
+```txt
+Physical device
+└─ Node
+  ├─ Element 0
+  │  ├─ Generic OnOff Server
+  │  └─ Light Lightness Server
+  ├─ Element 1
+  │  └─ Sensor Server
+  └─ Element 2
+    └─ Vendor Model
+```
+
+That hierarchy is the reason most mesh APIs feel layered: you usually discover a device first, then target a specific capability on one of its elements.
+
+## Node
+
+A node is one physical mesh device, such as a lamp, switch, sensor, or gateway.
+
+In BLEMeshJS, you usually reach it like this:
+
+```ts
+const device = await mesh.connect(uuid);
+```
+
+After you connect, the device object gives you provisioning helpers, model access, and convenience APIs like `device.light.on()`.
+
+### Think of a node as
+
+- the full device identity in the network,
+- the container for all elements and models on that device,
+- the thing that receives addresses, keys, and provisioning state.
+
+### Real-world examples
+
+| Device      | Likely node role                                              |
+| ----------- | ------------------------------------------------------------- |
+| Smart bulb  | One node with one or more lighting models                     |
+| Wall switch | One node with multiple elements for separate buttons or zones |
+| Sensor hub  | One node with sensor, configuration, and vendor models        |
+
+## Element
+
+An element is a functional part inside the node. A simple bulb may expose one element. A wall switch with two rockers may expose more than one.
+
+Use elements when different parts of the same device need different addresses or model sets.
+
+```ts
+const primary = device.elements[0];
+```
+
+### Why elements exist
+
+Elements solve a real hardware problem: one physical device may need multiple independently-addressable functions.
+
+For example:
+
+- a dual-relay switch might expose one element per relay,
+- a luminaire controller might expose one element for dimming and another for occupancy sensing,
+- a vendor device might expose a standard lighting element plus a private vendor-specific control element.
+
+### Good rule of thumb
+
+If two features on the same device need to behave like different mesh endpoints, they usually belong to different elements.
+
+## Model
+
+A model is the behavior unit. It defines what a device can do or report.
+
+Examples:
+
+- `GenericOnOff` controls on and off state.
+- `LightLightness` controls brightness.
+- Sensor models report measured values.
+
+You can attach typed behavior to a model with `model.use(...)`:
+
+```ts
+import { GenericOnOff } from "@blemeshjs/sdk";
+
+const onOff = device.model("generic-onoff").use(GenericOnOff);
+
+await onOff.on();
+```
+
+### Models are where behavior lives
+
+Nodes and elements give you structure. Models give you actions and state.
+
+| Model type      | Typical use                                        |
+| --------------- | -------------------------------------------------- |
+| Generic OnOff   | Binary state such as on/off                        |
+| Light Lightness | Brightness and dimming                             |
+| Sensor models   | Temperature, occupancy, power, or other telemetry  |
+| Vendor models   | Device-specific behavior not covered by SIG models |
+
+### Practical reading pattern
+
+When you look at code, read it like this:
+
+1. Find the device.
+2. Find the relevant model.
+3. Send or observe state through that model.
+
+That is why the SDK often feels model-centric once the initial connection is done.
+
+## Provisioning
+
+Provisioning is how a new device joins your mesh network. Before provisioning, the device can advertise itself but it is not trusted or usable as part of the network.
+
+Provisioning usually includes:
+
+1. Discover the unprovisioned device.
+2. Connect to it.
+3. Exchange security data.
+4. Assign addresses and keys.
+5. Save the resulting network state.
+
+In the SDK, that typically looks like this:
+
+```ts
+const device = await mesh.connect(uuid);
+await device.provision({ appKey: "home-app" });
+```
+
+### Provisioning flow
+
+```txt
+Unprovisioned device nearby
+  ↓
+Discover it
+  ↓
+Connect and identify it
+  ↓
+Exchange security data
+  ↓
+Assign address + keys
+  ↓
+Persist network state
+  ↓
+Provisioned mesh node
+```
+
+### Why provisioning matters
+
+Provisioning is not just a setup checkbox. It is the point where the device becomes:
+
+- authenticated,
+- addressable inside your mesh,
+- associated with your network keys and application keys,
+- part of the topology your app must persist.
+
+If a team misunderstands this step, they usually end up with flaky onboarding, duplicate nodes, or state that cannot be recovered after a restart.
+
+## Publish and subscribe
+
+Publish means a model sends messages to an address. Subscribe means a model listens for messages sent to an address.
+
+That address can point to:
+
+- one device,
+- one element,
+- a group of devices,
+- or a virtual address.
+
+This is how one wall panel can control many lights at once.
+
+```ts
+const livingRoom = await mesh.groups.create({
+  name: "Living Room",
+  address: "c000",
+});
+
+await livingRoom.light.on();
+```
+
+### Message flow diagram
+
+```txt
+Controller model publishes message
+            │
+            ▼
+      Destination address
+   ┌────────┼─────────┐
+   │        │         │
+Single   Group    Virtual
+device   address   address
+   │        │         │
+   ▼        ▼         ▼
+One node  Many nodes  Logical target set
+```
+
+### Why this matters in product code
+
+- Publish lets you target one destination without manually looping through every device.
+- Subscribe decides which models react to messages for a given address.
+- Group addressing is what makes room-level control practical.
+
+This is how one switch can control several lights, or one scene recall can coordinate many devices at once.
+
+## Diagram
+
+Here is the full concept chain from app code to behavior on hardware:
+
+```txt
+Your app
+  ↓
+Mesh manager
+  ↓
+Connect to a node
+  ↓
+Choose an element
+  ↓
+Work through a model
+  ↓
+Publish or receive a mesh message
+  ↓
+Device state changes or reports back
+```
+
+Read that flow from top to bottom:
+
+- your app creates a mesh manager,
+- the manager connects through a platform transport,
+- devices expose elements and models,
+- storage keeps keys and topology safe between sessions.
+
+## Keep it practical
+
+When you are building features, you usually only need these rules:
+
+- Connect to a device through the mesh manager.
+- Provision it once.
+- Use a device helper or model extension to send commands.
+- Use groups and scenes when one device at a time stops scaling.
+
+### Common mistakes to avoid
+
+| Mistake                                                    | Better mental model                                                           |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Treating a node and a model as the same thing              | The node is the device; the model is one behavior on that device              |
+| Treating provisioning like a one-time UI event only        | It is a security and topology operation that changes persistent network state |
+| Sending one command per device for room control            | Use group addressing when the problem is really one-to-many                   |
+| Thinking the physical device always maps to one capability | A single node may expose many elements and many models                        |
+
+### If you only remember three things
+
+1. A node is the device.
+2. A model is the behavior.
+3. Provisioning is what makes the device part of your network.
+

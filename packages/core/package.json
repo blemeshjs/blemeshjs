@@ -1,5 +1,5 @@
 {
-  "name": "@mesh-link-js/core",
+  "name": "@blemeshjs/core",
   "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -24,9 +24,9 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@blemeshjs/crypto": "workspace:^",
+    "@blemeshjs/utils": "workspace:^",
     "@borewit/text-codec": "^0.2.1",
-    "@mesh-link-js/crypto": "workspace:^",
-    "@mesh-link-js/utils": "workspace:^",
     "async-mutex": "^0.5.0",
     "immer": "^11.1.4",
     "lodash": "^4.17.21",
