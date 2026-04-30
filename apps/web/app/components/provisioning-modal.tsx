@@ -13,7 +13,7 @@ import { useProvisioningStore } from "../hooks/useProvisioning";
 import { useMesh } from "./mesh-provider";
 import { useEffect, useMemo } from "react";
 import { toastError } from "../helpers/error";
-import { ScanError } from "@blemeshjs/sdk-web";
+import { MeshNetworkManagerError, ScanError } from "@blemeshjs/sdk-web";
 import { useMutation } from "@tanstack/react-query";
 
 export function ProvisioningModal() {
@@ -26,8 +26,8 @@ export function ProvisioningModal() {
   });
 
   const startScan = () => {
-    setStatus("provisioning-scan");
-    mesh.provision.scan({});
+    setStatus("scanning");
+    mesh.provision.scan({ notifyOnWaitingForAdvertisements: true });
     const off = mesh.provision.on("scan:new-peripheral", (proxy) => {
       setStatus("ready");
       mesh.provision.stopScan();
@@ -50,6 +50,9 @@ export function ProvisioningModal() {
             toast.warning("Scan error", { description: error.message });
             setStatus("idle");
             break;
+          case error instanceof MeshNetworkManagerError:
+            toast.warning("Mesh Network Manager error", { description: error.message });
+            break;
           default:
             toastError(error);
         }
@@ -59,6 +62,9 @@ export function ProvisioningModal() {
       },
       "provision:status": (status) => {
         switch (status) {
+          case "waiting-for-advertisements":
+            setStatus("initializing");
+            break;
           case "connecting":
           case "discovering-services":
           case "connected":
@@ -71,7 +77,7 @@ export function ProvisioningModal() {
           case "complete":
             {
               const name = selectedDevice?.device.name || "Unknown device";
-              setStatus("provisioning-done");
+              setStatus("done");
               reset();
               setIsOpen(false);
               toast("Provisioning complete", {
@@ -112,11 +118,16 @@ export function ProvisioningModal() {
                 variant="secondary"
                 className="rounded-xl shadow-surface items-center justify-center p-4 w-full"
               >
-                {!selectedDevice && status !== "provisioning-scan" && (
+                {status === "idle" && (
                   <p className="text-sm text-muted text-center">No device discovered.</p>
                 )}
-                {status === "provisioning-scan" && (
-                  <p className="text-sm text-muted text-center">Waiting for devices...</p>
+                {status === "initializing" && (
+                  <p className="text-sm text-muted text-center">
+                    Waiting for device advertisements...
+                  </p>
+                )}
+                {status === "scanning" && (
+                  <p className="text-sm text-muted text-center">Scanning...</p>
                 )}
                 {selectedDevice && (
                   <ListBox aria-label="devices" selectionMode="none">
@@ -139,11 +150,16 @@ export function ProvisioningModal() {
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button
-                isDisabled={provisioning || status === "provisioning-scan"}
-                onPress={status === "ready" ? resetScan : startScan}
-                variant={status === "ready" ? "danger" : "primary"}
+                isDisabled={provisioning || status === "scanning"}
+                onPress={status === "idle" ? startScan : resetScan}
+                variant={status === "idle" ? "primary" : "danger"}
               >
-                <BluetoothSearching /> {status === "ready" ? "Reset" : "Scan for devices"}
+                <BluetoothSearching />{" "}
+                {status === "idle"
+                  ? "Scan for devices"
+                  : status === "initializing"
+                    ? "Abort"
+                    : "Reset"}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>

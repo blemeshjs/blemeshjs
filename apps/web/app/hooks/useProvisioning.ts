@@ -4,10 +4,11 @@ import { immer } from "zustand/middleware/immer";
 
 export type ProvisioningStatus =
   | "idle"
+  | "scanning"
+  | "initializing"
   | "ready"
-  | "provisioning-scan"
   | "provisioning"
-  | "provisioning-done"
+  | "done"
   | "error";
 export type ProvisioningStore = {
   isOpen: boolean;

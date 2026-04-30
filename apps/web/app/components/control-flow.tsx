@@ -49,6 +49,7 @@ export const ControlFlow = observer(() => {
       },
       "connection:status": (status) => {
         switch (status) {
+          case "waiting-for-advertisements":
           case "connecting":
           case "discovering-services":
           case "initializing":
@@ -89,7 +90,7 @@ export const ControlFlow = observer(() => {
           <Button
             variant="primary"
             size="sm"
-            onPress={() => mesh.connection.scan({})}
+            onPress={() => mesh.connection.scan({ notifyOnWaitingForAdvertisements: true })}
             isDisabled={isProxyScanActive || mesh.connection.isOpen}
           >
             <Search size={14} />
@@ -98,8 +99,10 @@ export const ControlFlow = observer(() => {
           <Button
             variant="danger"
             size="sm"
-            onPress={() => mesh.connection.close()}
-            isDisabled={!mesh.connection.isOpen}
+            onPress={() =>
+              isProxyScanActive ? mesh.connection.stopScan() : mesh.connection.close()
+            }
+            isDisabled={!isProxyScanActive && !mesh.connection.isOpen}
           >
             <Unplug size={14} />
             Disconnect

@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-    "globalDependencies": ["eslint.config.mjs", "prettier.config.mjs"],
+  "globalDependencies": ["eslint.config.mjs", "prettier.config.mjs"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

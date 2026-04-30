@@ -17,8 +17,8 @@
   "description": "TypeScript BLE Mesh monorepo for shared utilities, core layers, and SDK packages.",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "turbo run build --filter=!./packages/sdk-react-native --filter=!./apps/mobile --filter=!./apps/docs",
-    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs",
+    "build": "turbo run build --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
+    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
     "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "clean": "turbo run clean",
     "test": "vitest run",
