@@ -19,12 +19,13 @@ const packageDirs = [
 const dryRun = process.argv.includes("--dry-run");
 const skipBuild = process.argv.includes("--skip-build");
 const publishArgs = ["npm", "publish", "--access", "public", "--tolerate-republish"];
+const enableProvenance = process.env.BLEMESHJS_ENABLE_PROVENANCE === "true";
 
 if (dryRun) {
   publishArgs.push("--dry-run");
 }
 
-if (process.env.CI === "true") {
+if (enableProvenance) {
   publishArgs.push("--provenance");
 }
 
