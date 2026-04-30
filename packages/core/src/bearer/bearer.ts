@@ -91,7 +91,7 @@ export abstract class Transmitter {
    * @param parameter type The PDU type.
    * @throws This method throws an error if the PDU type is not supported, or data could not be sent for some other reason.
    */
-  public abstract send(data: Data, type: PduType): void;
+  public abstract send(data: Data, type: PduType): Promise<void>;
 }
 
 /**
@@ -176,7 +176,7 @@ export abstract class ProvisioningBearer extends Bearer {
    * @param request The Provisioning request to be sent over the Bearer.
    * @throws This method throws an error if the PDU type is not supported, or data could not be sent for some other reason.
    */
-  sendProvisioningRequest(request: ProvisioningRequest): void {
+  sendProvisioningRequest(request: ProvisioningRequest): Promise<void> {
     return this.send(ProvisioningRequest.pdu(request), PduType.provisioningPdu);
   }
 }

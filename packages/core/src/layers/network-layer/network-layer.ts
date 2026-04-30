@@ -266,12 +266,12 @@ export class NetworkLayer {
         return;
       }
       // If the message was sent locally, don't report Bearer closer error.
-      transmitter.send(networkPdu.pdu, type);
+      await transmitter.send(networkPdu.pdu, type);
     } else {
       // Messages sent with TTL = 1 may only be sent locally.
       if (ttl === 1) return;
       try {
-        transmitter.send(networkPdu.pdu, type);
+        await transmitter.send(networkPdu.pdu, type);
       } catch (error) {
         if (error === BearerError.bearerClosed) {
           this.proxyNetworkKey = undefined;
@@ -290,12 +290,12 @@ export class NetworkLayer {
       networkTransmit.count > 1
     ) {
       let count = networkTransmit.count;
-      BackgroundTimer.scheduledTimer(networkTransmit.timeInterval, true, (timer) => {
+      BackgroundTimer.scheduledTimer(networkTransmit.timeInterval, true, async (timer) => {
         if (typeof this === "undefined" || typeof this.networkManager === "undefined") {
           timer.invalidate();
           return;
         }
-        networkManager.transmitter?.send(networkPdu.pdu, type);
+        await networkManager.transmitter?.send(networkPdu.pdu, type);
         count -= 1;
         if (count === 0) {
           timer.invalidate();

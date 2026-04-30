@@ -217,13 +217,13 @@ export class ProvisioningManager
    * shall be called to continue provisioning.
    *
    * @param attentionTimer This value determines for how long (in seconds) the device shall remain attracting human's attention by blinking, flashing, buzzing, etc. The value 0 disables Attention Timer.
-   * @returns A `ProvisioningError` | `BearerError` can be returned in case of an error.
+   * @throws A `ProvisioningError` | `BearerError` can be returned in case of an error.
    */
-  public identify(attentionTimer: UInt8): void | ProvisioningError | BearerError {
+  public identify(attentionTimer: UInt8): Promise<void> {
     // Does the Bearer support provisioning?
     if (!this.bearer.supports(PduType.provisioningPdu)) {
       this.logger?.e(LogCategory.provisioning, "Bearer does not support provisioning PDU");
-      return BearerError.pduTypeNotSupported;
+      throw BearerError.pduTypeNotSupported;
     }
 
     // Has the provisioning been restarted?
@@ -234,13 +234,13 @@ export class ProvisioningManager
     // Is the Provisioner Manager in the right state?
     if (this.state.type !== ProvisioningStateType.ready) {
       this.logger?.e(LogCategory.provisioning, "Provisioning manager is in invalid state");
-      return ProvisioningError.invalidState;
+      throw ProvisioningError.invalidState;
     }
 
     // Is the Bearer open?
     if (!this.bearer.isOpen) {
       this.logger?.e(LogCategory.provisioning, "Bearer closed");
-      return BearerError.bearerClosed;
+      throw BearerError.bearerClosed;
     }
 
     this.bearerHandlersOffHandle = this.bearer.bindAllEvents(this);
@@ -384,16 +384,14 @@ export class ProvisioningManager
           return;
         }
         this.provisioningData!.provisionerDidObtainDeviceConfirmation(response.data);
-        try {
-          const provisioningRandom = ProvisioningRequest.random(
-            this.provisioningData!.provisionerRandom,
-          );
-          this.logger?.v(
-            LogCategory.provisioning,
-            `Sending ${ProvisioningRequest.toString(provisioningRandom)}`,
-          );
-          this.send(provisioningRandom);
-        } catch (error) {
+        const provisioningRandom = ProvisioningRequest.random(
+          this.provisioningData!.provisionerRandom,
+        );
+        this.logger?.v(
+          LogCategory.provisioning,
+          `Sending ${ProvisioningRequest.toString(provisioningRandom)}`,
+        );
+        this.send(provisioningRandom).catch((error) => {
           if (error instanceof Error) {
             this.state = ProvisioningState.failed(error);
           }
@@ -402,7 +400,7 @@ export class ProvisioningManager
             "Error: failed to send provisioning random: " +
               (error instanceof Error ? error.message : null),
           );
-        }
+        });
 
         break;
       }
@@ -411,18 +409,16 @@ export class ProvisioningManager
       case this.state.type === ProvisioningStateType.provisioning &&
         response.type === ProvisioningPduType.random: {
         this.provisioningData!.provisionerDidObtainDeviceRandom(response.data);
-        try {
-          const error = this.provisioningData!.validateConfirmation();
-          if (error) throw error;
-          const encryptedData = ProvisioningRequest.data(
-            this.provisioningData!.encryptedProvisioningDataWithMic,
-          );
-          this.logger?.v(
-            LogCategory.provisioning,
-            `Sending ${ProvisioningRequest.toString(encryptedData)}`,
-          );
-          this.send(encryptedData);
-        } catch (error) {
+        const error = this.provisioningData!.validateConfirmation();
+        if (error) throw error;
+        const encryptedData = ProvisioningRequest.data(
+          this.provisioningData!.encryptedProvisioningDataWithMic,
+        );
+        this.logger?.v(
+          LogCategory.provisioning,
+          `Sending ${ProvisioningRequest.toString(encryptedData)}`,
+        );
+        this.send(encryptedData).catch((error) => {
           if (error instanceof Error) {
             this.state = ProvisioningState.failed(error);
           }
@@ -431,7 +427,7 @@ export class ProvisioningManager
             "Error: failed to send provisioning data: " +
               (error instanceof Error ? error.message : null),
           );
-        }
+        });
         break;
       }
 
@@ -509,21 +505,19 @@ export class ProvisioningManager
   public authValueReceived(value: Data) {
     this.authAction = undefined;
     this.provisioningData!.provisionerDidObtainAuthValue(value);
-    try {
-      const provisioningConfirmation = ProvisioningRequest.confirmation(
-        this.provisioningData!.provisionerConfirmation,
-      );
-      this.logger?.v(
-        LogCategory.provisioning,
-        `Sending ${ProvisioningRequest.toString(provisioningConfirmation)}`,
-      );
-      this.send(provisioningConfirmation);
-    } catch (error) {
+    const provisioningConfirmation = ProvisioningRequest.confirmation(
+      this.provisioningData!.provisionerConfirmation,
+    );
+    this.logger?.v(
+      LogCategory.provisioning,
+      `Sending ${ProvisioningRequest.toString(provisioningConfirmation)}`,
+    );
+    this.send(provisioningConfirmation).catch((error) => {
       if (error instanceof Error) {
         this.state = ProvisioningState.failed(error);
       }
       console.error("Error: failed to send provisioning confirmation: ", error);
-    }
+    });
   }
 
   /**
@@ -575,7 +569,7 @@ export class ProvisioningManager
    *
    * @throws A `ProvisioningError` can be thrown in case of an error.
    */
-  public provision(
+  public async provision(
     algorithm: Algorithm,
     publicKey: PublicKey,
     authenticationMethod: AuthenticationMethod,
@@ -645,7 +639,7 @@ export class ProvisioningManager
       LogCategory.provisioning,
       `Sending ${ProvisioningRequest.toString(provisioningStart)}`,
     );
-    this.sendAndAccumulateTo(provisioningStart, this.provisioningData!);
+    await this.sendAndAccumulateTo(provisioningStart, this.provisioningData!);
     this.authenticationMethod = authenticationMethod;
 
     // Send the Public Key of the Provisioner.
@@ -656,7 +650,7 @@ export class ProvisioningManager
       LogCategory.provisioning,
       `Sending ${ProvisioningRequest.toString(provisioningPublicKey)}`,
     );
-    this.sendAndAccumulateTo(provisioningPublicKey, this.provisioningData!);
+    await this.sendAndAccumulateTo(provisioningPublicKey, this.provisioningData!);
 
     // If the device's Public Key was obtained OOB, we are now ready to
     // authenticate.

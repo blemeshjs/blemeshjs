@@ -152,7 +152,7 @@ export class BaseGattProxyBearer<
     this.isOpened = false;
   }
 
-  public send(data: Data, type: PduType): void {
+  public send(data: Data, type: PduType) {
     if (!this.supports(type)) {
       throw BearerError.pduTypeNotSupported;
     }
@@ -168,14 +168,18 @@ export class BaseGattProxyBearer<
     );
     const packets = this.protocolHandler.segment(data, type, mtu);
 
-    for (const packet of packets) {
-      this.logger?.d(LogCategory.bearer, `-> 0x${uint8ArrayToHex(packet)}`);
-      this.basePeripheral.writeValue(
-        packet,
-        this.dataInCharacteristic,
-        CBCharacteristicWriteType.withoutResponse,
-      );
-    }
+    return packets.reduce<Promise<void>>(
+      (promise, packet) =>
+        promise.then(() => {
+          this.logger?.d(LogCategory.bearer, `-> 0x${uint8ArrayToHex(packet)}`);
+          return this.basePeripheral.writeValue(
+            packet,
+            this.dataInCharacteristic!,
+            CBCharacteristicWriteType.withoutResponse,
+          );
+        }),
+      Promise.resolve(),
+    );
   }
 
   /**
@@ -410,7 +414,7 @@ export class BaseGattProxyBearer<
     }
   }
 
-  public didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error) {
+  public didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic) {
     // Data is sent without response.
     // This method will not be called.
   }
