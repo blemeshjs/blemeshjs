@@ -10,9 +10,15 @@ import {
   CBService,
 } from "@blemeshjs/utils";
 import Long from "long";
-import { BleError, BleErrorCode, Device, Subscription } from "react-native-ble-plx";
+import {
+  BleError,
+  BleErrorCode,
+  Device,
+  Subscription,
+} from "react-native-ble-plx";
 import { RNCBService } from "./service.js";
 import { base64ToUint8Array, uint8ArrayToBase64 } from "uint8array-extras";
+import { RNCBCharacteristic } from "./characteristic.js";
 
 export class RNCBPeripheral extends CBPeripheral {
   public services?: RNCBService[] = undefined;
@@ -34,13 +40,19 @@ export class RNCBPeripheral extends CBPeripheral {
     });
   }
 
-  public static fromDevice(device: Device, isConnected: boolean): RNCBPeripheral {
+  public static fromDevice(
+    device: Device,
+    isConnected: boolean,
+  ): RNCBPeripheral {
     const identifier = new UUID(device.id);
-    if (typeof identifier === "undefined") throw new Error("Invalid device identifier");
+    if (typeof identifier === "undefined")
+      throw new Error("Invalid device identifier");
     const peripheral = new RNCBPeripheral(
       device,
       identifier,
-      isConnected ? CBPeripheralState.connected : CBPeripheralState.disconnected,
+      isConnected
+        ? CBPeripheralState.connected
+        : CBPeripheralState.disconnected,
       device.name ?? device.localName ?? undefined,
       device.rssi ?? undefined,
       {
@@ -52,7 +64,9 @@ export class RNCBPeripheral extends CBPeripheral {
   }
 
   public equal(other: unknown): boolean {
-    return other instanceof RNCBPeripheral && this.identifier.equal(other.identifier);
+    return (
+      other instanceof RNCBPeripheral && this.identifier.equal(other.identifier)
+    );
   }
 
   public readRSSI(): void {
@@ -72,7 +86,9 @@ export class RNCBPeripheral extends CBPeripheral {
       .discoverAllServicesAndCharacteristics()
       .then((device) => device.services())
       .then((services) => {
-        this.services = services.map((service) => new RNCBService(service, this));
+        this.services = services.map(
+          (service) => new RNCBService(service, this),
+        );
         this.emit("didDiscoverServices", this);
       })
       .catch((error: Error) => {
@@ -102,34 +118,44 @@ export class RNCBPeripheral extends CBPeripheral {
       });
   }
 
-  public setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): void {
+  public setNotifyValue(
+    enabled: boolean,
+    characteristic: CBCharacteristic,
+  ): void {
     if (enabled) {
-      this.characteristicNotificationSub = this.device.monitorCharacteristicForService(
-        characteristic.serviceUUID.fullUuidString,
-        characteristic.uuid.fullUuidString,
-        (error, char) => {
-          if (error) {
-            // NOTE: react-native-ble-plx always stays attached and throws these errors on intentional disconnect
-            if (
-              error instanceof BleError &&
-              (error.errorCode === BleErrorCode.OperationCancelled ||
-                error.errorCode === BleErrorCode.DeviceDisconnected)
-            )
+      this.characteristicNotificationSub =
+        this.device.monitorCharacteristicForService(
+          characteristic.serviceUUID.fullUuidString,
+          characteristic.uuid.fullUuidString,
+          (error, char) => {
+            if (error) {
+              // NOTE: react-native-ble-plx always stays attached and throws these errors on intentional disconnect
+              if (
+                error instanceof BleError &&
+                (error.errorCode === BleErrorCode.OperationCancelled ||
+                  error.errorCode === BleErrorCode.DeviceDisconnected)
+              )
+                return;
+              this.emit(
+                "didUpdateValueForCharacteristic",
+                this,
+                characteristic,
+                new Error(error.message),
+              );
               return;
-            this.emit(
-              "didUpdateValueForCharacteristic",
-              this,
-              characteristic,
-              new Error(error.message),
-            );
-            return;
-          }
-          if (char) {
-            characteristic.value = char.value ? base64ToUint8Array(char.value) : undefined;
-            this.emit("didUpdateValueForCharacteristic", this, characteristic);
-          }
-        },
-      );
+            }
+            if (char) {
+              characteristic.value = char.value
+                ? base64ToUint8Array(char.value)
+                : undefined;
+              this.emit(
+                "didUpdateValueForCharacteristic",
+                this,
+                characteristic,
+              );
+            }
+          },
+        );
       characteristic.isNotifying = true;
     } else {
       this.characteristicNotificationSub?.remove();
@@ -139,7 +165,9 @@ export class RNCBPeripheral extends CBPeripheral {
       "didUpdateNotificationStateForCharacteristic",
       this,
       characteristic,
-      !enabled ? new Error("Stopping notifications not implemented") : undefined,
+      !enabled
+        ? new Error("Stopping notifications not implemented")
+        : undefined,
     );
   }
 
@@ -147,28 +175,33 @@ export class RNCBPeripheral extends CBPeripheral {
     data: Data,
     characteristic: CBCharacteristic,
     type: CBCharacteristicWriteType,
-  ): void {
+  ): Promise<void> {
     const base64Data = uint8ArrayToBase64(data);
 
     switch (type) {
       case CBCharacteristicWriteType.withoutResponse:
-        this.device
+        return this.device
           .writeCharacteristicWithoutResponseForService(
             characteristic.serviceUUID.fullUuidString,
             characteristic.uuid.fullUuidString,
             base64Data,
           )
-          .catch(console.error);
-        break;
+          .then(() => {});
 
       case CBCharacteristicWriteType.withResponse:
-        this.device
+        return this.device
           .writeCharacteristicWithResponseForService(
             characteristic.serviceUUID.fullUuidString,
             characteristic.uuid.fullUuidString,
             base64Data,
           )
-          .catch(console.error);
+          .then((value) => {
+            this.emit(
+              "didWriteValueForCharacteristic",
+              this,
+              new RNCBCharacteristic(value, characteristic.serviceUUID),
+            );
+          });
         break;
     }
   }
