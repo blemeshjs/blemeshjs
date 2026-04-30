@@ -65,8 +65,9 @@ export const ControlFlow = observer(() => {
   }, [mesh.connection.bindAllEvents, mesh.connection.connect]);
 
   useEffect(() => {
+    if (selectedNode) return;
     setSelectedNode(mesh.provisionerNode);
-  }, [mesh.provisionerNode, setSelectedNode]);
+  }, [mesh.provisionerNode, selectedNode, setSelectedNode]);
 
   return (
     <Card>
