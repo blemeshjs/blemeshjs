@@ -25,7 +25,6 @@ import { Provisioner } from "./provisioner.js";
 import { NodeFeaturesState, NodeFeatureState } from "./node-features.js";
 import { NetworkKey } from "./network-key.js";
 import { ApplicationKey } from "./application-key.js";
-import { clamp } from "lodash";
 import { ConfigNetworkTransmitSet } from "../mesh-messages/base/configuration/config-network-transmit-set.js";
 import { ConfigNetworkTransmitStatus } from "../mesh-messages/base/configuration/config-network-transmit-status.js";
 import {
@@ -84,7 +83,7 @@ export class NetworkTransmit {
    * Number of 10-millisecond steps between transmissions.
    */
   public get steps(): UInt8 {
-    return clamp(this.interval / 10 - 1, 0, 0xff);
+    return Math.min(Math.max(this.interval / 10 - 1, 0), 0xff);
   }
   /**
    * The interval in as `TimeInterval` in seconds.

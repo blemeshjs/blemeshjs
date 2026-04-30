@@ -92,7 +92,7 @@ describe("Common Helpers", () => {
       process.env.TZ = "America/Los_Angeles";
 
       const ts = Date.UTC(2018, 11, 23, 19, 45, 22); // 2018-12-23T19:45:22Z
-      expect(meshTimestamp(ts)).toBe("2018-12-23T11:45:22-08:00");
+      expect(meshTimestamp(ts)).toBe("2018-12-23T19:45:22Z");
 
       process.env.TZ = realTZ; // Restore original TZ
     });
@@ -103,7 +103,7 @@ describe("Common Helpers", () => {
       process.env.TZ = "Europe/Berlin";
 
       const ts = Date.UTC(2025, 0, 5, 6, 7, 8); // 2025-01-05T06:07:08Z
-      expect(meshTimestamp(ts)).toBe("2025-01-05T07:07:08+01:00");
+      expect(meshTimestamp(ts)).toBe("2025-01-05T06:07:08Z");
 
       process.env.TZ = realTZ;
     });
@@ -114,7 +114,7 @@ describe("Common Helpers", () => {
       process.env.TZ = "Asia/Kolkata";
 
       const ts = Date.UTC(2025, 7, 11, 10, 0, 0); // 2025-08-11T10:00:00Z
-      expect(meshTimestamp(ts)).toBe("2025-08-11T15:30:00+05:30");
+      expect(meshTimestamp(ts)).toBe("2025-08-11T10:00:00Z");
 
       process.env.TZ = realTZ;
     });

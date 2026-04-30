@@ -40,6 +40,9 @@ jobs:
       - name: Build public packages
         run: yarn build
 
+      - name: Run public package tests
+        run: yarn release:test
+
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:

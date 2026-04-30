@@ -16,7 +16,6 @@ import {
   ConfigMessage,
   ConfigAnyModelMessage,
 } from "@blemeshjs/utils";
-import { random } from "lodash";
 import { NetworkManager } from "../network-manager.js";
 import { MeshAddress, MeshNetwork, MessageHandle } from "../../mesh-models/index.js";
 import { Model } from "../../mesh-models/model.js";
@@ -30,13 +29,21 @@ import { UnknownMessage } from "../../mesh-messages/unknown-message.js";
 import { ConfigNodeReset } from "../../mesh-messages/index.js";
 import { AccessKeySet, DeviceKeySet } from "../../mesh-models/key-set.js";
 
+function randomIntInclusive(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomBetween(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
+
 /**
  * The transaction object is used for Transaction Messages,
  * for example `GenericLevelSet`.
  */
 class Transaction {
   /** Last used Transaction Identifier. */
-  private lastTid: UInt8 = random(0, 0xff);
+  private lastTid: UInt8 = randomIntInclusive(0, 0xff);
   /** The timestamp of the last transaction message sent. */
   private timestamp: number = Date.now();
 
@@ -370,7 +377,7 @@ export class AccessLayer {
     // milliseconds. This reduces the probability of multiple nodes responding to this
     // message at exactly the same time, and therefore increases the probability of
     // message delivery rather than message collisions.
-    const delay = origin.isUnicast ? random(0.02, 0.05) : random(0.02, 0.5);
+    const delay = origin.isUnicast ? randomBetween(0.02, 0.05) : randomBetween(0.02, 0.5);
 
     BackgroundTimer.scheduledTimer(delay, false, async () => {
       this.logger?.i(LogCategory.access, `Sending ${pdu}`);

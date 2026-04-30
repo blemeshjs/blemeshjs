@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useControlStore } from "../hooks/useControl";
 import { NodeItem } from "./control/node-item";
-import { useMount } from "react-use";
 import { ProvisioningModal } from "./provisioning-modal";
 import { AddGroupModal } from "./add-group-modal";
 import { toastError } from "../helpers/error";
@@ -65,9 +64,9 @@ export const ControlFlow = observer(() => {
     return unbindAllEvents;
   }, [mesh.connection.bindAllEvents, mesh.connection.connect]);
 
-  useMount(() => {
+  useEffect(() => {
     setSelectedNode(mesh.provisionerNode);
-  });
+  }, [mesh.provisionerNode, setSelectedNode]);
 
   return (
     <Card>

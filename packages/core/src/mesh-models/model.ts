@@ -11,7 +11,6 @@ import {
 } from "@blemeshjs/utils";
 import { Element } from "./element.js";
 import { Clazz, createModelSchema, custom, list, object, primitive } from "serializr";
-import { isUndefined } from "lodash";
 import { action, computed, makeObservable, observable } from "mobx";
 import { ApplicationKey } from "./application-key.js";
 import { produce } from "immer";
@@ -416,7 +415,7 @@ export class Model {
 
     model.subscribe.forEach((sub) => {
       const meshAddress = MeshAddress.fromHex(sub);
-      if (isUndefined(meshAddress)) {
+      if (meshAddress === undefined) {
         throw new DecodingError("Address must be 4-character hexadecimal string or UUID.");
       }
       if (!meshAddress.address.isGroup && !meshAddress.address.isVirtual) {

@@ -37,5 +37,5 @@ This package also re-exports symbols from `@blemeshjs/sdk`. This page focuses on
 
 
 ```ts
-function createRNMesh(): Promise<MeshNetworkManager>;
+function createRNMesh<T>(__namedParameters: { meshNetworkManager?: T }): Promise<T>;
 ```

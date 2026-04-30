@@ -2,8 +2,15 @@
   "packageManager": "yarn@4.9.2",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "packages/utils",
+    "packages/crypto",
+    "packages/core",
+    "packages/sdk",
+    "packages/sdk-web",
+    "packages/sdk-react-native",
+    "apps/web",
+    "apps/mobile",
+    "apps/docs"
   ],
   "name": "blemeshjs",
   "version": "1.0.0",
@@ -16,6 +23,7 @@
     "clean": "turbo run clean",
     "test": "vitest run",
     "coverage": "vitest --ui --coverage",
+    "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
     "release:status": "changeset status",
     "release:version": "changeset version && yarn install --mode=skip-build",
     "release:publish": "node ./scripts/publish-public-packages.mjs",

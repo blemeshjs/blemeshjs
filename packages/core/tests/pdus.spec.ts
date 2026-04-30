@@ -1,7 +1,13 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { Data, IvIndex, MeshAddress, Storage } from "@blemeshjs/utils";
+import { Data, IvIndex, Storage } from "@blemeshjs/utils";
 import { hexToUint8Array, stringToUint8Array } from "uint8array-extras";
-import { ConfigAppKeyAdd, MeshNetworkManager, PduType } from "../src/index.js";
+import {
+  ConfigAppKeyAdd,
+  MeshAddress,
+  MeshNetwork,
+  MeshNetworkManager,
+  PduType,
+} from "../src/index.js";
 import { AccessPdu } from "../src/layers/access-layer/access-pdu.js";
 import { UpperTransportPdu } from "../src/layers/upper-transport-layer/upper-transport-pdu.js";
 import { SegmentedAccessMessage } from "../src/layers/lower-transport-layer/segmented-access-message.js";
@@ -298,7 +304,7 @@ class TestStorage extends Storage {
 describe("PDUs", () => {
   let manager: MeshNetworkManager;
   beforeAll(() => {
-    manager = new MeshNetworkManager(new TestStorage(), MeshData);
+    manager = new MeshNetworkManager(new TestStorage(), MeshData, MeshNetwork);
 
     expect(async () => await manager.load()).not.toThrow();
   });

@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "description": "Core BLE Mesh bearer, provisioning, message, and lower-layer primitives.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blemeshjs/blemeshjs.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/blemeshjs/blemeshjs/issues"
+  },
+  "homepage": "https://github.com/blemeshjs/blemeshjs/tree/main/packages/core#readme",
   "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -35,7 +44,6 @@
     "@borewit/text-codec": "^0.2.1",
     "async-mutex": "^0.5.0",
     "immer": "^11.1.4",
-    "lodash": "^4.17.21",
     "long": "^5.3.2",
     "lru-cache": "^11.1.0",
     "mobx": "^6.15.0",

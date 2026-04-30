@@ -150,9 +150,14 @@ class CoreMeshNetworkManager extends MeshNetworkManager
 | Name | Type | Description |
 | --- | --- | --- |
 | `bearerDidDeliverData` | `(_bearer: Bearer, data: Data, type: PduType) => void` | This method should be called whenever a PDU has been received from the mesh network using any bearer. When a complete Mesh Message is received and reassembled, the delegate's `MeshNetworkDelegate.meshNetworkManager()` will be called. For easier integration with `GattBearer`, instead of calling this method, set the manager as Bearer's `Bearer.dataDelegate`. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<(AttentionTimerHandler & MeshNetworkHandler)[K]>) => void` | No description yet. |
 | `handlerQueue` | `DispatchQueue` | A queue to call handler methods on. |
 | `networkParameters` | `NetworkParameters` | Network parameters. |
+| `off` | `(event: K, fn?: (AttentionTimerHandler & MeshNetworkHandler)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: (AttentionTimerHandler & MeshNetworkHandler)[K]) => () => void` | No description yet. |
 | `proxyFilter` | `ProxyFilter` | The Proxy Filter state. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 | `$instance` | `CoreMeshNetworkManager` | No description yet. |
 | `isNetworkCreated` | `unknown` | No description yet. |
 | `localElements` | `unknown` | No description yet. |
@@ -169,20 +174,20 @@ class CoreMeshNetworkManager extends MeshNetworkManager
 | Name | Signature | Description |
 | --- | --- | --- |
 | `clear` | `clear(): Promise<void>;` | No description yet. |
-| `createNewMeshNetworkWithNameAndProvisioner` | `createNewMeshNetworkWithNameAndProvisioner(name: string, provisioner: Provisioner): any;` | No description yet. |
-| `createNewMeshNetworkWithNameAndProvisionerName` | `createNewMeshNetworkWithNameAndProvisionerName(name: string, provisionerName: string): any;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisioner` | `createNewMeshNetworkWithNameAndProvisioner(name: string, provisioner: Provisioner): MeshNetwork \| MeshNetworkError;` | No description yet. |
+| `createNewMeshNetworkWithNameAndProvisionerName` | `createNewMeshNetworkWithNameAndProvisionerName(name: string, provisionerName: string): MeshNetwork \| MeshNetworkError;` | No description yet. |
 | `ensureNetworkKey` | `ensureNetworkKey(networkKey: NetworkKey): void;` | No description yet. |
 | `export` | `export(): Promise<Data>;` | No description yet. |
 | `load` | `load(): Promise<void>;` | No description yet. |
-| `provisionUnprovisionedDevice` | `provisionUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, bearer: ProvisioningBearer): any;` | No description yet. |
+| `provisionUnprovisionedDevice` | `provisionUnprovisionedDevice(unprovisionedDevice: UnprovisionedDevice, bearer: ProvisioningBearer): ProvisioningManager \| MeshNetworkError;` | No description yet. |
 | `publish` | `publish(message: MeshMessage, model: Model): Promise<MessageHandle \| undefined>;` | No description yet. |
 | `save` | `save(): Promise<void>;` | No description yet. |
-| `sendAcknowledgedConfigMessageToAddress` | `sendAcknowledgedConfigMessageToAddress(message: { completion?: (result: Result<ConfigResponse, Error>) => void; destination: Address; initialTtl?: any; message: AcknowledgedConfigMessage; networkKey?: NetworkKey }): Promise<MessageHandle>;` | No description yet. |
-| `sendAcknowledgedConfigMessageToNode` | `sendAcknowledgedConfigMessageToNode(message: { completion?: (result: Result<ConfigResponse, Error>) => void; initialTtl?: any; message: AcknowledgedConfigMessage; networkKey?: NetworkKey; node: Node }): Promise<MessageHandle>;` | No description yet. |
-| `sendAcknowledgedMeshMessageToModel` | `sendAcknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: any; localElement?: Element; message: AcknowledgedMeshMessage; model: Model }): Promise<MeshResponse>;` | No description yet. |
-| `sendMeshMessageToMeshAddress` | `sendMeshMessageToMeshAddress(message: { applicationKey: ApplicationKey; destination: MeshAddress; initialTtl?: any; localElement?: Element; message: MeshMessage }): Promise<void>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToAddress` | `sendAcknowledgedConfigMessageToAddress(message: { completion?: (result: Result<ConfigResponse, Error>) => void; destination: Address; initialTtl?: number; message: AcknowledgedConfigMessage; networkKey?: NetworkKey }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedConfigMessageToNode` | `sendAcknowledgedConfigMessageToNode(message: { completion?: (result: Result<ConfigResponse, Error>) => void; initialTtl?: number; message: AcknowledgedConfigMessage; networkKey?: NetworkKey; node: Node }): Promise<MessageHandle>;` | No description yet. |
+| `sendAcknowledgedMeshMessageToModel` | `sendAcknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: number; localElement?: Element; message: AcknowledgedMeshMessage; model: Model }): Promise<MeshResponse>;` | No description yet. |
+| `sendMeshMessageToMeshAddress` | `sendMeshMessageToMeshAddress(message: { applicationKey: ApplicationKey; destination: MeshAddress; initialTtl?: number; localElement?: Element; message: MeshMessage }): Promise<void>;` | No description yet. |
 | `sendProxyConfigurationMessage` | `sendProxyConfigurationMessage(message: ProxyConfigurationMessage): Promise<void>;` | No description yet. |
-| `sendUnacknowledgedMeshMessageToModel` | `sendUnacknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: any; localElement?: Element; message: UnacknowledgedMeshMessage; model: Model }): Promise<void>;` | No description yet. |
+| `sendUnacknowledgedMeshMessageToModel` | `sendUnacknowledgedMeshMessageToModel(message: { applicationKey?: ApplicationKey; initialTtl?: number; localElement?: Element; message: UnacknowledgedMeshMessage; model: Model }): Promise<void>;` | No description yet. |
 | `initialize` | `initialize(storage: Storage): CoreMeshNetworkManager;` | No description yet. |
 
 ### createProxy
@@ -457,14 +462,14 @@ class NetworkConnection extends BindableTinyEmitter<NetworkConnectionEvents, thi
 #### Properties
 | Name | Type | Description |
 | --- | --- | --- |
-| `bindAllEvents` | `(handler: Partial<E>) => () => void` | No description yet. |
-| `emit` | `(event: K, args: Parameters<NetworkConnectionEvents[K]>) => void` | No description yet. |
+| `bindAllEvents` | `(handler: Partial<E>) => () => void & (handler: Partial<E>) => () => void` | No description yet. |
+| `emit` | `(event: K, args: Parameters<NetworkConnectionEvents[K]>) => void & (event: K, args: Parameters<(BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]>) => void` | No description yet. |
 | `isOpen` | `boolean` | A flag set to `true` when any of the underlying bearers is open. |
 | `meshNetwork` | `MeshNetwork` | The Mesh Network for this connection. |
-| `off` | `(event: K, fn?: NetworkConnectionEvents[K]) => void` | No description yet. |
-| `on` | `(event: K, fn: NetworkConnectionEvents[K]) => () => void` | No description yet. |
+| `off` | `(event: K, fn?: NetworkConnectionEvents[K]) => void & (event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
+| `on` | `(event: K, fn: NetworkConnectionEvents[K]) => () => void & (event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
 | `proxies` | `Map<string, GattBearer>` | The list of connected GATT Proxies. |
-| `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
+| `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
 | `maxConnections` | `number` | Maximum number of connections that ``NetworkConnection`` can handle. NOTE: In BLEMeshJS app this value is set to 1 due to UI limitations. When applying in 3rd party app, higher values should work. |
 | `bleReady` | `unknown` | No description yet. |
 | `bleState` | `unknown` | No description yet. |
@@ -602,7 +607,7 @@ function nodeIdentity(advertisementData: Record<string, unknown>): PublicNodeIde
 
 **Kind:** Class
 
-**Source:** `packages/sdk/src/mesh-network/provision.ts#L116`
+**Source:** `packages/sdk/src/mesh-network/provision.ts#L112`
 
 
 ```ts
