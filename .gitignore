@@ -30,3 +30,5 @@ expo-env.d.ts
 
 packages/pro
 packages/sdk-pro
+
+.env

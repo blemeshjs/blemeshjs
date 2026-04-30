@@ -1,9 +1,15 @@
 {
   "name": "@blemeshjs/utils",
+  "version": "0.0.1",
+  "description": "Shared BLE Mesh enums, helpers, messages, models, and low-level utilities.",
+  "license": "Apache-2.0",
   "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },

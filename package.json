@@ -7,15 +7,22 @@
   ],
   "name": "blemeshjs",
   "version": "1.0.0",
+  "description": "TypeScript BLE Mesh monorepo for shared utilities, core layers, and SDK packages.",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build --filter=!./packages/sdk-react-native --filter=!./apps/mobile --filter=!./apps/docs",
     "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs",
     "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "clean": "turbo run clean",
     "test": "vitest run",
-    "coverage": "vitest --ui --coverage"
+    "coverage": "vitest --ui --coverage",
+    "release:status": "changeset status",
+    "release:version": "changeset version && yarn install --mode=skip-build",
+    "release:publish": "node ./scripts/publish-public-packages.mjs",
+    "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.7",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.25.0",
