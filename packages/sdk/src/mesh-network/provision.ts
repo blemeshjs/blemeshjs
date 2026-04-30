@@ -24,8 +24,10 @@ import { hasMixin } from "ts-mixer";
 import { Crypto } from "@blemeshjs/crypto";
 import { CBCentralManager, CBCentralManagerState, MeshProvisioningService } from "@blemeshjs/utils";
 import { CoreMeshNetworkManager } from "./core-mesh-network-manager";
+import { MeshNetworkManagerError } from "../types/mesh-network-manager";
 
 type ProvisionStatus =
+  | "waiting-for-advertisements"
   | "connecting"
   | "discovering-services"
   | "connected"
@@ -169,11 +171,16 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     super();
   }
 
-  private performScan = ({ timeout }: ProvisionScanOptions) => {
+  private performScan = ({ timeout, notifyOnWaitingForAdvertisements }: ProvisionScanOptions) => {
     this.$scanSubscription = this.centralManager.on(
       "centralManagerDidDiscoverPeripheral",
       (central, peripheral, RSSI, advertisementData) => {
-        if (typeof advertisementData === "undefined") return;
+        if (typeof advertisementData === "undefined") {
+          if (notifyOnWaitingForAdvertisements) {
+            this.emit("provision:status", "waiting-for-advertisements");
+          }
+          return;
+        }
         // TODO: parse advertisement data to check if it contains Mesh Provisioning Service UUID or Mesh Proxy Service UUID for Remote Provisioning.
         // Ignore all packets without Unprovisioned Device UUID.
         const uuid = unprovisionedDeviceUUID(advertisementData);
@@ -335,8 +342,9 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
 
     pManager.bindAllEvents(this.$provisioningHandler);
     pManager.logger = CoreMeshNetworkManager.instance.logger;
-    const error = pManager.identify(attentionTimer);
-    if (error !== undefined) this.emit("provision:error", error);
+    pManager.identify(attentionTimer).catch((error: Error) => {
+      if (error !== undefined) this.emit("provision:error", error);
+    });
   };
 
   public quick = (peripheral: DiscoveredUnprovisionedPeripheral): Promise<void> => {
@@ -351,8 +359,16 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
               this.start();
               break;
             case "complete":
-              resolve();
-              off();
+              CoreMeshNetworkManager.instance
+                .save()
+                .catch((error: Error) => {
+                  console.error("Error saving mesh configuration", error);
+                  this.emit("provision:error", MeshNetworkManagerError.SaveError);
+                })
+                .finally(() => {
+                  resolve();
+                  off();
+                });
               break;
             case "disconnected":
               off();
@@ -405,14 +421,11 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     }
 
     this.emit("provision:status", "provisioning");
-    const error = provisioningManager.provision(
-      capabilities.algorithms.strongest,
-      publicKey,
-      authenticationMethod,
-    );
-    if (error !== undefined) {
-      this.emit("provision:error", error);
-      this.disconnect();
-    }
+    provisioningManager
+      .provision(capabilities.algorithms.strongest, publicKey, authenticationMethod)
+      .catch((error: Error) => {
+        this.emit("provision:error", error);
+        this.disconnect();
+      });
   };
 }

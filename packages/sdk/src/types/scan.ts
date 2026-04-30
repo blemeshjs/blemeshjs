@@ -3,6 +3,7 @@ import { Int32 } from "@blemeshjs/utils";
 
 export type ScanOptions = {
   timeout?: number;
+  notifyOnWaitingForAdvertisements?: boolean;
 };
 
 export type ProxyScanOptions = ScanOptions;

@@ -1,5 +1,5 @@
 import { Element as $Element } from "@blemeshjs/core";
-import { makeAutoObservable } from "mobx";
+import { computed, makeObservable } from "mobx";
 import { InternalModel } from "./model.js";
 import { createProxy, keysOf } from "../types";
 import { CoreMeshNetworkManager } from "../mesh-network/core-mesh-network-manager.js";
@@ -25,6 +25,8 @@ export class InternalElement {
     private $element: $Element,
     private $coreMeshNetworkManager: CoreMeshNetworkManager,
   ) {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      models: computed,
+    });
   }
 }

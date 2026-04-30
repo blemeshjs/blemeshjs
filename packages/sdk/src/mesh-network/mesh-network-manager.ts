@@ -6,7 +6,6 @@ import {
   SceneRange,
   Element as $Element,
   Model as $Model,
-  Group,
 } from "@blemeshjs/core";
 import { NetworkConnection } from "./network-connection.js";
 import Long from "long";

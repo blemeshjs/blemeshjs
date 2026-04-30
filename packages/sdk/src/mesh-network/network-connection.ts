@@ -27,6 +27,7 @@ import { CoreMeshNetworkManager } from "./core-mesh-network-manager.js";
 import { DiscoveredProxyPeripheral, ProxyScanOptions, ScanError } from "../types";
 
 export type ConnectionStatus =
+  | "waiting-for-advertisements"
   | "connecting"
   | "discovering-services"
   | "initializing"
@@ -418,19 +419,28 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
     this.$isStarted = false;
   };
 
-  public send = (data: Data, type: PduType): void => {
+  public send = (data: Data, type: PduType) => {
     // Send the message to all open GATT Proxy nodes.
-    for (const proxy of this.proxies.values()) {
-      if (!proxy.isOpen) continue;
-      proxy.send(data, type);
-    }
+    return this.proxies.values().reduce<Promise<void>>(
+      (promise, proxy) =>
+        promise.then(() => {
+          if (!proxy.isOpen) return;
+          return proxy.send(data, type);
+        }),
+      Promise.resolve(),
+    );
   };
 
-  private performScan = ({ timeout = 10000 }: ProxyScanOptions) => {
+  private performScan = ({ timeout, notifyOnWaitingForAdvertisements }: ProxyScanOptions) => {
     this.$scanSubscription = this.centralManager.on(
       "centralManagerDidDiscoverPeripheral",
       (_central, peripheral, RSSI, advertisementData) => {
-        if (typeof advertisementData === "undefined") return;
+        if (typeof advertisementData === "undefined") {
+          if (notifyOnWaitingForAdvertisements) {
+            this.emit("connection:status", "waiting-for-advertisements");
+          }
+          return;
+        }
 
         // Is it a Network ID or Private Network Identity beacon?
         const identity = networkIdentity(advertisementData);
@@ -478,10 +488,12 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
         this.emit("ble:error", error instanceof Error ? error : new Error(String(error)));
       });
 
-    this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
-      this.stopScan();
-      this.emit("ble:error", ScanError.ScanTimeout);
-    });
+    if (timeout) {
+      this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
+        this.stopScan();
+        this.emit("ble:error", ScanError.ScanTimeout);
+      });
+    }
   };
 
   public scan = (options: ProxyScanOptions) => {
@@ -509,6 +521,7 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
       .catch((error) =>
         this.emit("ble:error", error instanceof Error ? error : new Error(String(error))),
       );
+    this.status = "disconnected";
   };
 
   public connect = (proxy: DiscoveredProxyPeripheral) => {

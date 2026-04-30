@@ -4,5 +4,6 @@ export * from "./node.js";
 export * from "./key.js";
 export * from "./logger.js";
 export * from "./proxy.js";
+export * from "./mesh-network-manager.js";
 
 export type ClassInstance<T> = T extends { prototype: infer R } ? R : never;
