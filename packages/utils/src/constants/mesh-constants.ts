@@ -105,7 +105,7 @@ export abstract class CBPeripheral extends BindableTinyEmitter<CBPeripheralHandl
     data: Data,
     characteristic: CBCharacteristic,
     type: CBCharacteristicWriteType,
-  ): void;
+  ): Promise<void>;
 
   public abstract maximumWriteValueLength(type: CBCharacteristicWriteType): Int64;
 }
