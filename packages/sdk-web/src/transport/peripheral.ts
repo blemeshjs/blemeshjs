@@ -209,11 +209,11 @@ export class WebCBPeripheral extends CBPeripheral {
     };
   };
 
-  public writeValue(
+  public async writeValue(
     data: Data,
     characteristic: CBCharacteristic,
     type: CBCharacteristicWriteType,
-  ): void {
+  ) {
     if (!(characteristic instanceof WebCBCharacteristic)) {
       throw new Error("Invalid characteristic reference");
     }
@@ -225,14 +225,11 @@ export class WebCBPeripheral extends CBPeripheral {
         ? nativeChar.writeValueWithResponse(data.slice().buffer)
         : nativeChar.writeValueWithoutResponse(data.slice().buffer);
 
-    write
-      .then(() => {
+    return write.then(() => {
+      if (type === CBCharacteristicWriteType.withResponse) {
         this.emit("didWriteValueForCharacteristic", this, characteristic);
-      })
-      .catch((error: Error) => {
-        console.error("Write operation failed:", error);
-        this.emit("didWriteValueForCharacteristic", this, characteristic, error);
-      });
+      }
+    });
   }
 
   public maximumWriteValueLength(type: CBCharacteristicWriteType): Long {

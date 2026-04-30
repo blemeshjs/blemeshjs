@@ -97,13 +97,21 @@ export class WebCBCentralManager extends CBCentralManager {
         );
       };
 
-      await navigator.bluetooth.requestDevice(options).then((device) => {
+      await navigator.bluetooth.requestDevice(options).then(async (device) => {
+        this.emit("centralManagerDidDiscoverPeripheral", this, this.getOrCreatePeripheral(device));
         this.scanObject = device;
         this.abortController = new AbortController();
         device.addEventListener("advertisementreceived", this.advertisementListener!);
-        return device.watchAdvertisements({
-          signal: this.abortController.signal,
-        });
+        return device
+          .watchAdvertisements({
+            signal: this.abortController.signal,
+          })
+          .catch((error) => {
+            this.stopScan().catch((error) => {
+              console.error("Silently failed to stop scan", error);
+            });
+            throw error;
+          });
       });
     } catch (error) {
       console.error("Scanning failed:", error);
