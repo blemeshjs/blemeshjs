@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 import {
   ArrowRight,
   Bluetooth,
@@ -8,35 +8,35 @@ import {
   RadioTower,
   Sparkles,
   Zap,
-} from 'lucide-react';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/cn';
-import { appName, docsRoute } from '@/lib/shared';
+} from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
+import { appName, docsRoute } from "@/lib/shared";
 
 const stats = [
   {
-    label: 'Platforms',
-    value: 'Multiple runtimes',
-    detail: 'React Native, Node.js, and Web from one SDK model.',
+    label: "Platforms",
+    value: "Multiple runtimes",
+    detail: "React Native, Node.js, and Web from one SDK model.",
     icon: Layers3,
-    accent: 'from-sky-500/15 via-sky-500/5 to-transparent',
-    iconClassName: 'bg-sky-500/10 text-sky-700 ring-sky-500/15',
+    accent: "from-sky-500/15 via-sky-500/5 to-transparent",
+    iconClassName: "bg-sky-500/10 text-sky-700 ring-sky-500/15",
   },
   {
-    label: 'Core Flow',
-    value: 'Scan to control',
-    detail: 'Discovery, provisioning, and device commands without changing mental models.',
+    label: "Core Flow",
+    value: "Scan to control",
+    detail: "Discovery, provisioning, and device commands without changing mental models.",
     icon: Zap,
-    accent: 'from-emerald-500/15 via-emerald-500/5 to-transparent',
-    iconClassName: 'bg-emerald-500/10 text-emerald-700 ring-emerald-500/15',
+    accent: "from-emerald-500/15 via-emerald-500/5 to-transparent",
+    iconClassName: "bg-emerald-500/10 text-emerald-700 ring-emerald-500/15",
   },
   {
-    label: 'Operational Depth',
-    value: 'Groups and scenes',
-    detail: 'Move from first light control into production workflows and state updates.',
+    label: "Operational Depth",
+    value: "Groups and scenes",
+    detail: "Move from first light control into production workflows and state updates.",
     icon: RadioTower,
-    accent: 'from-amber-500/15 via-amber-500/5 to-transparent',
-    iconClassName: 'bg-amber-500/10 text-amber-700 ring-amber-500/15',
+    accent: "from-amber-500/15 via-amber-500/5 to-transparent",
+    iconClassName: "bg-amber-500/10 text-amber-700 ring-amber-500/15",
   },
 ];
 
@@ -75,10 +75,10 @@ export default function HomePage() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
-                href={`${docsRoute}/playground`}
+                href="https://blemeshjs-web.vercel.app/"
                 className={cn(
-                  buttonVariants({ variant: 'primary' }),
-                  'gap-2 rounded-full px-6 py-3 shadow-sm',
+                  buttonVariants({ variant: "primary" }),
+                  "gap-2 rounded-full px-6 py-3 shadow-sm",
                 )}
               >
                 Open Playground
@@ -87,8 +87,8 @@ export default function HomePage() {
               <Link
                 href={docsRoute}
                 className={cn(
-                  buttonVariants({ variant: 'secondary' }),
-                  'gap-2 rounded-full px-6 py-3 shadow-sm',
+                  buttonVariants({ variant: "secondary" }),
+                  "gap-2 rounded-full px-6 py-3 shadow-sm",
                 )}
               >
                 Browse documentation
@@ -103,7 +103,7 @@ export default function HomePage() {
                 >
                   <div
                     className={cn(
-                      'pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b opacity-90',
+                      "pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b opacity-90",
                       item.accent,
                     )}
                   />
@@ -118,14 +118,16 @@ export default function HomePage() {
                     </div>
                     <div
                       className={cn(
-                        'flex h-11 w-11 items-center justify-center rounded-2xl ring-1 backdrop-blur-sm',
+                        "flex h-11 w-11 items-center justify-center rounded-2xl ring-1 backdrop-blur-sm",
                         item.iconClassName,
                       )}
                     >
                       <item.icon className="h-5 w-5" />
                     </div>
                   </div>
-                  <div className="relative mt-3 text-sm leading-6 text-fd-muted-foreground">{item.detail}</div>
+                  <div className="relative mt-3 text-sm leading-6 text-fd-muted-foreground">
+                    {item.detail}
+                  </div>
                 </div>
               ))}
             </div>
