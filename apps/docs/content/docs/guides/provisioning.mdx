@@ -1,55 +1,91 @@
 ---
 title: Provision a New Device
-description: Bring an unprovisioned node into the network using the current provisioning manager flow in the supported web runtime.
+description: Bring an unprovisioned device into your mesh network end to end.
 icon: ListPlus
 ---
 
-Provisioning is the moment a device becomes part of your network instead of just a nearby BLE target.
+Use this when a device is advertising but not yet part of your mesh network.
 
-## 1. Scan for unprovisioned devices
+Provisioning is the step that turns "nearby hardware" into a trusted mesh node with keys, address, and persistent network state.
 
-<Tabs items={["Web", "React Native", "Node"]}>
+## Before you start
+
+- You already ran [Setup Runtime](/docs/guides/setup-runtime).
+- Bluetooth is powered on.
+- The target device is in unprovisioned mode.
+
+## 1. Scan and capture one unprovisioned candidate
+
+```ts
+import type { DiscoveredUnprovisionedPeripheral } from "@blemeshjs/sdk";
+
+const candidate = await new Promise<DiscoveredUnprovisionedPeripheral>((resolve, reject) => {
+  const offFound = mesh.provision.on("scan:new-peripheral", (peripheral) => {
+    mesh.provision.stopScan();
+    offFound();
+    offError();
+    resolve(peripheral);
+  });
+
+  const offError = mesh.provision.on("ble:error", (error) => {
+    offFound();
+    offError();
+    reject(error);
+  });
+
+  mesh.provision.scan({ timeout: 15_000, notifyOnWaitingForAdvertisements: true });
+});
+```
+
+<Tabs items={["Web", "React Native"]}>
   <Tab value="Web">
-    ```ts
-    mesh.provision.on("scan:new-peripheral", (peripheral) => {
-      console.log("Found unprovisioned peripheral", peripheral);
-    });
-
-    mesh.provision.scan({ timeout: 15_000 });
-    ```
-    <Callout>
-      On the web you can't scan and see get a list of devices like on other platforms due to [this limitation](https://github.com/WebBluetoothCG/web-bluetooth/blob/main/implementation-status.md#scanning-api).
-      You'd rather get a sub window showing scanned devices and the device you select would emit a `scan:new-peripheral` event.
+    <Callout title="⚠️ Gotcha">
+      Web Bluetooth scan UX is browser-mediated. You should expect chooser-style selection behavior,
+      then `scan:new-peripheral` fires for the selected device.
     </Callout>
-
   </Tab>
-  <Tab value="React Native">Coming soon!</Tab>
-  <Tab value="Node">Coming soon!</Tab>
+
+  <Tab value="React Native">
+    <Callout title="✅ Best practice">
+      Keep scan timeouts short (10-20 seconds) and restart scans from explicit user actions.
+    </Callout>
+  </Tab>
 </Tabs>
 
-## 2. Connect to unprovisioned device
+## 2. Provision using the quick flow
+
+```ts
+await mesh.provision.quick(candidate);
+```
+
+`quick(...)` handles connect -> identify -> provisioning start -> completion, then persists state.
+
+## 3. Verify provisioning result
+
+```ts
+console.log("Configured nodes:", mesh.configuredNodes?.length ?? 0);
+console.log("Unconfigured nodes:", mesh.notConfiguredNodes?.length ?? 0);
+```
+
+At this point, you should have a node that no longer appears as unprovisioned and is now part of your mesh network.
+
+## If provisioning fails
+
+1. Call `mesh.provision.disconnect()` to reset local state.
+2. Put the device back into unprovisioned mode if required by hardware.
+3. Start a fresh scan and retry.
+
+<Callout title="💡 Pro tip">
+  If users must pick one physical device among many, run identify before provisioning in a manual
+  flow:
 
 ```ts
 mesh.provision.connect(candidate);
-```
-
-<Callout>
-Use identify when you need the user to confirm which physical device is about to join the network after connecting.
-
-```ts
-mesh.provision.identity(5)
+mesh.provision.identify(5);
+mesh.provision.start();
 ```
 </Callout>
 
-## 3. Quickly provision unprovisioned device
-```ts
-mesh.provision.quick(candidate);
-````
+If this worked, you are ready to send model commands.
 
-After provisioning completes, you should now be able to configure and control the node.
-
-## What to do if it fails
-
-1. Disconnect cleanly.
-2. Re-scan so you are working from a fresh discovered peripheral.
-3. Retry only after the device is back in the expected state.
+Next, you will want to follow [Control Device](/docs/guides/control-device).

@@ -1,24 +1,100 @@
 ---
 title: BLEMeshJS
-description: Build Bluetooth Mesh tools.
+description: Build Bluetooth Mesh apps with a fast first success path.
 icon: House
 ---
 
-## What BLEMeshJS is for
+## Why this SDK exists
 
-BLEMeshJS is aimed at teams that need to work with Bluetooth Mesh devices without rebuilding provisioning, transport setup, and model control from scratch.
+BLEMeshJS exists so you can build Bluetooth Mesh features in TypeScript without rebuilding provisioning, transport setup, key handling, and model messaging from scratch.
 
-That usually means one of these product shapes:
+If you are here, you probably want one of these outcomes:
 
-- a Web tool for diagnostics, demos, or technician workflows.
-- a React Native app that will eventually need mobile-native transport,
-- a Node.js service or gateway that manages mesh state over time.
+- Connect to an existing mesh node and send a real command.
+- Provision a new device without hand-rolling provisioning flow logic.
+- Ship one SDK mental model across web and React Native.
 
-## At a glance
+## Get your first success in under 60 seconds
+
+Use this when you want proof that your runtime is configured correctly.
+
+1. Install the runtime package.
+2. Create the mesh manager.
+3. Scan and connect to a provisioned proxy.
+
+<Tabs items={["Web", "React Native"]}>
+	<Tab value="Web">
+		```sh
+		yarn add @blemeshjs/sdk-web
+		```
+
+		```ts
+		import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-web";
+
+		const mesh = await createMesh({
+			meshNetworkManager: MeshNetworkManager.instance,
+		});
+
+		if (!mesh.isNetworkCreated) {
+			await mesh.createNewMeshNetwork();
+		}
+
+		await new Promise<void>((resolve, reject) => {
+			const offProxy = mesh.connection.on("scan:new-proxy", async (proxy) => {
+				try {
+					await mesh.connection.connect(proxy);
+					mesh.connection.stopScan();
+					offProxy();
+					offError();
+					resolve();
+				} catch (error) {
+					reject(error);
+				}
+			});
+
+			const offError = mesh.connection.on("ble:error", (error) => {
+				offProxy();
+				offError();
+				reject(error);
+			});
+
+			mesh.connection.scan({ timeout: 10_000, notifyOnWaitingForAdvertisements: true });
+		});
+		```
+	</Tab>
+
+	<Tab value="React Native">
+		```sh
+		yarn add @blemeshjs/sdk-react-native \
+			@react-native-async-storage/async-storage \
+			react-native-ble-plx \
+			react-native-get-random-values
+		```
+
+		```ts
+		import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-react-native";
+
+		const mesh = await createMesh({
+			meshNetworkManager: MeshNetworkManager.instance,
+		});
+		```
+	</Tab>
+</Tabs>
+
+<Callout title="At this point, you should have a live mesh runtime">
+	If this worked, your app can initialize BLE Mesh, discover a provisioned proxy, and open a
+	connection.
+</Callout>
+
+Next, you will want to either provision a new device or send your first model command.
+
+## Choose your path
 
 | Area                      | What it gives you                                                                   | Best starting point             |
 | ------------------------- | ----------------------------------------------------------------------------------- | ------------------------------- |
-| Bluetooth Mesh vocabulary | Nodes, elements, models, provisioning, and addressing                               | [Core Concepts](/docs/concepts) |
-| Supported platform setup  | Runtime-specific transport and browser limits for the supported path                | [Web Setup](/docs/guides/web)   |
-| Workflow guides           | Provisioning, groups, scenes, retries, and state updates with current support notes | [Guides](/docs/guides)          |
+| Getting Started           | Install, runtime setup, and first connection                                        | [Setup Runtime](/docs/guides/setup-runtime) |
+| Core Concepts             | Node/element/model mental model and provisioning flow                               | [Core Concepts](/docs/concepts) |
+| Common Use Cases          | Provisioning and device control workflows                                           | [Guides](/docs/guides) |
+| Advanced / Edge Cases     | Custom runtime wiring and operational patterns                                      | [Advanced](/docs/advanced) |
+| Reference                 | Auto-generated package API docs                                                     | [API Reference](/docs/api) |
 

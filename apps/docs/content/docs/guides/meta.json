@@ -2,6 +2,7 @@
   "title": "Guides",
   "icon": "Signpost",
   "pages": [
+    "index",
     "setup-runtime",
     "provisioning",
     "control-device"

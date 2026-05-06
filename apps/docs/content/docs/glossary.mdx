@@ -4,23 +4,28 @@ description: Plain-language definitions for the Bluetooth Mesh terms you see thr
 icon: BookOpenText
 ---
 
-Use this glossary when Bluetooth Mesh terms show up faster than you can absorb them.
+Use this glossary when terms appear before they feel intuitive.
+
+## How to use this page
+
+- If you are blocked by terminology, skim the relevant entry and return to the guide you were on.
+- If you are new to mesh, read [Core Concepts](/docs/concepts) first and use this page as lookup.
 
 ## A
 
 **Address**
 
-The destination used for publish and subscribe traffic. It can point to one element, a group, or a virtual target.
+The destination for mesh messages. It can target one element, a group, or a virtual destination.
 
 **Application key**
 
-A key used to secure access-layer messages for specific models. In practice, it is part of what lets an already provisioned node accept and send model messages on the right network.
+A key used to secure model-level messages. If model commands fail, key binding is often the first thing to verify.
 
 ## B
 
 **Bearer**
 
-The transport path that carries mesh traffic between your application and a device. In the current docs flow, that usually means a browser-driven BLE path underneath the connection or provisioning managers.
+The transport path that carries mesh traffic between your app and a device.
 
 ## C
 
@@ -40,15 +45,15 @@ Each element owns one or more models, which is why a single physical device can 
 
 **Group**
 
-An address that lets one published message target multiple nodes or models at once. Use groups when the problem is really one-to-many control, such as a room of lights.
+An address that lets one message target many devices at once.
 
 ## M
 
 **Model**
 
-The behavior contract attached to an element. Models define what commands or state a device supports.
+The behavior surface attached to an element. Models define supported commands and state.
 
-If a node is the device, a model is one capability on that device, such as on/off or lightness.
+If a node is the device, a model is one capability on that device.
 
 **Mesh network**
 
@@ -56,7 +61,7 @@ The persistent topology and security state your application works against: nodes
 
 **Mesh manager**
 
-The runtime-configured `MeshNetworkManager` instance used by the current docs flow. In the supported browser path, it is created with `createBrowserMesh(MeshNetworkManager.instance)`.
+The runtime-configured `MeshNetworkManager` instance used by the docs flow.
 
 It owns the higher-level runtime surfaces used throughout the docs, especially `mesh.connection` and `mesh.provision`.
 
@@ -115,3 +120,7 @@ A nearby device that is advertising as not yet joined to the mesh network. In th
 **Virtual address**
 
 An address derived from a label UUID instead of a simple numeric group value. Use it when multiple devices should share a logical target without relying only on a manually assigned group address.
+
+## What to read next
+
+If this page helped, the next best step is [Guides](/docs/guides) for task-driven workflows.

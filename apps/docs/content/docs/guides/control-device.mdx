@@ -1,62 +1,90 @@
 ---
 title: Control Device
-description: Use the current flow to reach a provisioned device and then layer model control on top.
+description: Connect to a provisioned node and send a real model command.
 icon: Settings2
 ---
 
-Use this recipe when the device is already provisioned and you need the fastest current control path.
+Use this when your target device is already provisioned and you want to verify command flow end to end.
 
-## 1. Discover a provisioned device
+## Before you start
 
-<Tabs items={["Web", "React Native", "Node"]}>
-  <Tab value="Web">
-    ```ts
-    mesh.connection.on("scan:new-proxy", async (proxy) => {
-      await mesh.connection.connect(proxy);
-    });
+- You completed [Setup Runtime](/docs/guides/setup-runtime).
+- At least one device is already provisioned.
 
-    mesh.connection.scan({ timeout: 10_000 });
-    ````
-    <Callout>
-      On the web you can't scan and see get a list of devices like on other platforms due to [this limitation](https://github.com/WebBluetoothCG/web-bluetooth/blob/main/implementation-status.md#scanning-api).
-      You'd rather get a sub window showing scanned devices and the device you select would emit a `scan:new-proxy` event.
-    </Callout>
-
-  </Tab>
-  <Tab value="React Native">Coming soon!</Tab>
-  <Tab value="Node">Coming soon!</Tab>
-</Tabs>
-
-## 3. Send the model command
-
-Once the proxy connection is established, move up to the model layer described in the SDK package reference.
-
-The current docs do not present `device.light.on()` as the public source of truth anymore. For the accurate exported surfaces, use:
-
-- [SDK Package](/docs/api/sdk)
-- [Core Package](/docs/api/core)
-
-## Expected behavior
-
-- the SDK opens a session to the device,
-- the selected proxy remains reachable,
-- your model command path can be layered on top of a real connection.
-
-## What this page is really for
-
-This guide exists to place lighting control in the correct flow order:
-
-1. configure the supported runtime,
-2. discover a provisioned proxy,
-3. connect cleanly,
-4. then send mesh model messages.
-
-## When to use models directly
-
-If you need lower-level control, work through the model API:
+## 1. Discover and connect to a provisioned proxy
 
 ```ts
-import { GenericOnOff } from "@blemeshjs/sdk";
+const proxy = await new Promise((resolve, reject) => {
+  const offFound = mesh.connection.on("scan:new-proxy", (candidate) => {
+    mesh.connection.stopScan();
+    offFound();
+    offError();
+    resolve(candidate);
+  });
+
+  const offError = mesh.connection.on("ble:error", (error) => {
+    offFound();
+    offError();
+    reject(error);
+  });
+
+  mesh.connection.scan({ timeout: 10_000, notifyOnWaitingForAdvertisements: true });
+});
+
+await mesh.connection.connect(proxy);
 ```
 
-Use the generated package docs for the current signatures and related model message types.
+<Tabs items={["Web", "React Native"]}>
+  <Tab value="Web">
+    <Callout title="⚠️ Gotcha">
+      Web Bluetooth scanning is browser-mediated, so expect chooser UX rather than silent passive
+      discovery.
+    </Callout>
+  </Tab>
+
+  <Tab value="React Native">
+    <Callout title="✅ Best practice">
+      Keep one shared mesh manager in memory for the app session to avoid repeated transport setup.
+    </Callout>
+  </Tab>
+</Tabs>
+
+## 2. Send a Generic OnOff command
+
+```ts
+import { GenericOnOff, SigModelId } from "@blemeshjs/sdk";
+
+const node = mesh.configuredNodes?.[0];
+if (!node) throw new Error("No configured node found");
+
+const onOffModel = mesh.getModel(node.uuid.uuidString, 0, SigModelId.genericOnOffServerModelId);
+if (!onOffModel) throw new Error("Generic OnOff model not found on element 0");
+
+const onOff = onOffModel.use(GenericOnOff);
+await onOff.get();
+await onOff.set(!Boolean(onOff.state), { acknowledged: true });
+```
+
+This reads the current state and then toggles it, so your test command always does something visible.
+
+## 3. Validate expected behavior
+
+- The target device changes state.
+- No `ble:error` is emitted during command flow.
+- Your app remains connected after the command.
+
+<Callout title="⚠️ Gotcha">
+  If `onOff.set(...)` throws an access error, the model may not be bound to an application key yet.
+  Complete model/key configuration before retrying.
+</Callout>
+
+<Callout title="💡 Pro tip">
+  Always test with acknowledged commands first. Once command flow is stable, move latency-sensitive
+  paths to unacknowledged messages where appropriate.
+</Callout>
+
+At this point, you should have verified real command delivery over a live proxy connection.
+
+## What to do next
+
+Next, you will want to review [Advanced](/docs/advanced) for custom runtime control and [API Reference](/docs/api) for exact signatures.

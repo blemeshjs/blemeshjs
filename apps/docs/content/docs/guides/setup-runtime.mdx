@@ -1,34 +1,99 @@
 ---
 title: Setup Runtime
-description: Set up the runtime.
+description: Install and initialize BLEMeshJS so your app can scan and connect.
 icon: Hammer
 ---
 
-## Install required packages
+Use this page when you are wiring BLEMeshJS into an app for the first time.
 
-<Tabs items={["Web", "React Native", "Node"]}>
+## 1. Install the runtime package
+
+<Tabs items={["Web", "React Native", "Custom Runtime"]}>
   <Tab value="Web">
     ```bash
     yarn add @blemeshjs/sdk-web
     ```
   </Tab>
-  <Tab value="React Native">Coming soon!</Tab>
-  <Tab value="Node">Coming soon!</Tab>
+
+  <Tab value="React Native">
+    ```bash
+    yarn add @blemeshjs/sdk-react-native \
+      @react-native-async-storage/async-storage \
+      react-native-ble-plx \
+      react-native-get-random-values
+    ```
+  </Tab>
+
+  <Tab value="Custom Runtime">
+    ```bash
+    yarn add @blemeshjs/sdk
+    ```
+  </Tab>
 </Tabs>
 
-## Create the mesh manager
+## 2. Create the mesh manager
 
-<Tabs items={["Web", "React Native", "Node"]}>
+<Tabs items={["Web", "React Native", "Custom Runtime"]}>
   <Tab value="Web">
     ```ts
     import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-web";
 
-    const mesh = await createMesh(MeshNetworkManager.instance);
+    const mesh = await createMesh({
+      meshNetworkManager: MeshNetworkManager.instance,
+    });
     ```
   </Tab>
-  <Tab value="React Native">Coming soon!</Tab>
-  <Tab value="Node">Coming soon!</Tab>
+
+  <Tab value="React Native">
+    ```ts
+    import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-react-native";
+
+    const mesh = await createMesh({
+      meshNetworkManager: MeshNetworkManager.instance,
+    });
+    ```
+  </Tab>
+
+  <Tab value="Custom Runtime">
+    ```ts
+    import { MeshNetworkManager } from "@blemeshjs/sdk";
+
+    const mesh = MeshNetworkManager.instance;
+    mesh.init(myCentralManager, myStorage);
+    await mesh.setup();
+    ```
+  </Tab>
 </Tabs>
 
-This configures the shared manager with the transport and storage implementation.
+This configures the shared manager with transport and storage for your runtime.
+
+## 3. Create a network if this is a fresh install
+
+```ts
+if (!mesh.isNetworkCreated) {
+  await mesh.createNewMeshNetwork();
+}
+```
+
+## 4. Verify BLE readiness before scanning
+
+```ts
+mesh.connection.on("ble:state-change", (state) => {
+  console.log("BLE state:", state);
+});
+```
+
+<Callout title="✅ Best practice">
+  Create and initialize the mesh manager once at app startup, then reuse it instead of recreating
+  it in each screen or route.
+</Callout>
+
+<Callout title="⚠️ Gotcha">
+  On web, scan UX is browser-mediated due Web Bluetooth limitations. You should expect chooser UI
+  behavior, not a silent background scanner.
+</Callout>
+
+At this point, you should have a configured `mesh` instance that is ready to scan.
+
+Next, you will want to [Provision a New Device](/docs/guides/provisioning) or [Control Device](/docs/guides/control-device).
 

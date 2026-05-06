@@ -1,14 +1,24 @@
 ---
 title: API Reference
-description: Auto-generated package reference built from TypeScript source comments and exported surfaces.
+description: Package-level API reference generated from exported TypeScript surfaces.
 icon: BookOpenText
 ---
 
-This API section is package-oriented and auto-generated from the public TypeScript entrypoints in the monorepo.
+Use this section when you already understand the workflow and need exact signatures, types, and source locations.
+
+This API reference is package-oriented and auto-generated from public TypeScript entrypoints in the monorepo.
 
 > Write API documentation as TSDoc-style comments above exported declarations in package source files. The docs generator reads those comments and rebuilds these pages automatically.
 
-## How this flow works
+## When should I use API reference?
+
+- You know what task you are solving and need the exact call signature.
+- You are checking event names, option types, or return types.
+- You are validating behavior against source-level comments.
+
+If you are still deciding what to do next, start with [Guides](/docs/guides) first.
+
+## How generation works
 
 1. Add or update comments in the package source under the relevant `src/**` tree.
 2. Run `yarn workspace docs api:generate` if you want to refresh the API pages directly.
@@ -36,14 +46,18 @@ Use concise comments directly on exported declarations.
  * @remarks
  * Call this once during application startup and reuse the returned manager for later scans and connections.
  */
-export async function createBrowserMesh(...) {
+export async function createMesh(...) {
   // ...
 }
 ```
 
-## Why this flow is better
+The current runtime helper names are `createMesh(...)` in both web and React Native packages.
+
+## Why this matters
 
 - The package surface stays aligned with the real source of truth.
 - Comments live next to the code they describe.
 - Docs rebuilds automatically as part of normal docs workflows.
 - Fumadocs still renders the generated pages with the same site-wide styling as the rest of the docs.
+
+Next, you will usually jump to one package page and then back to a guide to apply it in context.

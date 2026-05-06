@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { createRNMesh } from "@blemeshjs/sdk-react-native";
+import { createMesh } from "@blemeshjs/sdk-react-native";
 import { MeshNetworkManager } from "@blemeshjs/sdk";
 
 const MeshContext = createContext<MeshNetworkManager | null>(null);
@@ -10,7 +10,7 @@ export const MeshProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let mounted = true;
 
-    createRNMesh().then((instance) => {
+    createMesh().then((instance) => {
       if (mounted) setMesh(instance);
     });
 

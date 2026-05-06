@@ -1,0 +1,57 @@
+---
+title: Troubleshooting
+description: Fast fixes for the most common BLEMeshJS setup, scan, and provisioning issues.
+icon: Wrench
+---
+
+Use this page when a guide did not behave as expected.
+
+## Quick triage checklist
+
+1. Confirm Bluetooth is powered on.
+2. Confirm your runtime package and peer dependencies are installed.
+3. Confirm you initialized exactly one mesh manager instance.
+4. Confirm the device is in the expected state (provisioned vs unprovisioned).
+
+## Common problems and fixes
+
+| Symptom | Likely cause | What to do now |
+| --- | --- | --- |
+| No scan events fire | BLE not ready, scan not started, or browser chooser not completed | Listen for `ble:state-change`, restart scan with timeout, complete chooser flow |
+| `scan:new-proxy` never appears | Device not provisioned in this network or not advertising proxy identity | Verify network identity and device mode |
+| Provisioning starts but never completes | Device moved out of range, auth mismatch, or stale scan candidate | Disconnect, re-enter provisioning mode on device, rescan and retry |
+| Control command fails after connect | Model not present or app key not bound | Verify model ID and model key binding |
+
+## Web-specific notes
+
+<Callout title="⚠️ Gotcha">
+  Browser BLE scanning is chooser-driven. If the chooser is cancelled, expected scan events will
+  not fire.
+</Callout>
+
+## React Native-specific notes
+
+<Callout title="✅ Best practice">
+  Verify native permissions and platform BLE setup for `react-native-ble-plx` before debugging SDK
+  logic.
+</Callout>
+
+## Minimal health-check snippet
+
+```ts
+mesh.connection.on("ble:state-change", (state) => {
+  console.log("BLE state", state);
+});
+
+mesh.connection.on("ble:error", (error) => {
+  console.error("BLE error", error);
+});
+
+mesh.provision.on("provision:error", (error) => {
+  console.error("Provision error", error);
+});
+```
+
+If this health check looks clean, you are ready to retry the workflow guide step by step.
+
+Next, you will want to return to [Setup Runtime](/docs/guides/setup-runtime) or [Provision a New Device](/docs/guides/provisioning), depending on where your flow broke.

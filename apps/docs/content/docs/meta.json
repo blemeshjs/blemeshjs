@@ -3,13 +3,9 @@
     "index",
     "concepts",
     "guides",
-    "api",
-    "simulator",
-    "gateway-cloud",
-    "examples",
-    "architecture",
     "advanced",
     "troubleshooting",
+    "api",
     "glossary"
   ]
 }

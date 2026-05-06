@@ -1,0 +1,70 @@
+---
+title: Advanced
+description: Edge cases and custom runtime patterns once the basics are stable.
+icon: Gauge
+---
+
+Use this page when your first success path is already working and you need tighter control.
+
+## When should you use advanced patterns?
+
+- You need a custom central manager or storage implementation.
+- You are tuning scan/connection behavior for noisy BLE environments.
+- You need deterministic lifecycle control across app restarts.
+
+## Custom runtime wiring
+
+If platform helpers are not enough, initialize the shared SDK directly:
+
+```ts
+import { MeshNetworkManager } from "@blemeshjs/sdk";
+
+const mesh = MeshNetworkManager.instance;
+mesh.init(myCentralManager, myStorage);
+await mesh.setup();
+```
+
+<Callout title="✅ Best practice">
+  Keep one long-lived manager instance. Recreating the manager frequently leads to scan race
+  conditions and harder-to-reason state.
+</Callout>
+
+## Scan and connection strategy
+
+Use short, explicit scan windows and connect on user intent:
+
+```ts
+mesh.connection.scan({ timeout: 8_000, notifyOnWaitingForAdvertisements: true });
+```
+
+Then stop scans as soon as you have a candidate:
+
+```ts
+mesh.connection.stopScan();
+```
+
+<Callout title="⚠️ Gotcha">
+  Running long overlapping scans across multiple screens is a common source of flaky behavior.
+</Callout>
+
+## Provisioning strategy for production UX
+
+Use `quick(...)` for fast onboarding. Move to manual `connect -> identify -> start` when you need
+stronger user confirmation of physical device identity.
+
+## Persistence and recovery
+
+Mesh state is persistent and should be treated as critical app data.
+
+- Persist after topology changes.
+- Reuse the same storage backend across sessions.
+- Recover with `setup()` at startup before UI workflows begin.
+
+<Callout title="💡 Pro tip">
+  Build a startup health check that verifies BLE readiness and confirms a mesh network is present
+  before enabling provisioning or control UI.
+</Callout>
+
+At this point, you should have a reliable baseline for production-grade behavior.
+
+Next, you will want to read [Troubleshooting](/docs/troubleshooting) for failure-mode playbooks.
