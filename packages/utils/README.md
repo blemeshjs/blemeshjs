@@ -1,28 +1,34 @@
 # @blemeshjs/utils
 
-Shared BLE Mesh enums, helpers, messages, models, and low-level utilities.
+The shared toolbox that the rest of BLEMeshJS is built on.
 
-## Scope
+If you're using `@blemeshjs/sdk`, `@blemeshjs/sdk-web`, or `@blemeshjs/sdk-react-native`, you already have everything from here re-exported for you — you usually don't need to install this package directly. It lives as its own package so the lower layers (crypto, core) can depend on a small, stable foundation.
 
-This package is the shared foundation for the rest of the blemeshjs stack. Its public entrypoint re-exports helpers, types, constants, enums, mesh messages, and mesh models.
+## What's inside
 
-## Installation
+- BLE Mesh **enums and constants** that match the spec.
+- **Helpers** for parsing, encoding, and working with mesh primitives.
+- Type definitions for **mesh messages** and **mesh models**.
+- Small utilities (byte arrays, hex, etc.) that are handy across the stack.
+
+## Install
 
 ```sh
 yarn add @blemeshjs/utils
 ```
 
-## Development
+## Usage
 
-From this package directory:
-
-```sh
-yarn build
-yarn test
-yarn lint
+```ts
+import { /* enums, helpers, types */ } from "@blemeshjs/utils";
 ```
 
-## Related Packages
+## Related
 
-- `@blemeshjs/crypto` builds mesh cryptographic helpers on top of these primitives.
-- `@blemeshjs/core` and `@blemeshjs/sdk` use this package as a shared dependency layer.
+- [`@blemeshjs/crypto`](../crypto) — mesh cryptography built on top of these primitives.
+- [`@blemeshjs/core`](../core) — uses utils for the protocol layers.
+- [`@blemeshjs/sdk`](../sdk) — the high-level SDK that re-exports this package.
+
+## License
+
+Apache-2.0

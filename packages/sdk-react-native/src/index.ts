@@ -2,7 +2,7 @@ import { MeshNetworkManager } from "@blemeshjs/sdk";
 import { RNCBCentralManager } from "./transport/central-manager.js";
 import { RNAsyncStorage } from "./storage.js";
 
-export async function createRNMesh<T extends MeshNetworkManager = MeshNetworkManager>({
+export async function createMesh<T extends MeshNetworkManager = MeshNetworkManager>({
   meshNetworkManager = MeshNetworkManager.instance as T,
 }: {
   meshNetworkManager?: T;

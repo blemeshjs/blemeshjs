@@ -1,28 +1,29 @@
 # @blemeshjs/crypto
 
-BLE Mesh cryptographic helpers built on top of `@blemeshjs/utils`.
+Mesh-flavored cryptography for BLEMeshJS.
 
-## Scope
+BLE Mesh has its own family of crypto primitives — `s1`, `k1`–`k4`, AES-CMAC, AES-CCM with mesh-specific nonces, and friends. This package wraps them up into ergonomic TypeScript helpers so you can derive keys, encrypt PDUs, and validate security material without rebuilding the spec by hand.
 
-Use this package when you need the standalone cryptographic utilities that support key derivation, security material handling, and mesh-specific crypto flows.
-
-## Installation
+## Install
 
 ```sh
 yarn add @blemeshjs/crypto
 ```
 
-## Development
+`@blemeshjs/sdk-web` already re-exports this package, so browser apps usually don't need to install it directly.
 
-From this package directory:
+## Usage
 
-```sh
-yarn build
-yarn test
-yarn lint
+```ts
+import { /* key derivation, encryption helpers */ } from "@blemeshjs/crypto";
 ```
 
-## Related Packages
+## Related
 
-- `@blemeshjs/utils` provides the shared low-level types used here.
-- `@blemeshjs/core` and `@blemeshjs/sdk-web` consume this package.
+- [`@blemeshjs/utils`](../utils) — shared types and helpers used by this package.
+- [`@blemeshjs/core`](../core) — consumes these helpers in the mesh layers.
+- [`@blemeshjs/sdk-web`](../sdk-web) — re-exports this package for browser consumers.
+
+## License
+
+Apache-2.0

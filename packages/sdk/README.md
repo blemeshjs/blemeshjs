@@ -1,12 +1,17 @@
 # @blemeshjs/sdk
 
-High-level BLE Mesh SDK with network management, models, and extensions.
+The high-level BLEMeshJS SDK.
 
-## Scope
+This is the package most developers actually want to use. It gives you `MeshNetworkManager` — a single entry point that owns your network state, your local node, your models, and your message routing — plus a collection of mesh models and model extensions you can compose into your app.
 
-This is the main developer-facing SDK package. It exports the network manager, mesh models, model extensions, shared types, and the underlying `@blemeshjs/utils` surface.
+`@blemeshjs/sdk` is platform-agnostic on its own. To actually talk to devices you'll pair it with a transport + storage adapter:
 
-## Installation
+- [`@blemeshjs/sdk-web`](../sdk-web) for browsers
+- [`@blemeshjs/sdk-react-native`](../sdk-react-native) for React Native / Expo
+
+…or you can plug in your own.
+
+## Install
 
 ```sh
 yarn add @blemeshjs/sdk
@@ -18,19 +23,20 @@ yarn add @blemeshjs/sdk
 import { MeshNetworkManager } from "@blemeshjs/sdk";
 
 const mesh = MeshNetworkManager.instance;
+// Provide your own central manager + storage:
+mesh.init(myCentralManager, myStorage);
+await mesh.setup();
 ```
 
-## Development
+If you're on the web or React Native, you'll usually skip the manual `init` and use the platform package's `createMesh()` / `createRNMesh()` helper instead — they handle the wiring for you.
 
-From this package directory:
+## What you get
 
-```sh
-yarn build
-yarn test
-yarn lint
-```
+- `MeshNetworkManager` — your single source of truth for the mesh.
+- A library of standard **mesh models**.
+- **Model extensions** for common app-level patterns.
+- Shared SDK **types** and a re-export of [`@blemeshjs/utils`](../utils).
 
-## Related Packages
+## License
 
-- `@blemeshjs/core` provides the low-level protocol implementation.
-- `@blemeshjs/sdk-web` and `@blemeshjs/sdk-react-native` add platform-specific bindings.
+Apache-2.0

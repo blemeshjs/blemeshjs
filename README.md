@@ -2,32 +2,125 @@
 	<img src="./logo.svg" alt="blemeshjs logo" />
 </p>
 
-# BLEMeshJS
+<h1 align="center">BLEMeshJS</h1>
 
-TypeScript BLE Mesh monorepo for shared utilities, core layers, platform bindings, and higher-level SDK packages.
+<p align="center">
+	<em>A friendly TypeScript SDK for building Bluetooth Mesh apps on the web and React Native.</em>
+</p>
 
-## Packages
+---
 
-| Package | Purpose | Publish status |
-| --- | --- | --- |
-| `@blemeshjs/utils` | Shared enums, helpers, mesh message/model types, and low-level utilities. | Public |
-| `@blemeshjs/crypto` | BLE Mesh cryptographic helpers built on top of `@blemeshjs/utils`. | Public |
-| `@blemeshjs/core` | Bearer, provisioning, mesh messages, and lower-level mesh primitives. | Public |
-| `@blemeshjs/sdk` | High-level SDK surface including network management, models, and extensions. | Public |
-| `@blemeshjs/sdk-web` | Browser transport and storage bindings for the SDK. | Public |
-| `@blemeshjs/sdk-react-native` | React Native transport and storage bindings for the SDK. | Public |
-| `@blemeshjs/pro` | Private higher-level BLE Mesh package built on core and shared utilities. | Private |
-| `@blemeshjs/sdk-pro` | Private SDK layer that re-exports `@blemeshjs/sdk` with pro-specific additions. | Private |
+BLE Mesh is powerful, but the spec is dense and the tooling is scattered across native platforms. **BLEMeshJS** brings it into the JavaScript world: one familiar API, the same mental model on every platform, and sensible defaults so you can get a node provisioned and a light turned on without reading 400 pages of specification first.
 
-## Apps
+If you've ever wished you could just `import` a mesh manager and start sending messages, this is for you.
 
-| App | Purpose |
-| --- | --- |
-| `apps/web` | Next.js web application using `@blemeshjs/sdk-web`. |
-| `apps/mobile` | Expo / React Native application using `@blemeshjs/sdk-react-native`. |
-| `apps/docs` | Documentation site built with Next.js and Fumadocs. |
+## Highlights
 
-## Getting Started
+- 🌐 **Cross-platform** — the same SDK runs in the browser (Web Bluetooth) and in React Native (via `react-native-ble-plx`).
+- 🧠 **Batteries included** — provisioning, mesh models, model extensions, key management, and storage are all wired up for you.
+- 🧩 **Composable** — start with the high-level SDK, drop down to `@blemeshjs/core` when you need to.
+- 🟦 **TypeScript first** — strong types throughout, no `any` smuggled in the public API.
+- 🧪 **Tested** — each package ships with its own test suite and coverage.
+
+## Pick your package
+
+Most apps only need one of these. Choose based on where your code runs:
+
+| I'm building for...        | Install                          | Entry point                              |
+| -------------------------- | -------------------------------- | ---------------------------------------- |
+| The browser                | `@blemeshjs/sdk-web`             | `createMesh()`                           |
+| React Native / Expo        | `@blemeshjs/sdk-react-native`    | `createMesh()`                         |
+| A custom platform / Node   | `@blemeshjs/sdk`                 | `MeshNetworkManager.instance`            |
+| Low-level protocol work    | `@blemeshjs/core`                | bearer / provisioning / message layers   |
+
+## Install
+
+```sh
+# Web
+yarn add @blemeshjs/sdk-web
+
+# React Native
+yarn add @blemeshjs/sdk-react-native \
+  @react-native-async-storage/async-storage \
+  react-native-ble-plx \
+  react-native-get-random-values
+```
+
+## Quick start
+
+### In the browser
+
+```ts
+import { createMesh } from "@blemeshjs/sdk-web";
+
+const mesh = await createMesh();
+// mesh is a fully-initialized MeshNetworkManager,
+// already wired up to Web Bluetooth and localStorage.
+```
+
+### In React Native
+
+```ts
+import { createMesh } from "@blemeshjs/sdk-react-native";
+
+const mesh = await createMesh();
+// transport: react-native-ble-plx
+// storage:   AsyncStorage
+```
+
+### Anywhere else
+
+```ts
+import { MeshNetworkManager } from "@blemeshjs/sdk";
+
+const mesh = MeshNetworkManager.instance;
+// Bring your own transport + storage and call mesh.init(...)
+```
+
+## How the packages fit together
+
+```
+          ┌─────────────────────────┐    ┌──────────────────────────────┐
+   apps → │     @blemeshjs/sdk-web  │    │ @blemeshjs/sdk-react-native  │
+          └────────────┬────────────┘    └──────────────┬───────────────┘
+                       │                                │
+                       └────────────────┬───────────────┘
+                                        ▼
+                            ┌──────────────────────┐
+                            │   @blemeshjs/sdk     │   high-level API
+                            └──────────┬───────────┘
+                                       ▼
+                            ┌──────────────────────┐
+                            │   @blemeshjs/core    │   protocol layers
+                            └──────────┬───────────┘
+                                       ▼
+                  ┌─────────────────────┴─────────────────────┐
+                  ▼                                           ▼
+        ┌──────────────────┐                       ┌──────────────────┐
+        │ @blemeshjs/utils │                       │ @blemeshjs/crypto│
+        └──────────────────┘                       └──────────────────┘
+```
+
+| Package                         | What it gives you                                                       |
+| ------------------------------- | ----------------------------------------------------------------------- |
+| `@blemeshjs/utils`              | Shared types, enums, helpers, mesh message and model primitives.        |
+| `@blemeshjs/crypto`             | Mesh-flavored cryptography: key derivation, security material, AEAD.    |
+| `@blemeshjs/core`               | Bearer, provisioning, mesh layers, and message handling.                |
+| `@blemeshjs/sdk`                | The developer-facing API: `MeshNetworkManager`, models, extensions.     |
+| `@blemeshjs/sdk-web`            | Web Bluetooth transport + browser storage.                              |
+| `@blemeshjs/sdk-react-native`   | React Native BLE transport + AsyncStorage.                              |
+
+There are also two private companion packages — `@blemeshjs/pro` and `@blemeshjs/sdk-pro` — used by closed-source apps built on top of the SDK.
+
+## Where to learn more
+
+- **Docs site** — see `apps/docs` for the in-progress documentation site.
+- **Web example** — `apps/web` is a small Next.js playground that uses `@blemeshjs/sdk-web`.
+- **Mobile example** — `apps/mobile` is an Expo app that uses `@blemeshjs/sdk-react-native`.
+
+## Contributing
+
+This repo is a Yarn 4 + Turbo monorepo. If you'd like to hack on it locally:
 
 ```sh
 yarn install
@@ -35,34 +128,8 @@ yarn build
 yarn test
 ```
 
-## Common Commands
-
-```sh
-yarn lint
-yarn format
-yarn coverage
-yarn release:status
-```
-
-Root `build`, `lint`, and `format` intentionally exclude `apps/mobile`, `apps/docs`, and `packages/sdk-react-native`.
-
-## Package Layout
-
-- `packages/utils`: shared types, helpers, constants, enums, and mesh primitives.
-- `packages/crypto`: cryptographic helpers and mesh key material helpers.
-- `packages/core`: low-level bearer, provisioning, layer, and message logic.
-- `packages/sdk`: high-level network manager, models, and extensions.
-- `packages/sdk-web`: browser-specific transport and local storage integration.
-- `packages/sdk-react-native`: React Native BLE transport and async storage integration.
-- `packages/pro`: private higher-level package used by companion private repos.
-- `packages/sdk-pro`: private SDK layer used by companion private repos.
-
-## Development Notes
-
-- Package builds are emitted from package-level `src/` directories into `dist/`.
-- Prefer package-scoped validation when changing a single package.
-- Avoid editing generated output under `dist/` and coverage artifacts under `coverage/`.
+Most changes only need the package-level scripts — no need to rebuild the entire world. PRs and issues are welcome.
 
 ## License
 
-Apache-2.0 for the public monorepo packages. Private companion packages follow the policies of their owning repositories.
+[Apache-2.0](./LICENSE) for all public packages. The private `pro` packages follow the licensing of the repositories that own them.

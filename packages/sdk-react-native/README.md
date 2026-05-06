@@ -1,38 +1,45 @@
 # @blemeshjs/sdk-react-native
 
-React Native transport and storage bindings for the blemeshjs SDK.
+BLEMeshJS for React Native and Expo.
 
-## Scope
+If you're building a mobile app and want a BLE Mesh SDK that feels at home in React Native, this is the package for you. It bundles:
 
-This package wires the shared SDK to React Native BLE transport and async storage. It exports the full `@blemeshjs/sdk` surface and provides `createRNMesh(...)` to initialize a `MeshNetworkManager` with the React Native platform adapters.
+- The full [`@blemeshjs/sdk`](../sdk) surface.
+- A React Native BLE transport (built on `react-native-ble-plx`).
+- An `AsyncStorage`-backed persistence layer.
 
-## Installation
+…and gives you `createMesh()` to wire everything up in one call.
+
+## Install
 
 ```sh
 yarn add @blemeshjs/sdk-react-native
 ```
 
-Peer dependencies:
+You'll also need these peer dependencies in your app:
 
-- `@react-native-async-storage/async-storage`
-- `react-native`
-- `react-native-ble-plx`
-- `react-native-get-random-values`
+```sh
+yarn add @react-native-async-storage/async-storage \
+  react-native-ble-plx \
+  react-native-get-random-values
+```
+
+Make sure to follow each library's setup instructions (native permissions, pods, etc.).
 
 ## Usage
 
 ```ts
-import { createRNMesh } from "@blemeshjs/sdk-react-native";
+import { createMesh } from "@blemeshjs/sdk-react-native";
 
-const mesh = await createRNMesh();
+const mesh = await createMesh();
 ```
 
-## Development
+Want to bring your own `MeshNetworkManager` (e.g. for testing or a custom subclass)?
 
-From this package directory:
-
-```sh
-yarn build
-yarn test
-yarn lint
+```ts
+const mesh = await createMesh({ meshNetworkManager: myMesh });
 ```
+
+## License
+
+Apache-2.0
