@@ -94,6 +94,52 @@ describe("NetworkConnection", () => {
     vi.clearAllMocks();
   });
 
+  describe("central manager state changes", () => {
+    it("keeps existing proxies when the radio powers on", async () => {
+      const { connection, centralManager } = createConnection();
+      connection.isConnectionAutomatic = true;
+      await connection.open();
+
+      const bearer = new FakeBearer("proxy-1");
+      await connection.use(bearer as unknown as GattBearer);
+      expect(connection.proxies.size).toBe(1);
+
+      // A poweredOn notification must not tear down what is already connected.
+      // This case previously fell through into poweredOff and cleared them.
+      centralManager.emit(
+        "centralManagerDidUpdateState",
+        centralManager,
+        CBCentralManagerState.poweredOn,
+      );
+
+      expect(connection.proxies.size).toBe(1);
+      expect(bearer.close).not.toHaveBeenCalled();
+    });
+
+    it("closes and clears proxies when the radio powers off", async () => {
+      const { connection, centralManager } = createConnection();
+      connection.isConnectionAutomatic = true;
+      await connection.open();
+
+      const bearer = new FakeBearer("proxy-1");
+      await connection.use(bearer as unknown as GattBearer);
+      expect(connection.proxies.size).toBe(1);
+
+      centralManager.state = CBCentralManagerState.poweredOff;
+      centralManager.emit(
+        "centralManagerDidUpdateState",
+        centralManager,
+        CBCentralManagerState.poweredOff,
+      );
+
+      // Proxies are closed through a promise chain, so let it drain.
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(bearer.close).toHaveBeenCalled();
+      expect(connection.proxies.size).toBe(0);
+    });
+  });
+
   it("starts automatic scan when opened with poweredOn BLE", async () => {
     const { connection, centralManager } = createConnection();
 
