@@ -297,7 +297,7 @@ class InternalModel
 | `bindApplicationKey` | `bindApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
 | `unbindApplicationKey` | `unbindApplicationKey(applicationKey: ApplicationKey): Promise<void>;` | No description yet. |
 | `use` | `use<T>(ext: ModelExtension<T>): T;` | No description yet. |
-| `toProxy` | `toProxy(model: Model, coreMeshNetworkManager: CoreMeshNetworkManager): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "boundApplicationKeys" \| "applicationKeys">;` | No description yet. |
+| `toProxy` | `toProxy(model: Model, coreMeshNetworkManager: CoreMeshNetworkManager): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "relatedModels" \| "boundApplicationKeys" \| "applicationKeys">;` | No description yet. |
 
 ### InternalNode
 
@@ -413,7 +413,7 @@ class MeshNetworkManager
 | `export` | `export(): Promise<Data>;` | No description yet. |
 | `getElement` | `getElement(nodeUuid: string, elementIndex: number): InternalElement & Pick<Element, never> & Pick<Element, "name" \| "index" \| "location" \| "unicastAddress"> \| undefined;` | No description yet. |
 | `getGroup` | `getGroup(_groupAddress: string): any;` | No description yet. |
-| `getModel` | `getModel(nodeUuid: string, elementIndex: number, modelId: number): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "boundApplicationKeys" \| "applicationKeys"> \| undefined;` | No description yet. |
+| `getModel` | `getModel(nodeUuid: string, elementIndex: number, modelId: number): InternalModel & Pick<Model, never> & Pick<Model, "name" \| "companyIdentifier" \| "companyName" \| "isBluetoothSIGAssigned" \| "modelIdentifier" \| "isGenericOnOffServer" \| "modelId" \| "relatedModels" \| "boundApplicationKeys" \| "applicationKeys"> \| undefined;` | No description yet. |
 | `getNode` | `getNode(uuid: string): InternalNode & Pick<Node, never> & Pick<Node, "name" \| "companyIdentifier" \| "applicationKeys" \| "uuid" \| "isConfigComplete" \| "elementsCount" \| "primaryUnicastAddress" \| "deviceKey" \| "defaultTtl" \| "isLocalProvisioner" \| "isProvisioner" \| "networkKeys" \| "isCompositionDataReceived"> \| undefined;` | No description yet. |
 | `init` | `init(centralManager: CBCentralManager, storage: Storage): void;` | No description yet. |
 | `meshNetworkDidChange` | `meshNetworkDidChange(): void;` | No description yet. |

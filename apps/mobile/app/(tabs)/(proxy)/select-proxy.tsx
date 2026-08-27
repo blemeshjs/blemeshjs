@@ -31,9 +31,9 @@ export default function SelectProxyScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      const bindAllEvents = mesh.bindAllEvents;
+      const bindAllEvents = mesh.connection.bindAllEvents;
       const off = bindAllEvents({
-        "proxy:status": (status) => {
+        "connection:status": (status) => {
           switch (status) {
             case "discovering-services":
               setAlert((prev) => {
@@ -54,8 +54,7 @@ export default function SelectProxyScreen() {
                         message: "Cancelling connection...",
                       });
                       if (selectedProxy.current === null) return;
-                      const disconnect = mesh.disconnect;
-                      disconnect(selectedProxy.current);
+                      void mesh.connection.close();
                     },
                   },
                 ],
@@ -104,41 +103,32 @@ export default function SelectProxyScreen() {
       return () => {
         off();
       };
-    }, [
-      mesh.bindAllEvents,
-      mesh.disconnect,
-      router.dismiss,
-      setAlert,
-      setProxies,
-    ]),
+    }, [mesh.connection, router.dismiss, setAlert, setProxies]),
   );
 
   const stopScanning = useCallback(() => {
     setScanning(false);
-    mesh.stopScan();
+    void mesh.connection.stopScan();
   }, [mesh, setScanning]);
 
   useFocusEffect(
     useCallback(() => {
-      const scan = mesh.scan;
       setScanning(true);
-      scan({
-        waitForBleReady: true,
-      });
+      // Failures are surfaced through the "ble:error" handler above.
+      mesh.connection.scan().catch(() => undefined);
       return () => {
         stopScanning();
       };
-    }, [mesh.scan, setScanning, stopScanning]),
+    }, [mesh.connection, setScanning, stopScanning]),
   );
 
   const open = useCallback(
     (proxy: DiscoveredProxyPeripheral) => {
       stopScanning();
-      const connect = mesh.connect;
       selectedProxy.current = proxy;
-      connect(proxy);
+      mesh.connection.connect(proxy).catch(() => undefined);
     },
-    [mesh.connect, stopScanning],
+    [mesh.connection, stopScanning],
   );
 
   useEffect(() => {
