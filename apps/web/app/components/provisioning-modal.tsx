@@ -23,11 +23,17 @@ export function ProvisioningModal() {
   const provisioning = useMemo(() => status === "provisioning", [status]);
   const provisionMutation = useMutation({
     mutationFn: (device: NonNullable<typeof selectedDevice>) => mesh.provision.quick(device),
+    // Provisioning failures used to arrive as a "provision:error" event; they
+    // now reject quick(), so the mutation is where they surface.
+    onError: toastError,
   });
 
   const startScan = () => {
     setStatus("scanning");
-    mesh.provision.scan({ notifyOnWaitingForAdvertisements: true });
+    // scan() now rejects on timeout or radio error, but those are already
+    // surfaced by the "ble:error" handler below, so swallow the rejection
+    // rather than reporting it twice.
+    mesh.provision.scan().catch(() => undefined);
     const off = mesh.provision.on("scan:new-peripheral", (proxy) => {
       setStatus("ready");
       mesh.provision.stopScan();
@@ -56,9 +62,6 @@ export function ProvisioningModal() {
           default:
             toastError(error);
         }
-      },
-      "provision:error": (error) => {
-        toastError(error);
       },
       "provision:status": (status) => {
         switch (status) {
