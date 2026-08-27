@@ -629,6 +629,7 @@ class BindableTinyEmitter<E>
 | `emit` | `emit<K>(event: K, args: Parameters<E[K]>): void;` | No description yet. |
 | `off` | `off<K>(event: K, fn?: E[K]): void;` | No description yet. |
 | `on` | `on<K>(event: K, fn: E[K]): () => void;` | No description yet. |
+| `once` | `once<K>(event: K, fn: E[K]): void;` | No description yet. |
 | `unbindAllEvents` | `unbindAllEvents(handler: Partial<E>): void;` | No description yet. |
 
 ### bitArrayToUint8Array
@@ -646,7 +647,7 @@ function bitArrayToUint8Array(signedInts: BitArray): Uint8Array;
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L407`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L337`
 
 
 ```ts
@@ -725,7 +726,7 @@ class CancellationError extends Error
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L367`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L297`
 
 
 Abstract class representing a Bluetooth Central Manager. Subclasses must implement scanning, connection, and state management logic.
@@ -753,6 +754,7 @@ class CBCentralManager extends BindableTinyEmitter<CBCentralManagerHandler>
 | `getState` | `getState(): CBCentralManagerState;` | No description yet. |
 | `off` | `off<K>(event: K, fn?: CBCentralManagerHandler[K]): void;` | No description yet. |
 | `on` | `on<K>(event: K, fn: CBCentralManagerHandler[K]): () => void;` | No description yet. |
+| `once` | `once<K>(event: K, fn: CBCentralManagerHandler[K]): void;` | No description yet. |
 | `retrieveConnectedPeripherals` | `retrieveConnectedPeripherals(serviceUUIDs?: string[]): CBPeripheral[];` | No description yet. |
 | `retrievePeripherals` | `retrievePeripherals(identifiers: UUID[]): CBPeripheral[];` | No description yet. |
 | `scanForPeripherals` | `scanForPeripherals(serviceUUIDs?: string[]): Promise<void>;` | No description yet. |
@@ -763,7 +765,7 @@ class CBCentralManager extends BindableTinyEmitter<CBCentralManagerHandler>
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L292`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L243`
 
 
 Abstract base class representing the handler of a central Bluetooth manager. Use this class to respond to central manager events such as state updates and peripheral discovery.
@@ -780,17 +782,15 @@ class CBCentralManagerHandler
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `centralManagerDidConnect` | `centralManagerDidConnect(central: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
 | `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(central: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
 | `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, advertisementData?: Record<string, unknown>): void;` | No description yet. |
-| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
 | `centralManagerDidUpdateState` | `centralManagerDidUpdateState(central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
 
 ### CBCentralManagerState
 
 **Kind:** Enumeration
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L354`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L284`
 
 
 ```ts
@@ -818,7 +818,7 @@ enum CBCentralManagerState {
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L154`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L157`
 
 
 ```ts
@@ -850,7 +850,7 @@ class CBCharacteristic
 
 **Kind:** Enumeration
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L136`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L139`
 
 
 ```ts
@@ -886,7 +886,7 @@ enum CBCharacteristicProperties {
 
 **Kind:** Enumeration
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L149`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L152`
 
 
 ```ts
@@ -930,23 +930,24 @@ class CBPeripheral extends BindableTinyEmitter<CBPeripheralHandler>
 | Name | Signature | Description |
 | --- | --- | --- |
 | `bindAllEvents` | `bindAllEvents(handler: Partial<E>): () => void;` | No description yet. |
-| `discoverCharacteristics` | `discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService): void;` | No description yet. |
-| `discoverServices` | `discoverServices(serviceUUIDs: CBUUID[]): void;` | No description yet. |
+| `discoverCharacteristics` | `discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService): Promise<CBCharacteristic[]>;` | No description yet. |
+| `discoverServices` | `discoverServices(serviceUUIDs: CBUUID[]): Promise<CBService[]>;` | No description yet. |
 | `emit` | `emit<K>(event: K, args: Parameters<CBPeripheralHandler[K]>): void;` | No description yet. |
 | `equal` | `equal(other: unknown): boolean;` | No description yet. |
 | `maximumWriteValueLength` | `maximumWriteValueLength(type: CBCharacteristicWriteType): Long;` | No description yet. |
 | `off` | `off<K>(event: K, fn?: CBPeripheralHandler[K]): void;` | No description yet. |
 | `on` | `on<K>(event: K, fn: CBPeripheralHandler[K]): () => void;` | No description yet. |
-| `readRSSI` | `readRSSI(): void;` | No description yet. |
-| `setNotifyValue` | `setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): void;` | No description yet. |
+| `once` | `once<K>(event: K, fn: CBPeripheralHandler[K]): void;` | No description yet. |
+| `readRSSI` | `readRSSI(): Promise<number>;` | No description yet. |
+| `setNotifyValue` | `setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): Promise<void>;` | No description yet. |
 | `unbindAllEvents` | `unbindAllEvents(handler: Partial<E>): void;` | No description yet. |
-| `writeValue` | `writeValue(data: Data, characteristic: CBCharacteristic, type: CBCharacteristicWriteType): void;` | No description yet. |
+| `writeValue` | `writeValue(data: Data, characteristic: CBCharacteristic, type: CBCharacteristicWriteType): Promise<void>;` | No description yet. |
 
 ### CBPeripheralHandler
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L210`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L213`
 
 
 Abstract base class representing the handler of a Bluetooth peripheral. Use this class to respond to events such as service discovery and characteristic updates.
@@ -964,13 +965,8 @@ class CBPeripheralHandler
 | Name | Signature | Description |
 | --- | --- | --- |
 | `didDisconnect` | `didDisconnect(peripheral: CBPeripheral): void;` | No description yet. |
-| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(peripheral: CBPeripheral, service: CBService, error?: Error): void;` | No description yet. |
-| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
-| `didReadRSSI` | `didReadRSSI(peripheral: CBPeripheral, rssi: Long, error?: Error): void;` | No description yet. |
-| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
 | `didUpdateState` | `didUpdateState(peripheral: CBPeripheral): void;` | No description yet. |
-| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
-| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic, error?: Error): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(peripheral: CBPeripheral, characteristic: CBCharacteristic): void;` | No description yet. |
 
 ### CBPeripheralState
 
@@ -1000,7 +996,7 @@ enum CBPeripheralState {
 
 **Kind:** Class
 
-**Source:** `packages/utils/src/constants/mesh-constants.ts#L113`
+**Source:** `packages/utils/src/constants/mesh-constants.ts#L116`
 
 
 ```ts
