@@ -95,16 +95,9 @@ export class RNCBCentralManager extends CBCentralManager {
   }
 
   public async connect(peripheral: CBPeripheral) {
-    return this.bleManager
-      .connectToDevice(peripheral.identifier.uuidString)
-      .then(() => {
-        peripheral.state = CBPeripheralState.connected;
-        this.emit("centralManagerDidConnect", this, peripheral);
-      })
-      .catch((error: Error) => {
-        this.emit("centralManagerDidFailConnect", this, peripheral, error);
-        throw error;
-      });
+    return this.bleManager.connectToDevice(peripheral.identifier.uuidString).then(() => {
+      peripheral.state = CBPeripheralState.connected;
+    });
   }
 
   public async cancelPeripheralConnection(peripheral: CBPeripheral) {

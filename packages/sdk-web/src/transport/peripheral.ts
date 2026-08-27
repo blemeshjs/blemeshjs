@@ -75,8 +75,10 @@ export class WebCBPeripheral extends CBPeripheral {
   }
 
   public disconnect(): void {
-    if (!this._gattServer?.connected) return;
-    this._gattServer.disconnect();
+    this._device.removeEventListener("gattserverdisconnected", this._handleDisconnected);
+    if (this._gattServer?.connected) {
+      this._gattServer.disconnect();
+    }
     this._handleDisconnected();
   }
 
@@ -87,25 +89,21 @@ export class WebCBPeripheral extends CBPeripheral {
     this.emit("didDisconnect", this);
   };
 
-  // ========== Service Discovery ==========
-  public discoverServices(serviceUUIDs: CBUUID[]): void {
+  public async discoverServices(serviceUUIDs: CBUUID[]) {
     if (!this._gattServer?.connected) {
       throw new Error("Peripheral not connected");
     }
 
-    Promise.all(
+    return Promise.all(
       serviceUUIDs.map((serviceUUID) =>
         this._gattServer!.getPrimaryServices(serviceUUID.fullUuidString.toLowerCase()),
       ),
     )
       .then((serviceGroups) => serviceGroups.flat())
       .then((services) => {
-        this.services = services.map((service) => this._convertBluetoothService(service));
-        this.emit("didDiscoverServices", this);
-      })
-      .catch((error: Error) => {
-        console.error("Service discovery failed:", error);
-        this.emit("didDiscoverServices", this, error);
+        const cbServices = services.map((service) => this._convertBluetoothService(service));
+        this.services = cbServices;
+        return cbServices;
       });
   }
 
@@ -113,8 +111,7 @@ export class WebCBPeripheral extends CBPeripheral {
     return new WebCBService(service, this);
   }
 
-  // ========== Characteristic Operations ==========
-  public discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService): void {
+  public async discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService) {
     if (!this._gattServer?.connected) {
       throw new Error("Peripheral not connected");
     }
@@ -125,7 +122,7 @@ export class WebCBPeripheral extends CBPeripheral {
 
     const nativeService = service.nativeService;
 
-    Promise.all(
+    return Promise.all(
       characteristicUUIDs.map((characteristicUUID) =>
         nativeService.getCharacteristics(characteristicUUID.fullUuidString.toLowerCase()),
       ),
@@ -137,11 +134,7 @@ export class WebCBPeripheral extends CBPeripheral {
         );
 
         service.characteristics = cbCharacteristics;
-        this.emit("didDiscoverCharacteristicsForService", this, service);
-      })
-      .catch((error: Error) => {
-        console.error("Characteristic discovery failed:", error);
-        this.emit("didDiscoverCharacteristicsForService", this, service, error);
+        return cbCharacteristics;
       });
   }
 
@@ -152,12 +145,12 @@ export class WebCBPeripheral extends CBPeripheral {
   }
 
   // ========== Characteristic Operations ==========
-  public readRSSI(): void {
+  public readRSSI() {
     // Web Bluetooth doesn't provide direct RSSI reading, use cached value
-    this.emit("didReadRSSI", this, Long.fromNumber(this.rssi ?? 0));
+    return Promise.resolve(this.rssi ?? 0);
   }
 
-  public setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): void {
+  public async setNotifyValue(enabled: boolean, characteristic: CBCharacteristic) {
     if (!(characteristic instanceof WebCBCharacteristic)) {
       throw new Error("Invalid characteristic reference");
     }
@@ -169,35 +162,20 @@ export class WebCBPeripheral extends CBPeripheral {
       const handler = this._createNotificationHandler(characteristic);
       this._notificationHandlers.set(key, handler);
 
-      nativeChar
-        .startNotifications()
-        .then(() => {
-          nativeChar.addEventListener("characteristicvaluechanged", handler);
-          characteristic.isNotifying = true;
-          this.emit("didUpdateNotificationStateForCharacteristic", this, characteristic);
-        })
-        .catch((error: Error) => {
-          console.error("Notification setup failed:", error);
-          this.emit("didUpdateNotificationStateForCharacteristic", this, characteristic, error);
-        });
-      return;
+      return nativeChar.startNotifications().then(() => {
+        nativeChar.addEventListener("characteristicvaluechanged", handler);
+        characteristic.isNotifying = true;
+      });
     }
 
     const existing = this._notificationHandlers.get(key);
-    nativeChar
-      .stopNotifications()
-      .then(() => {
-        if (existing) {
-          nativeChar.removeEventListener("characteristicvaluechanged", existing);
-          this._notificationHandlers.delete(key);
-        }
-        characteristic.isNotifying = false;
-        this.emit("didUpdateNotificationStateForCharacteristic", this, characteristic);
-      })
-      .catch((error: Error) => {
-        console.error("Notification setup failed:", error);
-        this.emit("didUpdateNotificationStateForCharacteristic", this, characteristic, error);
-      });
+    return nativeChar.stopNotifications().then(() => {
+      if (existing) {
+        nativeChar.removeEventListener("characteristicvaluechanged", existing);
+        this._notificationHandlers.delete(key);
+      }
+      characteristic.isNotifying = false;
+    });
   }
 
   private _createNotificationHandler = (characteristic: CBCharacteristic) => {
@@ -225,23 +203,11 @@ export class WebCBPeripheral extends CBPeripheral {
         ? nativeChar.writeValueWithResponse(data.slice().buffer)
         : nativeChar.writeValueWithoutResponse(data.slice().buffer);
 
-    return write.then(() => {
-      if (type === CBCharacteristicWriteType.withResponse) {
-        this.emit("didWriteValueForCharacteristic", this, characteristic);
-      }
-    });
+    return write;
   }
 
   public maximumWriteValueLength(type: CBCharacteristicWriteType): Long {
     // Web Bluetooth doesn't expose MTU size, return conservative estimate
     return Long.fromNumber(type === CBCharacteristicWriteType.withResponse ? 512 : 20);
-  }
-
-  // ========== Cleanup ==========
-  public cleanup() {
-    this._device.removeEventListener("gattserverdisconnected", this._handleDisconnected);
-    if (this._gattServer?.connected) {
-      this._gattServer.disconnect();
-    }
   }
 }

@@ -2,7 +2,7 @@ import { CBUUID } from "../types/cbuuid.js";
 import { BindableTinyEmitter } from "../types/emitter.js";
 import { UUID } from "../types/uuid.js";
 import { Data } from "../types/buffer.js";
-import { Int64 } from "../types/number.js";
+import { Int32, Int64 } from "../types/number.js";
 
 /**
  * A base class for mesh service objects.
@@ -93,19 +93,22 @@ export abstract class CBPeripheral extends BindableTinyEmitter<CBPeripheralHandl
     return other instanceof CBPeripheral && this.identifier.equal(other.identifier);
   }
 
-  public abstract readRSSI(): void;
+  public abstract readRSSI(): Promise<Int32>;
 
-  public abstract discoverServices(serviceUUIDs: CBUUID[]): void;
+  public abstract discoverServices(serviceUUIDs: CBUUID[]): Promise<CBService[]>;
 
-  public abstract discoverCharacteristics(characteristicUUIDs: CBUUID[], service: CBService): void;
+  public abstract discoverCharacteristics(
+    characteristicUUIDs: CBUUID[],
+    service: CBService,
+  ): Promise<CBCharacteristic[]>;
 
-  public abstract setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): void;
+  public abstract setNotifyValue(enabled: boolean, characteristic: CBCharacteristic): Promise<void>;
 
   public abstract writeValue(
     data: Data,
     characteristic: CBCharacteristic,
     type: CBCharacteristicWriteType,
-  ): Promise<void>;
+  ): Promise<void>; // TODO: with response should have a value not void
 
   public abstract maximumWriteValueLength(type: CBCharacteristicWriteType): Int64;
 }
@@ -209,27 +212,6 @@ export abstract class CBCharacteristic {
  */
 export abstract class CBPeripheralHandler {
   /**
-   * Called when services are discovered on the peripheral.
-   *
-   * @param peripheral - The peripheral where services were discovered.
-   * @param error - Optional error if service discovery failed.
-   */
-  abstract didDiscoverServices(peripheral: CBPeripheral, error?: Error): void;
-
-  /**
-   * Called when characteristics are discovered for a specific service.
-   *
-   * @param peripheral - The peripheral where characteristics were discovered.
-   * @param service - The service that owns the characteristics.
-   * @param error - Optional error if characteristic discovery failed.
-   */
-  abstract didDiscoverCharacteristicsForService(
-    peripheral: CBPeripheral,
-    service: CBService,
-    error?: Error,
-  ): void;
-
-  /**
    * Called when a characteristic's value is updated.
    *
    * @param peripheral - The peripheral containing the characteristic.
@@ -239,35 +221,7 @@ export abstract class CBPeripheralHandler {
   abstract didUpdateValueForCharacteristic(
     peripheral: CBPeripheral,
     characteristic: CBCharacteristic,
-    error?: Error,
   ): void;
-
-  /**
-   * Called when a write to a characteristic completes.
-   *
-   * @param peripheral - The peripheral where the write occurred.
-   * @param characteristic - The characteristic that was written to.
-   * @param error - Optional error if the write failed.
-   */
-  abstract didWriteValueForCharacteristic(
-    peripheral: CBPeripheral,
-    characteristic: CBCharacteristic,
-    error?: Error,
-  ): void;
-
-  /**
-   * Called when notification state changes for a characteristic.
-   *
-   * @param peripheral - The peripheral owning the characteristic.
-   * @param characteristic - The characteristic whose notification state changed.
-   * @param error - Optional error.
-   */
-  abstract didUpdateNotificationStateForCharacteristic(
-    peripheral: CBPeripheral,
-    characteristic: CBCharacteristic,
-    error?: Error,
-  ): void;
-
   /**
    * Called when the peripheral connection state changes.
    *
@@ -281,8 +235,6 @@ export abstract class CBPeripheralHandler {
    * @param peripheral - The peripheral.
    */
   abstract didDisconnect(peripheral: CBPeripheral): void;
-
-  abstract didReadRSSI(peripheral: CBPeripheral, rssi: Int64, error?: Error): void;
 }
 
 /**
@@ -299,27 +251,6 @@ export abstract class CBCentralManagerHandler {
   abstract centralManagerDidUpdateState(
     central: CBCentralManager,
     state: CBCentralManagerState,
-  ): void;
-
-  /**
-   * Called when a connection to a peripheral is successfully established.
-   *
-   * @param central - The central manager instance.
-   * @param peripheral - The connected peripheral.
-   */
-  abstract centralManagerDidConnect(central: CBCentralManager, peripheral: CBPeripheral): void;
-
-  /**
-   * Called when a connection to a peripheral fails.
-   *
-   * @param central - The central manager instance.
-   * @param peripheral - The peripheral that failed to connect.
-   * @param error - The error that occurred during the connection attempt.
-   */
-  abstract centralManagerDidFailConnect(
-    central: CBCentralManager,
-    peripheral: CBPeripheral,
-    error: Error,
   ): void;
 
   /**

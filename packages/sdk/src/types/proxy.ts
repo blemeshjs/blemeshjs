@@ -16,6 +16,16 @@ export function createProxy<
         return Reflect.get(target, prop, receiver);
       }
 
+      if (
+        prop === "then" ||
+        prop === "catch" ||
+        prop === "finally" ||
+        prop === "toJSON" ||
+        prop === "inspect"
+      ) {
+        return undefined;
+      }
+
       // 1. Class API
       if (prop in target) {
         return Reflect.get(target, prop, receiver);

@@ -3,7 +3,6 @@ import { Int32 } from "@blemeshjs/utils";
 
 export type ScanOptions = {
   timeout?: number;
-  notifyOnWaitingForAdvertisements?: boolean;
 };
 
 export type ProxyScanOptions = ScanOptions;
@@ -12,7 +11,7 @@ export type ProvisionScanOptions = ScanOptions;
 export type DiscoveredUnprovisionedPeripheral = {
   device: UnprovisionedDevice;
   bearer: ProvisioningBearer[];
-  rssi: number[];
+  rssi: Int32[];
 };
 
 export type DiscoveredProxyPeripheral = {
