@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Task } from "./task.js";
 
 describe("Task", () => {
@@ -64,10 +64,28 @@ describe("Task", () => {
     expect(rejected).toBe(false);
   });
 
-  it("Task.sleep resolves after ms", async () => {
-    const start = Date.now();
-    await Task.sleep(30).value();
-    expect(Date.now() - start).toBeGreaterThanOrEqual(30);
+  it("Task.sleep resolves only after the requested delay", async () => {
+    // Wall-clock timing is not a safe assertion here: timer clamping and
+    // Date.now() truncation let a setTimeout(30) measure as 29ms, which failed
+    // in CI. Fake timers test the same contract deterministically.
+    vi.useFakeTimers();
+    try {
+      let resolved = false;
+      const pending = Task.sleep(30)
+        .value()
+        .then(() => {
+          resolved = true;
+        });
+
+      await vi.advanceTimersByTimeAsync(29);
+      expect(resolved).toBe(false);
+
+      await vi.advanceTimersByTimeAsync(1);
+      await pending;
+      expect(resolved).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("should cancel the first task if the second one finishes first", async () => {
