@@ -90,7 +90,7 @@ export const ControlFlow = observer(() => {
           <Button
             variant="primary"
             size="sm"
-            onPress={() => mesh.connection.scan({ notifyOnWaitingForAdvertisements: true })}
+            onPress={() => mesh.connection.scan()}
             isDisabled={isProxyScanActive || mesh.connection.isOpen}
           >
             <Search size={14} />
