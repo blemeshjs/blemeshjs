@@ -7,8 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [
-    "@blemeshjs/pro",
-    "@blemeshjs/sdk-pro"
-  ]
+  "ignore": []
 }
