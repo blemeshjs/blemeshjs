@@ -38,7 +38,7 @@
     "@types/sjcl": "^1",
     "eslint": "^10.2.0",
     "prettier": "^3.8.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^3.2.4"
   },
   "dependencies": {
