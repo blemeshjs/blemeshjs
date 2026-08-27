@@ -18,16 +18,17 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
-    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
-    "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "clean": "turbo run clean",
-    "test": "vitest run",
-    "coverage": "vitest --ui --coverage",
-    "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
-    "release:status": "changeset status",
-    "release:version": "changeset version && yarn install --mode=skip-build",
+    "coverage": "turbo run coverage --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
+    "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
+    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
+    "lint:check": "turbo run lint:check --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
     "release:publish": "node ./scripts/publish-public-packages.mjs",
-    "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run"
+    "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run",
+    "release:status": "changeset status",
+    "release:test": "yarn test",
+    "release:version": "changeset version && yarn install --mode=skip-build",
+    "test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
