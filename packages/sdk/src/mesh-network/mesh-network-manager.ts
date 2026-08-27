@@ -222,9 +222,23 @@ export class MeshNetworkManager {
   /**
    * Sets up the local Elements and reinitializes the `NetworkConnection`
    * so that it starts scanning for devices advertising the new Network ID.
+   *
+   * Safe to call from a synchronous context. Closing the previous connection
+   * and opening the new one happen in the background, and their failures are
+   * reported through the logger rather than surfacing as unhandled
+   * rejections. `connection` is reassigned synchronously, so callers can use
+   * it as soon as this returns.
    */
   public meshNetworkDidChange = () => {
-    this.$connection?.close();
+    this.$connection
+      ?.close()
+      .catch((error: Error) =>
+        this.logger?.log(
+          `Error closing connection: ${error.message}`,
+          LogCategory.network,
+          LogLevel.warning,
+        ),
+      );
 
     const meshNetwork = this.$coreMeshNetworkManager.meshNetwork!;
 
@@ -250,7 +264,15 @@ export class MeshNetworkManager {
     this.$connection.on("bearerDidDeliverData", this.$coreMeshNetworkManager.bearerDidDeliverData);
     this.$connection.logger = logger;
     this.$coreMeshNetworkManager.transmitter = this.$connection;
-    this.$connection.open();
+    this.$connection
+      .open()
+      .catch((error: Error) =>
+        this.logger?.log(
+          `Error opening connection: ${error.message}`,
+          LogCategory.network,
+          LogLevel.error,
+        ),
+      );
   };
 
   public createNewMeshNetwork = async (): Promise<MeshNetwork> => {
