@@ -9987,6 +9987,8 @@ __metadata:
     tailwind-merge: "npm:^3.5.0"
     tailwindcss: "npm:^4.2.4"
     typedoc: "npm:^0.28.14"
+    typedoc-plugin-frontmatter: "npm:^1.3.1"
+    typedoc-plugin-markdown: "npm:^4.13.0"
     typescript: "npm:^6.0.3"
     unist-util-visit: "npm:^5.1.0"
     zod: "npm:^4.3.6"
@@ -19720,6 +19722,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typedoc-plugin-frontmatter@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "typedoc-plugin-frontmatter@npm:1.3.1"
+  dependencies:
+    yaml: "npm:^2.8.1"
+  peerDependencies:
+    typedoc-plugin-markdown: ">=4.9.0"
+  checksum: 10c0/8bdda87c7a89b2a9dfdd3925c4b1a633c92696ca3fa110d96870a9d9bc2433afbe6d48e2b1b899bad4c7ae00970a8af1543d58e3e122db6d61055d1a2aff7dab
+  languageName: node
+  linkType: hard
+
+"typedoc-plugin-markdown@npm:^4.13.0":
+  version: 4.13.0
+  resolution: "typedoc-plugin-markdown@npm:4.13.0"
+  peerDependencies:
+    typedoc: 0.28.x
+  checksum: 10c0/a75f7e4ce164444b1046dcd55bd90ef3bffc41d5902ce7e05c1c3aece031e22374148fdfdae59a5f3b0f73c55aefb27675fd1768e0564db165707152c7f24745
+  languageName: node
+  linkType: hard
+
 "typedoc@npm:^0.28.14":
   version: 0.28.19
   resolution: "typedoc@npm:0.28.19"
@@ -20818,6 +20840,15 @@ __metadata:
   bin:
     yaml: bin.mjs
   checksum: 10c0/703e4dc1e34b324aa66876d63618dcacb9ed49f7e7fe9b70f1e703645be8d640f68ab84f12b86df8ac960bac37acf5513e115de7c970940617ce0343c8c9cd96
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.8.1":
+  version: 2.9.0
+  resolution: "yaml@npm:2.9.0"
+  bin:
+    yaml: bin.mjs
+  checksum: 10c0/f340718df45e97a9551b9bf9dac61c80050bc464513b710debfb5067c380c8472e3b67809cffacb4ab5ffb5e66ef9310816c88b05f371cec60abfedd8c88e0a2
   languageName: node
   linkType: hard
 

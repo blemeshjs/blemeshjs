@@ -1,6 +1,5 @@
 {
   "title": "API",
-  "icon": "TrafficCone",
   "pages": [
     "index",
     "sdk",
