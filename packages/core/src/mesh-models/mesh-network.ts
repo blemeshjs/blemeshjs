@@ -571,7 +571,7 @@ export class MeshNetwork {
    * Returns whether the Node with given UUID is in the
    * mesh network.
    *
-   * @paarm uuid The Node's UUID to look for.
+   * @param uuid The Node's UUID to look for.
    * @returns `True` if the Node was found, `false` otherwise.
    */
   public containsNodeWithUuid(uuid: UUID): boolean {
