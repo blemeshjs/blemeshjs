@@ -19,7 +19,7 @@ export namespace Algorithm {
     }
   }
 
-  export function from(pdu: ProvisioningPdu) {
+  export function from(pdu: ProvisioningPdu): Algorithm | undefined {
     return isEnumCase(pdu[1], Algorithm) ? pdu[1] : undefined;
   }
 
