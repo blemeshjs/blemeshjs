@@ -105,7 +105,7 @@ export default function Home() {
 
       const lightState = () => {
         if (typeof light.state === "undefined") return "UNKNOWN";
-        return "light is " + light.state ? "ON" : "OFF";
+        return "light is " + (light.state ? "ON" : "OFF");
       };
 
       console.log(lightState());
