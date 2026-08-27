@@ -15,6 +15,15 @@ export class BindableTinyEmitter<
     return () => set.delete(fn);
   };
 
+  once = <K extends keyof E>(event: K, fn: E[K]): void => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const off = this.on(event, ((...args: any[]): void => {
+      off();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      fn(...args);
+    }) as E[K]);
+  };
+
   off = <K extends keyof E>(event: K, fn?: E[K]) => {
     if (fn) {
       this.listeners.get(event)?.delete(fn);
