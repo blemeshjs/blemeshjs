@@ -28,39 +28,11 @@ Use this when you want proof that your runtime is configured correctly.
 		yarn add @blemeshjs/sdk-web
 		```
 
-		```ts
-		import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-web";
-
-		const mesh = await createMesh({
-			meshNetworkManager: MeshNetworkManager.instance,
-		});
-
-		if (!mesh.isNetworkCreated) {
-			await mesh.createNewMeshNetwork();
-		}
-
-		await new Promise<void>((resolve, reject) => {
-			const offProxy = mesh.connection.on("scan:new-proxy", async (proxy) => {
-				try {
-					await mesh.connection.connect(proxy);
-					mesh.connection.stopScan();
-					offProxy();
-					offError();
-					resolve();
-				} catch (error) {
-					reject(error);
-				}
-			});
-
-			const offError = mesh.connection.on("ble:error", (error) => {
-				offProxy();
-				offError();
-				reject(error);
-			});
-
-			mesh.connection.scan({ timeout: 10_000, notifyOnWaitingForAdvertisements: true });
-		});
-		```
+		<FileCodeBlock
+			file="apps/docs/content/examples/first-success/web-connect.ts"
+			title="apps/docs/content/examples/first-success/web-connect.ts"
+			lang="ts"
+		/>
 	</Tab>
 
 	<Tab value="React Native">
@@ -71,13 +43,11 @@ Use this when you want proof that your runtime is configured correctly.
 			react-native-get-random-values
 		```
 
-		```ts
-		import { MeshNetworkManager, createMesh } from "@blemeshjs/sdk-react-native";
-
-		const mesh = await createMesh({
-			meshNetworkManager: MeshNetworkManager.instance,
-		});
-		```
+		<FileCodeBlock
+			file="apps/docs/content/examples/first-success/react-native-connect.ts"
+			title="apps/docs/content/examples/first-success/react-native-connect.ts"
+			lang="ts"
+		/>
 	</Tab>
 </Tabs>
 
@@ -86,6 +56,8 @@ Use this when you want proof that your runtime is configured correctly.
 	connection.
 </Callout>
 
+If you want a practical walkthrough before diving deeper, go to [Demo](/docs/demo).
+
 Next, you will want to either provision a new device or send your first model command.
 
 ## Choose your path
@@ -93,6 +65,7 @@ Next, you will want to either provision a new device or send your first model co
 | Area                      | What it gives you                                                                   | Best starting point             |
 | ------------------------- | ----------------------------------------------------------------------------------- | ------------------------------- |
 | Getting Started           | Install, runtime setup, and first connection                                        | [Setup Runtime](/docs/guides/setup-runtime) |
+| Demo                      | One practical end-to-end proof-of-concept workflow                                  | [Demo](/docs/demo) |
 | Core Concepts             | Node/element/model mental model and provisioning flow                               | [Core Concepts](/docs/concepts) |
 | Common Use Cases          | Provisioning and device control workflows                                           | [Guides](/docs/guides) |
 | Advanced / Edge Cases     | Custom runtime wiring and operational patterns                                      | [Advanced](/docs/advanced) |
