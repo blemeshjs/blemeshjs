@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(corepack yarn build)",
+      "Bash(corepack yarn test)",
+      "Bash(corepack yarn test:*)",
+      "Bash(corepack yarn lint:check)",
+      "Bash(corepack yarn lint)",
+      "Bash(corepack yarn format)",
+      "Bash(corepack yarn release:status)",
+      "Bash(corepack yarn workspace:*)",
+      "Bash(corepack yarn vitest:*)",
+      "Bash(corepack yarn changeset:*)",
+      "Bash(corepack yarn install)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git restore:*)",
+      "Bash(git stash list)",
+      "Bash(git worktree list)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(rg:*)",
+      "Bash(fd:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(corepack yarn release:publish)",
+      "Bash(corepack yarn release:version)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(corepack yarn release:publish:*)",
+      "Bash(npm publish:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/format-edited-file.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
