@@ -1,3 +1,4 @@
+import { ApplicationKey } from "@blemeshjs/core";
 import { useMesh } from "@/components/mesh-provider";
 import { MySafeAreaScrollView } from "@/components/my-safe-area-scroll-view";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
@@ -35,7 +36,7 @@ export default observer(function ModelBindAppKey() {
 
   // state
   const [alert, setAlert] = useImmer<null | Alert>(null);
-  const [selectedAppKey, setSelectedAppKey] = useImmer<string | null>(null);
+  const [selectedAppKey, setSelectedAppKey] = useImmer<ApplicationKey | null>(null);
 
   // actions
   const bindKey = useCallback(() => {
@@ -44,9 +45,9 @@ export default observer(function ModelBindAppKey() {
       title: "Status",
       message: "Binding application key...",
     });
-    const bindApplicationKey = model?.bindApplicationKey;
-    if (!bindApplicationKey) return;
-    bindApplicationKey(selectedAppKey)
+    if (!model) return;
+    model
+      .bindApplicationKey(selectedAppKey)
       .then(() => {
         setAlert(null);
         router.dismiss();
@@ -57,7 +58,7 @@ export default observer(function ModelBindAppKey() {
           message: err.message,
         });
       });
-  }, [router, selectedAppKey, setAlert, model?.bindApplicationKey]);
+  }, [router, selectedAppKey, setAlert, model]);
 
   // effects
   useEffect(() => {
@@ -85,7 +86,7 @@ export default observer(function ModelBindAppKey() {
         <ListGroup variant="secondary" className="mx-2">
           {model?.applicationKeys.map((appKey, idx, arr) => (
             <Fragment key={uint8ArrayToHex(appKey.key)}>
-              <ListGroup.Item onPress={() => setSelectedAppKey(appKey.name)}>
+              <ListGroup.Item onPress={() => setSelectedAppKey(appKey)}>
                 <ListGroup.ItemPrefix>
                   <StyledKeyIcon size={20} className="text-muted" />
                 </ListGroup.ItemPrefix>
@@ -95,7 +96,7 @@ export default observer(function ModelBindAppKey() {
                     {appKey.boundNetworkKey.name}
                   </ListGroup.ItemDescription>
                 </ListGroup.ItemContent>
-                {selectedAppKey === appKey.name && (
+                {selectedAppKey?.index === appKey.index && (
                   <ListGroup.ItemSuffix>
                     <StyledCheckIcon className="text-accent" />
                   </ListGroup.ItemSuffix>

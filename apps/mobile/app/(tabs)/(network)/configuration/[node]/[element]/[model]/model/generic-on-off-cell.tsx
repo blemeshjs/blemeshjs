@@ -1,7 +1,7 @@
 import { AppText } from "@/components/app-text";
 import { Alert } from "@/components/my-alert";
 import { GenericOnOff } from "@blemeshjs/sdk-react-native";
-import { RNModel } from "@blemeshjs/sdk-react-native/dist/src/model";
+import { MeshModel } from "@/components/mesh-provider";
 import { Button } from "heroui-native/button";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 import { View } from "react-native";
 
 type Props = {
-  model?: RNModel;
+  model?: MeshModel;
   setAlert: (alert: null | Alert) => void;
 };
 export function GenericOnOffCell({ model, setAlert }: Props) {
@@ -30,11 +30,13 @@ export function GenericOnOffCell({ model, setAlert }: Props) {
     });
     light
       ?.get()
-      .then((value) => {
-        setStatus(value.isOn ? "ON" : "OFF");
+      .then(() => {
+        // get() resolves once the status message arrives; the value lands on
+        // the extension's observable `state`.
+        setStatus(light.state ? "ON" : "OFF");
         setAlert(null);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         setAlert({
           title: "Error",
           message: error.message,
@@ -53,7 +55,7 @@ export function GenericOnOffCell({ model, setAlert }: Props) {
         acknowledged,
       })
       .then(() => setAlert(null))
-      .catch((error) => {
+      .catch((error: Error) => {
         setAlert({ title: "Error", message: error.message });
       });
   };

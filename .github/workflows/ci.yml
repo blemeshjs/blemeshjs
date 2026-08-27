@@ -53,6 +53,9 @@ jobs:
       - name: Type-check the web app
         run: yarn workspace web types:check
 
+      - name: Type-check the mobile app
+        run: yarn workspace mobile types:check
+
       - name: Verify the generated API reference is current
         run: |
           yarn workspace docs api:generate

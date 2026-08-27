@@ -1,7 +1,6 @@
 import { AppText } from "@/components/app-text";
-import { useMesh } from "@/components/mesh-provider";
+import { MeshNode, useMesh } from "@/components/mesh-provider";
 import { MySafeAreaScrollView } from "@/components/my-safe-area-scroll-view";
-import { RNNode } from "@blemeshjs/sdk-react-native";
 import { CompanyIdentifier } from "@blemeshjs/utils";
 import { useRouter } from "expo-router";
 import { ListGroup } from "heroui-native/list-group";
@@ -18,12 +17,12 @@ export default observer(function NetworkScreen() {
   // properties
   const mesh = useMesh();
   const router = useRouter();
-  const provisionerNode = mesh.allNodes.provisionerNode;
-  const configuredNodes = mesh.allNodes.configuredNodes;
-  const otherNodes = mesh.allNodes.notConfiguredNodes;
+  const provisionerNode = mesh.provisionerNode;
+  const configuredNodes = mesh.configuredNodes;
+  const otherNodes = mesh.notConfiguredNodes;
 
   const goToNode = useCallback(
-    (node: RNNode) => {
+    (node: MeshNode) => {
       const push = router.push;
       push(`/(tabs)/(network)/configuration/${node.uuid.uuidString}/node`);
     },

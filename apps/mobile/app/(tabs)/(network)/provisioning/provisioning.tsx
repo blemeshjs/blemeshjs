@@ -136,10 +136,42 @@ export default function ProvisioningScreen() {
     [setAlert],
   );
 
+  /**
+   * Provisioning failures used to arrive as a "provision:error" event. They
+   * now reject the call that caused them, so this is attached to those
+   * promises instead.
+   */
+  const onProvisionError = useCallback(
+    (error: unknown) => {
+      if (error instanceof MeshNetworkError) {
+        if (error === MeshNetworkError.nodeAlreadyExist) {
+          setAlert({
+            title: "Node already exist",
+            message:
+              "A node with the same UUID already exist in the network. Remove it before reprovisioning.",
+            completion: () => setAlert(null),
+          });
+          return;
+        }
+        setAlert({
+          title: "Error",
+          message: error.message,
+          completion: () => setAlert(null),
+        });
+        return;
+      }
+      setAlert({
+        title: "Error",
+        message: error instanceof Error ? error.message : String(error),
+        completion: () => setAlert(null),
+      });
+    },
+    [setAlert],
+  );
+
   const abort = useCallback(() => {
-    const disconnect = mesh.provision.disconnect;
-    disconnect();
-  }, [mesh.provision.disconnect]);
+    mesh.provision.disconnect().catch(onProvisionError);
+  }, [mesh.provision, onProvisionError]);
 
   const presentStatusDialog = useCallback(
     (message: string, completion?: () => void) => {
@@ -190,31 +222,6 @@ export default function ProvisioningScreen() {
     useCallback(() => {
       const bindAllEvents = mesh.provision.bindAllEvents;
       const off = bindAllEvents({
-        "provision:error": (error) => {
-          switch (true) {
-            case error instanceof MeshNetworkError:
-              switch (error) {
-                case MeshNetworkError.nodeAlreadyExist:
-                  setAlert({
-                    title: "Node already exist",
-                    message:
-                      "A node with the same UUID already exist in the network. Remove it before reprovisioning.",
-                    completion: () => {
-                      setAlert(null);
-                    },
-                  });
-                  return;
-                default:
-                  setAlert({
-                    title: "Error",
-                    message: error.message,
-                    completion: () => setAlert(null),
-                  });
-                  return;
-              }
-          }
-        },
-
         "provision:status": (status) => {
           switch (status) {
             case "identifying":
@@ -314,8 +321,7 @@ export default function ProvisioningScreen() {
       if (!mesh.provision.capabilitiesReceived && !isProvisioningComplete) {
         // We are now connected. Proceed by sending Provisioning Invite request.
         presentStatusDialog("Identifying...", () => {
-          const identify = mesh.provision.identify;
-          identify(attentionTimer);
+          mesh.provision.identify(attentionTimer).catch(onProvisionError);
         });
       }
     }, [

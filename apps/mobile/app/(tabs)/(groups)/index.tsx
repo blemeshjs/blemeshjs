@@ -9,7 +9,7 @@ export default function GroupsScreen() {
     <MySafeAreaView>
       <Card className="rounded-none">
         <Card.Body className="flex-row items-center gap-4 py-3">
-          <Avatar>
+          <Avatar alt="Groups">
             <Avatar.Fallback>
               <BoxesIcon size={24} color={mutedColor} />
             </Avatar.Fallback>

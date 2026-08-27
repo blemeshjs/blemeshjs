@@ -32,15 +32,14 @@ export default function ScannerScreen() {
 
   const startScanning = useCallback(() => {
     setScanning(true);
-    const scan = mesh.provision.scan;
-    scan({ waitForBleReady: true });
-  }, [mesh.provision.scan, setScanning]);
+    // Failures surface through the "ble:error" handler below.
+    mesh.provision.scan().catch(() => undefined);
+  }, [mesh.provision, setScanning]);
 
   const stopScanning = useCallback(() => {
     setScanning(false);
-    const stopScan = mesh.stopScan;
-    stopScan();
-  }, [mesh.stopScan, setScanning]);
+    void mesh.provision.stopScan();
+  }, [mesh.provision, setScanning]);
 
   useFocusEffect(
     useCallback(() => {
@@ -117,10 +116,6 @@ export default function ScannerScreen() {
               startScanning();
               break;
           }
-        },
-        "provision:error": (error) => {
-          setAlert(null);
-          setAlert({ title: "Error", message: error.message });
         },
       });
 
