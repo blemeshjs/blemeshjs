@@ -27,6 +27,7 @@ import { CoreMeshNetworkManager } from "./core-mesh-network-manager.js";
 import { DiscoveredProxyPeripheral, ProxyScanOptions, ScanError } from "../types";
 
 export type ConnectionStatus =
+  | "scanning"
   | "waiting-for-advertisements"
   | "connecting"
   | "discovering-services"
@@ -62,9 +63,15 @@ class CBCentralManagerHandlerAdapter implements Partial<CBCentralManagerHandler>
         }
       case CBCentralManagerState.poweredOff:
       case CBCentralManagerState.resetting:
-        this.$networkConnection.proxies.forEach((proxy) => {
-          proxy.close();
-        });
+        this.$networkConnection.proxies
+          .values()
+          .reduce<Promise<unknown>>(
+            (promise, proxy) => promise.then(() => proxy.close()),
+            Promise.resolve(),
+          )
+          .catch((error) => {
+            console.error("error closing proxy", error);
+          });
         this.$networkConnection.proxies.clear();
       default:
         break;
@@ -102,7 +109,12 @@ class CBCentralManagerHandlerAdapter implements Partial<CBCentralManagerHandler>
     const bearer = GattBearer.fromPeripheral(peripheral, centralManager);
     centralManager.bindAllEvents(bearer);
     bearer.centralManagerDidUpdateState(centralManager, centralManager.state);
-    this.$networkConnection.use(bearer);
+    this.$networkConnection.use(bearer).catch((error) => {
+      this.$networkConnection.emit(
+        "ble:error",
+        error instanceof Error ? error : new Error(String(error)),
+      );
+    });
   }
 }
 
@@ -357,7 +369,7 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
    *
    * @param bearer The GATT Bearer proxy to use.
    */
-  public use = (bearer: GattBearer) => {
+  public use = async (bearer: GattBearer) => {
     // Make sure we're not adding a duplicate.
     if (this.proxies.has(bearer.identifier.uuidString)) {
       return;
@@ -366,7 +378,7 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
     if (this.proxies.size >= NetworkConnection.maxConnections) {
       const proxies = Array.from(this.proxies.values());
       const last = proxies[proxies.length - 1];
-      last?.close();
+      await last?.close();
     }
     // Add new proxy.
     bearer.bindAllEvents(this.$bearerHandlerAdapter);
@@ -377,44 +389,34 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
     if (bearer.isOpen) {
       this.$bearerHandlerAdapter.bearerDidOpen(bearer);
     } else {
-      bearer.open();
+      await bearer.open();
     }
     // Is the limit reached?
     if (this.proxies.size >= NetworkConnection.maxConnections) {
-      this.centralManager
-        .stopScan()
-        .catch((error: Error) =>
-          this.logger?.d(LogCategory.bearer, `Error stopping scan: ${error.message}`),
-        );
+      await this.centralManager.stopScan();
     }
   };
 
-  public open = () => {
+  public open = async () => {
     if (
       !this.$isStarted &&
       this.isConnectionAutomatic &&
       this.centralManager.state === CBCentralManagerState.poweredOn
     ) {
       this.centralManager.bindAllEvents(this.$centralManagerHandlerAdapter);
-      this.centralManager
-        .scanForPeripherals([MeshProxyService.uuid.uuidString])
-        .catch((error: Error) =>
-          this.logger?.d(LogCategory.bearer, `Error opening connection: ${error.message}`),
-        );
+      await this.centralManager.scanForPeripherals([MeshProxyService.uuid.uuidString]);
     }
     this.$isStarted = true;
   };
 
-  public close = (): Error | void => {
+  public close = async () => {
     this.centralManager.unbindAllEvents(this.$centralManagerHandlerAdapter);
-    this.centralManager
-      .stopScan()
-      .catch((error: Error) =>
-        this.logger?.d(LogCategory.bearer, `Error stopping scan: ${error.message}`),
-      );
-    this.proxies.forEach((proxy) => {
-      proxy.close();
-    });
+    await this.centralManager.stopScan();
+    await this.proxies
+      .values()
+      .reduce<
+        Promise<unknown>
+      >((promise, proxy) => promise.then(() => proxy.close()), Promise.resolve());
     this.proxies.clear();
     this.$isStarted = false;
   };
@@ -431,79 +433,93 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
     );
   };
 
-  private performScan = ({ timeout, notifyOnWaitingForAdvertisements }: ProxyScanOptions) => {
-    this.$scanSubscription = this.centralManager.on(
-      "centralManagerDidDiscoverPeripheral",
-      (_central, peripheral, RSSI, advertisementData) => {
-        if (typeof advertisementData === "undefined") {
-          if (notifyOnWaitingForAdvertisements) {
+  private performScan = (options?: ProxyScanOptions): Promise<DiscoveredProxyPeripheral> => {
+    return new Promise<DiscoveredProxyPeripheral>((resolve, reject) => {
+      let settled = false;
+      this.$scanSubscription = this.centralManager.on(
+        "centralManagerDidDiscoverPeripheral",
+        (_central, peripheral, RSSI, advertisementData) => {
+          if (typeof advertisementData === "undefined") {
             this.emit("connection:status", "waiting-for-advertisements");
-          }
-          return;
-        }
-
-        // Is it a Network ID or Private Network Identity beacon?
-        const identity = networkIdentity(advertisementData);
-
-        if (identity !== null) {
-          if (!this.$coreMeshNetworkManager.meshNetwork?.matchesNetworkIdentity(identity)) {
-            // A Node from another mesh network.
             return;
           }
-        } else {
-          // Is it a Node Identity or Private Node Identity beacon?
-          const identity = nodeIdentity(advertisementData);
+
+          // Is it a Network ID or Private Network Identity beacon?
+          const identity = networkIdentity(advertisementData);
+
           if (identity !== null) {
-            if (!this.$coreMeshNetworkManager.meshNetwork?.matchesNodeIdentity(identity)) {
+            if (!this.$coreMeshNetworkManager.meshNetwork?.matchesNetworkIdentity(identity)) {
               // A Node from another mesh network.
               return;
             }
+          } else {
+            // Is it a Node Identity or Private Node Identity beacon?
+            const identity = nodeIdentity(advertisementData);
+            if (identity !== null) {
+              if (!this.$coreMeshNetworkManager.meshNetwork?.matchesNodeIdentity(identity)) {
+                // A Node from another mesh network.
+                return;
+              }
+            }
           }
-        }
 
-        const discoveredProxy = this.$discoveredProxies.get(peripheral.identifier.uuidString);
-        if (discoveredProxy) {
-          const newDiscoveredProxy: DiscoveredProxyPeripheral = {
-            ...discoveredProxy,
-            rssi: RSSI ?? 0,
-          };
-          this.$discoveredProxies.set(peripheral.identifier.uuidString, newDiscoveredProxy);
-          this.emit("scan:new-proxy", newDiscoveredProxy);
-        } else {
-          const bearer = GattBearer.fromPeripheral(peripheral, this.centralManager);
-          const discoveredPeripheral: DiscoveredProxyPeripheral = {
-            device: bearer,
-            rssi: RSSI ?? 0,
-          };
-          this.$discoveredProxies.set(peripheral.identifier.uuidString, discoveredPeripheral);
-          this.emit("scan:new-proxy", discoveredPeripheral);
-        }
-      },
-    );
+          const discoveredProxy = this.$discoveredProxies.get(peripheral.identifier.uuidString);
+          if (discoveredProxy) {
+            const newDiscoveredProxy: DiscoveredProxyPeripheral = {
+              ...discoveredProxy,
+              rssi: RSSI ?? 0,
+            };
+            this.$discoveredProxies.set(peripheral.identifier.uuidString, newDiscoveredProxy);
+            this.emit("scan:new-proxy", newDiscoveredProxy);
+            settled = true;
+            resolve(newDiscoveredProxy);
+          } else {
+            const bearer = GattBearer.fromPeripheral(peripheral, this.centralManager);
+            const discoveredPeripheral: DiscoveredProxyPeripheral = {
+              device: bearer,
+              rssi: RSSI ?? 0,
+            };
+            this.$discoveredProxies.set(peripheral.identifier.uuidString, discoveredPeripheral);
+            this.emit("scan:new-proxy", discoveredPeripheral);
+            settled = true;
+            resolve(discoveredPeripheral);
+          }
+        },
+      );
 
-    this.centralManager
-      .scanForPeripherals([MeshProxyService.uuid.fullUuidString])
-      .catch((error) => {
-        this.$clearScan();
-        this.emit("ble:error", error instanceof Error ? error : new Error(String(error)));
-      });
+      this.status = "scanning";
+      this.centralManager
+        .scanForPeripherals([MeshProxyService.uuid.fullUuidString])
+        .catch((error) => {
+          this.$clearScan();
+          const normalizedError = error instanceof Error ? error : new Error(String(error));
+          this.emit("ble:error", normalizedError);
+          if (settled) return;
+          reject(normalizedError);
+        });
 
-    if (timeout) {
-      this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
-        this.stopScan();
-        this.emit("ble:error", ScanError.ScanTimeout);
-      });
-    }
+      if (options?.timeout) {
+        this.$scanTimer = new BackgroundTimer(options.timeout / 1000, false, () => {
+          this.stopScan().catch((error) => {
+            console.error("error stopping scan", error);
+          });
+          this.emit("ble:error", ScanError.ScanTimeout);
+          if (settled) return;
+          reject(ScanError.ScanTimeout);
+        });
+      }
+    });
   };
 
-  public scan = (options: ProxyScanOptions) => {
-    this.stopScan();
+  public scan = async (options?: ProxyScanOptions) => {
+    await this.stopScan();
 
-    if (this.centralManager.state === CBCentralManagerState.poweredOn) {
-      this.performScan(options);
-    } else {
+    if (this.centralManager.state !== CBCentralManagerState.poweredOn) {
       this.emit("ble:error", ScanError.BleUnready);
+      throw ScanError.BleUnready;
     }
+
+    return this.performScan(options);
   };
 
   private $clearScan = () => {
@@ -514,57 +530,21 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
     this.$scanTimer = undefined;
   };
 
-  public stopScan = () => {
+  public stopScan = async () => {
     this.$clearScan();
-    this.centralManager
-      .stopScan()
-      .catch((error) =>
-        this.emit("ble:error", error instanceof Error ? error : new Error(String(error))),
-      );
+    await this.centralManager.stopScan();
     this.status = "disconnected";
   };
 
-  public connect = (proxy: DiscoveredProxyPeripheral) => {
-    return new Promise<void>((resolve, reject) => {
-      this.stopScan();
-      const bearer = proxy.device;
-      bearer.logger = this.logger;
-      if (hasMixin(bearer, GattBearer)) {
-        this.centralManager.bindAllEvents(bearer);
-        proxy.device.centralManagerDidUpdateState(this.centralManager, this.centralManager.state);
-      }
-      this.status = "connecting";
-      const offAll = () => {
-        cbSub();
-        bearerSub();
-      };
+  public connect = async (proxy: DiscoveredProxyPeripheral) => {
+    await this.stopScan();
+    const bearer = proxy.device;
+    bearer.logger = this.logger;
+    if (hasMixin(bearer, GattBearer)) {
+      this.centralManager.bindAllEvents(bearer);
+    }
+    this.status = "connecting";
 
-      const bearerSub = this.bindAllEvents({
-        bearerDidOpen: () => {
-          resolve();
-          offAll();
-        },
-        bearerDidClose: (_bearer, error) => {
-          reject(error ?? new Error("Connection closed by remote device."));
-          offAll();
-        },
-      });
-
-      const cbSub = this.centralManager.bindAllEvents({
-        centralManagerDidFailConnect: (_central, peripheral, error) => {
-          if (peripheral.equal(proxy.device)) {
-            reject(error ?? new Error("Connection failed."));
-            offAll();
-          }
-        },
-        centralManagerDidDisconnectPeripheral(_central, peripheral, error) {
-          if (peripheral.equal(proxy.device)) {
-            reject(error ?? new Error("Disconnected by remote device."));
-            offAll();
-          }
-        },
-      });
-      this.use(bearer);
-    });
+    await this.use(bearer);
   };
 }

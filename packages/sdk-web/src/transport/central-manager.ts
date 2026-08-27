@@ -134,30 +134,21 @@ export class WebCBCentralManager extends CBCentralManager {
 
   async connect(peripheral: CBPeripheral) {
     if (!(peripheral instanceof WebCBPeripheral)) {
-      const error = new Error("Unsupported peripheral implementation for WebCBCentralManager");
-      this.emit("centralManagerDidFailConnect", this, peripheral, error);
-      throw error;
+      throw new Error("Unsupported peripheral implementation for WebCBCentralManager");
     }
 
-    return peripheral
-      .connect()
-      .then(() => {
-        this.activeConnections.add(peripheral.identifier.uuidString);
+    return peripheral.connect().then(() => {
+      this.activeConnections.add(peripheral.identifier.uuidString);
 
-        const device = peripheral.device;
-        const onDisconnected = () => {
-          this.activeConnections.delete(peripheral.identifier.uuidString);
-          device.removeEventListener("gattserverdisconnected", onDisconnected);
-          this.emit("centralManagerDidDisconnectPeripheral", this, peripheral);
-        };
+      const device = peripheral.device;
+      const onDisconnected = () => {
+        this.activeConnections.delete(peripheral.identifier.uuidString);
+        device.removeEventListener("gattserverdisconnected", onDisconnected);
+        this.emit("centralManagerDidDisconnectPeripheral", this, peripheral);
+      };
 
-        device.addEventListener("gattserverdisconnected", onDisconnected);
-        this.emit("centralManagerDidConnect", this, peripheral);
-      })
-      .catch((error: Error) => {
-        this.emit("centralManagerDidFailConnect", this, peripheral, error);
-        throw error;
-      });
+      device.addEventListener("gattserverdisconnected", onDisconnected);
+    });
   }
 
   cancelPeripheralConnection(peripheral: CBPeripheral) {
