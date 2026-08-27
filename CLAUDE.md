@@ -77,6 +77,35 @@ module surface (see
 
 When fixing a bug, verify the test fails without the fix before committing it.
 
+## Adding a model extension
+
+The road to 1.0 is Generic Level, Lighting (Lightness / CTL / HSL) and Sensor.
+Every `SigModelId` already exists in `packages/utils/src/enums/sig-model-id.ts`;
+what is missing is the messages and the developer-facing extension. Each model
+is one PR, built in this order:
+
+1. **Messages** in `packages/core/src/mesh-messages/<group>/` — one class per
+   opcode (`...Get`, `...Set`, `...Status`), mirroring
+   `mesh-messages/generic/generic-on-off-*.ts`. Export them from that
+   directory's `index.ts`.
+2. **PDU round-trip tests** in `packages/core/tests/`, using the vectors in the
+   Bluetooth Mesh Model Specification. Encode a known message, compare bytes;
+   decode known bytes, compare fields.
+3. **The extension** in `packages/sdk/src/model-extensions/<model>.ts`, built
+   with `Object.assign` over a `makeObservable` state bag, exactly like
+   `generic-on-off.ts`. Observable state, a `get()` that resolves when the
+   status arrives, and a `set()` taking `{ acknowledged }`. Export it from
+   `model-extensions/index.ts`.
+4. **Extension tests** beside it, following `generic-on-off.spec.ts`.
+5. **A changeset**, then regenerate the API reference.
+
+Reach a model from an element with `element.models.find(...)` and attach the
+extension with `model.use(TheExtension)`. `get()` resolves `void`; read the
+value from the extension's observable state afterwards.
+
+Do not add a model to `packages/sdk` without the `core` messages underneath it —
+transport and protocol concerns stay in `core`.
+
 ## Conventions
 
 - No `any` in public API surfaces. `@ts-expect-error` is acceptable where a
