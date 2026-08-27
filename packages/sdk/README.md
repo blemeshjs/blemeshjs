@@ -28,7 +28,7 @@ mesh.init(myCentralManager, myStorage);
 await mesh.setup();
 ```
 
-If you're on the web or React Native, you'll usually skip the manual `init` and use the platform package's `createMesh()` / `createRNMesh()` helper instead — they handle the wiring for you.
+If you're on the web or React Native, you'll usually skip the manual `init` and use the platform package's `createMesh()` helper instead — they handle the wiring for you.
 
 ## What you get
 

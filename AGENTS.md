@@ -14,8 +14,8 @@
 - `packages/core`: bearer, provisioning, mesh messages, and lower-level mesh layers.
 - `packages/pro`: private higher-level package built on `core` and `utils`.
 - `packages/sdk`: higher-level SDK surface including `MeshNetworkManager`, mesh models, model extensions, and network helpers.
-- `packages/sdk-web`: web transport and browser storage; exports `createBrowserMesh(...)`.
-- `packages/sdk-react-native`: React Native transport and storage; exports `createRNMesh()`.
+- `packages/sdk-web`: web transport and browser storage; exports `createMesh(...)`.
+- `packages/sdk-react-native`: React Native transport and storage; exports `createMesh(...)`.
 - `packages/sdk-pro`: private SDK layer that re-exports `@blemeshjs/sdk` plus pro-specific types/models.
 
 ## App Map

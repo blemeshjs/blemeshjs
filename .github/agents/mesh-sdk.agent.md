@@ -10,7 +10,7 @@ description: >-
 tools: ['read', 'edit', 'search', 'execute', 'todo', 'insert_edit_into_file', 'replace_string_in_file', 'create_file', 'apply_patch', 'get_terminal_output', 'show_content', 'open_file', 'run_in_terminal', 'get_errors', 'list_dir', 'read_file', 'file_search', 'grep_search', 'validate_cves', 'run_subagent']
 argument-hint: >-
   Describe a focused SDK task (for example: 'fix MeshNetworkManager typing',
-  'update createBrowserMesh()', 'refactor RN transport init', or 'add a model
+  'update createMesh()', 'refactor RN transport init', or 'add a model
   extension test')
 ---
 You are a senior TypeScript engineer working on a cross-platform Bluetooth Mesh SDK (blemeshjs).
@@ -29,11 +29,11 @@ The public SDK surface is centered on `MeshNetworkManager` and platform setup he
 
 ```ts
 import { MeshNetworkManager } from "@blemeshjs/sdk"
-import { createBrowserMesh } from "@blemeshjs/sdk-web"
-import { createRNMesh } from "@blemeshjs/sdk-react-native"
+import { createMesh as createBrowserMesh } from "@blemeshjs/sdk-web"
+import { createMesh as createNativeMesh } from "@blemeshjs/sdk-react-native"
 
-const browserMesh = await createBrowserMesh(MeshNetworkManager.instance)
-const nativeMesh = await createRNMesh()
+const browserMesh = await createBrowserMesh({ meshNetworkManager: MeshNetworkManager.instance })
+const nativeMesh = await createNativeMesh()
 ```
 
 Relevant exported areas include:

@@ -24,7 +24,7 @@ You'll need the usual React Native / Expo toolchain installed (Xcode, Android St
 
 ## What it shows
 
-- Initializing the SDK with `createRNMesh()`.
+- Initializing the SDK with `createMesh()`.
 - Hooking the SDK lifecycle into a React Native app.
 - Talking to a BLE Mesh device over `react-native-ble-plx`.
 

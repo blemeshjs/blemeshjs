@@ -132,7 +132,7 @@ Use concise comments directly on exported declarations.
  * @remarks
  * Call this once during application startup and reuse the returned manager for later scans and connections.
  */
-export async function createBrowserMesh(...) {
+export async function createMesh(...) {
   // ...
 }
 \`\`\`
