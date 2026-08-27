@@ -203,9 +203,7 @@ export namespace ProvisioningRequest {
   }
 
   export function fromProvisioningPdu(pdu: Uint8Array): ProvisioningRequest | ProvisioningError {
-    const type = isEnumCase(pdu[0], ProvisioningPduType)
-      ? (pdu[0] as ProvisioningPduType)
-      : undefined;
+    const type = isEnumCase(pdu[0], ProvisioningPduType) ? pdu[0] : undefined;
     switch (type) {
       case ProvisioningPduType.invite:
         return { type, attentionTimer: pdu[1] };

@@ -399,7 +399,7 @@ describe("PDUs", () => {
 
     let networkPdu0 = NetworkPdu.encode(segment0, PduType.networkPdu, sequence, 4);
     expect(networkPdu0).not.instanceof(Error);
-    networkPdu0 = networkPdu0 as NetworkPdu;
+    networkPdu0 = networkPdu0;
     expect(networkPdu0.sequence).toBe(sequence);
     expect(networkPdu0.source).toBe(source);
     expect(networkPdu0.destination).toBe(destination.address);
@@ -413,7 +413,7 @@ describe("PDUs", () => {
     let networkPdu1 = NetworkPdu.encode(segment1, PduType.networkPdu, sequence + 1, 4);
 
     expect(networkPdu1).not.instanceof(Error);
-    networkPdu1 = networkPdu1 as NetworkPdu;
+    networkPdu1 = networkPdu1;
     expect(networkPdu1.sequence).toBe(sequence + 1);
     expect(networkPdu1.source).toBe(source);
     expect(networkPdu1.destination).toBe(destination.address);
