@@ -122,7 +122,7 @@ export class TransitionTime {
     }
   }
   public static fromRawValue(rawValue: UInt8) {
-    return new TransitionTime(rawValue & 0x3f, (rawValue >> 6) as StepResolution);
+    return new TransitionTime(rawValue & 0x3f, rawValue >> 6);
   }
   /**
    * Returns this Transition Time value, if it's known, or
