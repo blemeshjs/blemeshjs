@@ -216,7 +216,6 @@ export abstract class CBPeripheralHandler {
    *
    * @param peripheral - The peripheral containing the characteristic.
    * @param characteristic - The characteristic whose value was updated.
-   * @param error - Optional error if the read failed.
    */
   abstract didUpdateValueForCharacteristic(
     peripheral: CBPeripheral,
