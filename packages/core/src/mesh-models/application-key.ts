@@ -101,7 +101,9 @@ export class ApplicationKey extends Key {
     if (!index.isValidKeyIndex) {
       return MeshNetworkError.keyIndexOutOfRange;
     }
-    return new ApplicationKey(name, index, key, networkKey.index);
+    const appKey = new ApplicationKey(name, index, key, networkKey.index);
+    appKey.regenerateKeyDerivatives();
+    return appKey;
   }
   private regenerateKeyDerivatives() {
     this.aid = Crypto.calculateAid(this.key);

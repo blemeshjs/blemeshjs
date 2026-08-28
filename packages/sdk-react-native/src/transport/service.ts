@@ -31,12 +31,19 @@ export class RNCBService extends CBService {
     return this.uuid.equals(MeshProxyService.uuid);
   }
 
-  public async discoverCharacteristics(characteristicUUIDs?: string[]): Promise<void> {
+  public async discoverCharacteristics(
+    characteristicUUIDs?: CBUUID[],
+  ): Promise<CBCharacteristic[]> {
     return this._nativeService.characteristics().then((chars) => {
-      chars.forEach((char) => {
-        if (characteristicUUIDs && !characteristicUUIDs.includes(char.uuid)) return;
-        this.characteristics.push(new RNCBCharacteristic(char, this.uuid));
-      });
+      this.characteristics = chars
+        .map((char) => new RNCBCharacteristic(char, this.uuid))
+        .filter(
+          (char) =>
+            typeof characteristicUUIDs === "undefined" ||
+            characteristicUUIDs.length === 0 ||
+            characteristicUUIDs.some((uuid) => uuid.equals(char.uuid)),
+        );
+      return this.characteristics;
     });
   }
 

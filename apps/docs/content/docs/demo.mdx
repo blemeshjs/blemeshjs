@@ -1,0 +1,95 @@
+---
+title: Demo
+description: Provisioner-node control simulation inspired by nRF Mesh app workflows.
+icon: CirclePlay
+---
+
+# Demo
+
+## Overview
+
+This demo is interaction-first and runs fully in-page.
+
+It simulates control from the local provisioner node in the mesh network, similar to how the iOS nRF Mesh app treats the provisioner as the source of control intent.
+
+## Requirements
+
+Before running this demo, you need:
+
+- A modern browser that can run this docs site.
+- No Bluetooth device and no scan flow.
+
+<Callout title="✅ No Bluetooth required">
+  This panel intentionally avoids live scanning and GATT proxy connection. It focuses on mesh
+  runtime setup and provisioner-driven control simulation.
+</Callout>
+
+<Callout title="ℹ️ Why this approach">
+  This gives fast, deterministic feedback for learning and onboarding before you move to live
+  bearer/scan testing.
+</Callout>
+
+## Interactive Demo / Demo UI
+
+Try this exact interaction order:
+
+1. `Initialize Offline Mesh`
+2. `Load Provisioner Node`
+3. Choose a target (nRF-style target picker)
+4. `Simulate Get` or `Send Simulated Set`
+
+Use `Reset Demo` to repeat the flow.
+
+
+## Real-World Use Cases This Maps To
+
+- Field diagnostics.
+- Installer validation.
+- QA smoke test.
+- Operations triage.
+
+The interaction model here is: initialize -> load provisioner -> target -> control intent -> logs.
+
+## Minimal Example
+
+```ts
+import { createMesh, MeshNetworkManager } from "@blemeshjs/sdk-web";
+
+const mesh = await createMesh({ meshNetworkManager: MeshNetworkManager.instance });
+if (!mesh.isNetworkCreated) {
+  await mesh.createNewMeshNetwork();
+}
+
+const provisioner = mesh.provisionerNode;
+console.log(provisioner?.uuid.uuidString, provisioner?.primaryUnicastAddress?.hex);
+```
+
+## Troubleshooting
+
+| Problem | What to check | Typical fix |
+| --- | --- | --- |
+| Provisioner node missing | Mesh network initialization state | Re-run `Initialize Offline Mesh` |
+| Control buttons disabled | Provisioner not loaded | Click `Load Provisioner Node` |
+| Unexpected simulated state | Wrong selected target | Re-select target and send again |
+| Need to test real transport | Simulation-only panel | Move to runtime + live scan guide |
+
+For broader failure handling patterns, see [Troubleshooting](/docs/troubleshooting).
+
+## What This Demo Proves
+
+This demo proves that:
+
+- The SDK has a simple entry point.
+- The provisioner node is available as the default local control source.
+- nRF-style target and model control intent can be demonstrated clearly.
+- Logs and errors are visible to the developer.
+
+## What This Demo Does Not Prove Yet
+
+This demo does not fully prove:
+
+- Real bearer transport behavior.
+- Device discovery and proxy connection behavior.
+- RF conditions and over-the-air reliability.
+
+Next, you will want to continue with [Setup Runtime](/docs/guides/setup-runtime), then [Control Device](/docs/guides/control-device), and use [API Reference](/docs/api) for exact signatures.

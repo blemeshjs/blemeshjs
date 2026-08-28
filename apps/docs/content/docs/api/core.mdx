@@ -290,7 +290,7 @@ enum AuthenticationMethodType {
 
 **Kind:** Class
 
-**Source:** `packages/core/src/bearer/gatt/base-gatt-proxy-bearer.ts#L34`
+**Source:** `packages/core/src/bearer/gatt/base-gatt-proxy-bearer.ts#L33`
 
 
 Base implementation for GATT Proxy bearer.
@@ -315,6 +315,7 @@ class BaseGattProxyBearer<Service> extends Bearer<this> & BindableTinyEmitter<Ga
 | `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn: GattBearerHandler[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
 | `isOpen` | `unknown` | No description yet. |
@@ -322,23 +323,16 @@ class BaseGattProxyBearer<Service> extends Bearer<this> & BindableTinyEmitter<Ga
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
 | `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
-| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
-| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(_central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
 | `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
-| `close` | `close(): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
 | `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
-| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
-| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
-| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
 | `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
-| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
-| `open` | `open(): void;` | No description yet. |
-| `readRSSI` | `readRSSI(): void;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_peripheral: CBPeripheral, characteristic: CBCharacteristic): void;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `readRSSI` | `readRSSI(): Promise<number> \| undefined;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 
 ### Bearer
@@ -367,14 +361,15 @@ class Bearer extends BindableTinyEmitter<BearerHandler<Bearer> & BearerDataHandl
 | `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `close` | `close(): void \| Error;` | No description yet. |
-| `open` | `open(): void \| Error;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 
 ### BearerDataHandler
@@ -1287,29 +1282,23 @@ class GattBearer extends BaseGattProxyBearer<typeof MeshProxyService, this> & Me
 | `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn: GattBearerHandler[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
 | `name` | `unknown` | No description yet. |
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
 | `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
-| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
-| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(_central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
 | `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
-| `close` | `close(): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
 | `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
-| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
-| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
-| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
 | `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
-| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
-| `open` | `open(): void;` | No description yet. |
-| `readRSSI` | `readRSSI(): void;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_peripheral: CBPeripheral, characteristic: CBCharacteristic): void;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `readRSSI` | `readRSSI(): Promise<number> \| undefined;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 | `fromPeripheral` | `fromPeripheral(peripheral: CBPeripheral, centralManager: CBCentralManager): GattBearer;` | No description yet. |
 
@@ -1732,14 +1721,15 @@ class MeshBearer extends Bearer
 | `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `close` | `close(): void \| Error;` | No description yet. |
-| `open` | `open(): void \| Error;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 
 ### MeshData
@@ -1893,6 +1883,7 @@ class MeshNetworkManager<MD, MN> extends BindableTinyEmitter<AttentionTimerHandl
 | `networkParameters` | `NetworkParameters` | Network parameters. |
 | `off` | `(event: K, fn?: (AttentionTimerHandler & MeshNetworkHandler)[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (AttentionTimerHandler & MeshNetworkHandler)[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (AttentionTimerHandler & MeshNetworkHandler)[K]) => void` | No description yet. |
 | `proxyFilter` | `ProxyFilter` | The Proxy Filter state. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 | `isNetworkCreated` | `unknown` | No description yet. |
@@ -2625,30 +2616,24 @@ class PBGattBearer extends BaseGattProxyBearer<typeof MeshProvisioningService, t
 | `logger` | `LoggerHandler` | The logger receives logs sent from the bearer. The logs will contain raw data of sent and received packets, as well as connection events. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn?: GattBearerHandler[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void & (event: K, fn: GattBearerHandler[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void & (event: K, fn: GattBearerHandler[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void & (handler: Partial<E>) => void` | No description yet. |
 | `name` | `unknown` | No description yet. |
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `centralManagerDidConnect` | `centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral): void;` | No description yet. |
 | `centralManagerDidDisconnectPeripheral` | `centralManagerDidDisconnectPeripheral(_: CBCentralManager, peripheral: CBPeripheral, error?: Error): void;` | No description yet. |
-| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
-| `centralManagerDidFailConnect` | `centralManagerDidFailConnect(central: CBCentralManager, peripheral: CBPeripheral, error: Error): void;` | No description yet. |
+| `centralManagerDidDiscoverPeripheral` | `centralManagerDidDiscoverPeripheral(_central: CBCentralManager, peripheral: CBPeripheral, rssi?: number, _advertisementData?: unknown): void;` | No description yet. |
 | `centralManagerDidUpdateState` | `centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState): void;` | No description yet. |
-| `close` | `close(): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
 | `didDisconnect` | `didDisconnect(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didDiscoverCharacteristicsForService` | `didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error): void;` | No description yet. |
-| `didDiscoverServices` | `didDiscoverServices(peripheral: CBPeripheral, _?: Error): void;` | No description yet. |
-| `didReadRSSI` | `didReadRSSI(_: CBPeripheral, RSSI: Long, __?: Error): void;` | No description yet. |
-| `didUpdateNotificationStateForCharacteristic` | `didUpdateNotificationStateForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, __?: Error): void;` | No description yet. |
 | `didUpdateState` | `didUpdateState(_peripheral: CBPeripheral): void;` | No description yet. |
-| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_: CBPeripheral, characteristic: CBCharacteristic, error: Error): void;` | No description yet. |
-| `didWriteValueForCharacteristic` | `didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic, ___?: Error): void;` | No description yet. |
-| `open` | `open(): void;` | No description yet. |
-| `readRSSI` | `readRSSI(): void;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
-| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): void;` | No description yet. |
+| `didUpdateValueForCharacteristic` | `didUpdateValueForCharacteristic(_peripheral: CBPeripheral, characteristic: CBCharacteristic): void;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `readRSSI` | `readRSSI(): Promise<number> \| undefined;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
+| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 | `fromPeripheral` | `fromPeripheral(peripheral: CBPeripheral, centralManager: CBCentralManager): PBGattBearer;` | No description yet. |
 
@@ -2876,15 +2861,16 @@ class ProvisioningBearer extends Bearer
 | `isOpen` | `boolean` | This property returns `true` if the Bearer is open, otherwise `false`. |
 | `off` | `(event: K, fn?: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: (BearerHandler<Bearer> & BearerDataHandler<Bearer>)[K]) => void` | No description yet. |
 | `supportedPduTypes` | `PduTypes[]` | Returns the PDU types supported by this bearer. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `close` | `close(): void \| Error;` | No description yet. |
-| `open` | `open(): void \| Error;` | No description yet. |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
-| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): void;` | No description yet. |
+| `close` | `close(): Promise<void>;` | No description yet. |
+| `open` | `open(): Promise<void>;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
+| `sendProvisioningRequest` | `sendProvisioningRequest(request: ProvisioningRequest): Promise<void>;` | No description yet. |
 | `supports` | `supports(pduType: PduType): boolean;` | No description yet. |
 
 ### ProvisioningCapabilities
@@ -2983,6 +2969,7 @@ class ProvisioningManager extends BindableTinyEmitter<ProvisioningHandler> imple
 | `networkKey` | `NetworkKey` | The Network Key to be sent to the device during provisioning. Setting this property is mandatory before calling `provision()`. |
 | `off` | `(event: K, fn?: ProvisioningHandler[K]) => void` | No description yet. |
 | `on` | `(event: K, fn: ProvisioningHandler[K]) => () => void` | No description yet. |
+| `once` | `(event: K, fn: ProvisioningHandler[K]) => void` | No description yet. |
 | `unbindAllEvents` | `(handler: Partial<E>) => void` | No description yet. |
 | `unicastAddress` | `Address` | The Unicast Address that will be assigned to the device. After device capabilities are received, the address is automatically set to the first available unicast address from Provisioner's range. |
 | `isDeviceSupported` | `unknown` | No description yet. |
@@ -2997,9 +2984,9 @@ class ProvisioningManager extends BindableTinyEmitter<ProvisioningHandler> imple
 | `bearerDidClose` | `bearerDidClose(_bearer: Bearer, _error?: Error): void;` | No description yet. |
 | `bearerDidDeliverData` | `bearerDidDeliverData(_bearer: Bearer, data: Data, _type: PduType): void;` | No description yet. |
 | `bearerDidOpen` | `bearerDidOpen(_bearer: Bearer): void;` | No description yet. |
-| `identify` | `identify(attentionTimer: number): void \| ProvisioningError \| BearerError;` | No description yet. |
+| `identify` | `identify(attentionTimer: number): Promise<void>;` | No description yet. |
 | `obtainAuthValue` | `obtainAuthValue(): void;` | No description yet. |
-| `provision` | `provision(algorithm: Algorithm, publicKey: PublicKey, authenticationMethod: AuthenticationMethod): ProvisioningError \| BearerError \| undefined;` | No description yet. |
+| `provision` | `provision(algorithm: Algorithm, publicKey: PublicKey, authenticationMethod: AuthenticationMethod): Promise<void>;` | No description yet. |
 | `reset` | `reset(): void;` | No description yet. |
 
 ### ProvisioningState
@@ -3413,7 +3400,7 @@ class Transmitter
 #### Methods
 | Name | Signature | Description |
 | --- | --- | --- |
-| `send` | `send(data: Data, type: PduType): void;` | No description yet. |
+| `send` | `send(data: Data, type: PduType): Promise<void>;` | No description yet. |
 
 ### UnknownNode
 

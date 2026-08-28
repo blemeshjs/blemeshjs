@@ -32,3 +32,6 @@ packages/pro
 packages/sdk-pro
 
 .env
+
+# macOS
+.DS_Store

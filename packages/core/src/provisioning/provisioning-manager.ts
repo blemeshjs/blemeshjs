@@ -580,13 +580,13 @@ export class ProvisioningManager
       this.provisioningCapabilities === undefined
     ) {
       this.logger?.e(LogCategory.provisioning, "Provisioning manager is in invalid state");
-      return ProvisioningError.invalidState;
+      throw ProvisioningError.invalidState;
     }
 
     // Can the Unprovisioned Device be provisioned by this manager?
     if (!this.isDeviceSupported) {
       this.logger?.e(LogCategory.provisioning, "Device not supported");
-      return ProvisioningError.unsupportedDevice;
+      throw ProvisioningError.unsupportedDevice;
     }
 
     // Was the Unicast Address specified?
@@ -596,19 +596,19 @@ export class ProvisioningManager
 
     if (this.unicastAddress === undefined) {
       this.logger?.e(LogCategory.provisioning, "Unicast Address not specified");
-      return ProvisioningError.addressNotSpecified;
+      throw ProvisioningError.addressNotSpecified;
     }
 
     // Ensure the Network Key is set.
     if (this.networkKey === undefined) {
       this.logger?.e(LogCategory.provisioning, "Network Key not specified");
-      return ProvisioningError.networkKeyNotSpecified;
+      throw ProvisioningError.networkKeyNotSpecified;
     }
 
     // Is the Bearer open?
     if (!this.bearer.isOpen) {
       this.logger?.e(LogCategory.provisioning, "Bearer closed");
-      return BearerError.bearerClosed;
+      throw BearerError.bearerClosed;
     }
 
     // Try generating Private and Public Keys. This may fail if the given

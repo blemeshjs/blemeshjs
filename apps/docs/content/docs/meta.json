@@ -1,6 +1,7 @@
 {
   "pages": [
     "index",
+    "demo",
     "concepts",
     "guides",
     "advanced",

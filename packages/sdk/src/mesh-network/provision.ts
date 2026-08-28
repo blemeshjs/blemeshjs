@@ -1,8 +1,8 @@
 import { Address, BackgroundTimer, BindableTinyEmitter } from "@blemeshjs/utils";
 import {
+  DiscoveredProxyPeripheral,
   DiscoveredUnprovisionedPeripheral,
   ProvisionScanOptions,
-  ProxyScanOptions,
   ScanError,
 } from "../types";
 import {
@@ -19,12 +19,12 @@ import {
   PublicKey,
   UnprovisionedDevice,
   unprovisionedDeviceUUID,
+  GattBearer,
 } from "@blemeshjs/core";
 import { hasMixin } from "ts-mixer";
 import { Crypto } from "@blemeshjs/crypto";
 import { CBCentralManager, CBCentralManagerState, MeshProvisioningService } from "@blemeshjs/utils";
 import { CoreMeshNetworkManager } from "./core-mesh-network-manager";
-import { MeshNetworkManagerError } from "../types/mesh-network-manager";
 
 type ProvisionStatus =
   | "waiting-for-advertisements"
@@ -36,11 +36,11 @@ type ProvisionStatus =
   | "provisioning"
   | "identifying"
   | "capabilities-received"
+  | "failed"
   | "complete";
 
 type RNProvisionEvents = {
   "provision:status": (status: ProvisionStatus, error?: Error) => void;
-  "provision:error": (error: Error) => void;
   "ble:error": (error: Error) => void;
   "provision:capabilities-received": (capabilities: ProvisioningCapabilities) => void;
   "scan:new-peripheral": (discoveredPeripheral: DiscoveredUnprovisionedPeripheral) => void;
@@ -75,11 +75,9 @@ class RNProvisioningHandler implements ProvisioningHandler {
         break;
       case ProvisioningStateType.complete:
         this.$provisioningManager.emit("provision:status", "complete");
-        this.$provisioningManager.disconnect();
         break;
       case ProvisioningStateType.failed:
-        this.$provisioningManager.emit("provision:error", state.error);
-        this.$provisioningManager.disconnect();
+        this.$provisioningManager.emit("provision:status", "failed", state.error);
         break;
     }
   }
@@ -171,96 +169,108 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     super();
   }
 
-  private performScan = ({ timeout, notifyOnWaitingForAdvertisements }: ProvisionScanOptions) => {
-    this.$scanSubscription = this.centralManager.on(
-      "centralManagerDidDiscoverPeripheral",
-      (central, peripheral, RSSI, advertisementData) => {
-        if (typeof advertisementData === "undefined") {
-          if (notifyOnWaitingForAdvertisements) {
+  private performScan = (options?: ProvisionScanOptions) => {
+    return new Promise<DiscoveredUnprovisionedPeripheral>((resolve, reject) => {
+      let settled = false;
+      this.$scanSubscription = this.centralManager.on(
+        "centralManagerDidDiscoverPeripheral",
+        (central, peripheral, RSSI, advertisementData) => {
+          if (typeof advertisementData === "undefined") {
             this.emit("provision:status", "waiting-for-advertisements");
+            return;
           }
-          return;
-        }
-        // TODO: parse advertisement data to check if it contains Mesh Provisioning Service UUID or Mesh Proxy Service UUID for Remote Provisioning.
-        // Ignore all packets without Unprovisioned Device UUID.
-        const uuid = unprovisionedDeviceUUID(advertisementData);
-        if (!uuid) return;
-        // Check if a device with the same UUID was already scanned before.
-        if (this.$discoveredPeripherals.has(uuid.uuidString)) {
-          // Update the device name.
-          // The name is only available when the device is advertising using
-          // Service Data and Local Name ADs.
-          const discoveredPeripheral = this.$discoveredPeripherals.get(uuid.uuidString)!;
-          if (discoveredPeripheral.device) {
-            discoveredPeripheral.device.name = peripheral.name;
-          }
+          // TODO: parse advertisement data to check if it contains Mesh Provisioning Service UUID or Mesh Proxy Service UUID for Remote Provisioning.
+          // Ignore all packets without Unprovisioned Device UUID.
+          const uuid = unprovisionedDeviceUUID(advertisementData);
+          if (!uuid) return;
+          // Check if a device with the same UUID was already scanned before.
+          if (this.$discoveredPeripherals.has(uuid.uuidString)) {
+            // Update the device name.
+            // The name is only available when the device is advertising using
+            // Service Data and Local Name ADs.
+            const discoveredPeripheral = this.$discoveredPeripherals.get(uuid.uuidString)!;
+            if (discoveredPeripheral.device) {
+              discoveredPeripheral.device.name = peripheral.name;
+            }
 
-          // Check if the PB GATT Bearer already exists.
-          const bearerIndex = discoveredPeripheral.bearer.findIndex((bearer) =>
-            hasMixin(bearer, PBGattBearer),
-          );
-          if (bearerIndex !== -1) {
-            this.$discoveredPeripherals.set(uuid.uuidString, {
-              ...discoveredPeripheral,
-              rssi: discoveredPeripheral.rssi.map((rssi, index) =>
-                index === bearerIndex ? (RSSI ?? rssi) : rssi,
-              ),
-            });
-            // If so, just update the RSSI value.
-          } else {
-            // If the PB GATT Bearer doesn't exist, add it and corresponding RSSI value.
-            const bearer = PBGattBearer.fromPeripheral(peripheral, central);
-            bearer.logger = CoreMeshNetworkManager.instance.logger;
-            this.$discoveredPeripherals.set(uuid.uuidString, {
-              ...discoveredPeripheral,
-              bearer: [...discoveredPeripheral.bearer, bearer],
-              rssi: [...discoveredPeripheral.rssi, RSSI ?? 0],
-            });
-          }
-          this.emit("scan:new-peripheral", discoveredPeripheral);
-        } else {
-          const unprovisionedDevice = UnprovisionedDevice.fromAdvertisementData(
-            peripheral.name,
-            advertisementData,
-          );
-          if (typeof unprovisionedDevice !== "undefined") {
-            const bearer = PBGattBearer.fromPeripheral(peripheral, central);
-            bearer.logger = CoreMeshNetworkManager.instance.logger;
-
-            const discoveredPeripheral: DiscoveredUnprovisionedPeripheral = {
-              device: unprovisionedDevice,
-              bearer: [bearer],
-              rssi: [RSSI ?? 0],
-            };
-            this.$discoveredPeripherals.set(uuid.uuidString, discoveredPeripheral);
+            // Check if the PB GATT Bearer already exists.
+            const bearerIndex = discoveredPeripheral.bearer.findIndex((bearer) =>
+              hasMixin(bearer, PBGattBearer),
+            );
+            if (bearerIndex !== -1) {
+              this.$discoveredPeripherals.set(uuid.uuidString, {
+                ...discoveredPeripheral,
+                rssi: discoveredPeripheral.rssi.map((rssi, index) =>
+                  index === bearerIndex ? (RSSI ?? rssi) : rssi,
+                ),
+              });
+              // If so, just update the RSSI value.
+            } else {
+              // If the PB GATT Bearer doesn't exist, add it and corresponding RSSI value.
+              const bearer = PBGattBearer.fromPeripheral(peripheral, central);
+              bearer.logger = CoreMeshNetworkManager.instance.logger;
+              this.$discoveredPeripherals.set(uuid.uuidString, {
+                ...discoveredPeripheral,
+                bearer: [...discoveredPeripheral.bearer, bearer],
+                rssi: [...discoveredPeripheral.rssi, RSSI ?? 0],
+              });
+            }
             this.emit("scan:new-peripheral", discoveredPeripheral);
+            settled = true;
+            resolve(discoveredPeripheral);
+          } else {
+            const unprovisionedDevice = UnprovisionedDevice.fromAdvertisementData(
+              peripheral.name,
+              advertisementData,
+            );
+            if (typeof unprovisionedDevice !== "undefined") {
+              const bearer = PBGattBearer.fromPeripheral(peripheral, central);
+              bearer.logger = CoreMeshNetworkManager.instance.logger;
+
+              const discoveredPeripheral: DiscoveredUnprovisionedPeripheral = {
+                device: unprovisionedDevice,
+                bearer: [bearer],
+                rssi: [RSSI ?? 0],
+              };
+              this.$discoveredPeripherals.set(uuid.uuidString, discoveredPeripheral);
+              this.emit("scan:new-peripheral", discoveredPeripheral);
+              settled = true;
+              resolve(discoveredPeripheral);
+            }
           }
-        }
-      },
-    );
+        },
+      );
 
-    this.centralManager
-      .scanForPeripherals([MeshProvisioningService.uuid.fullUuidString.toLowerCase()])
-      .catch((error) => {
-        this.$clearScan();
-        this.emit("ble:error", error instanceof Error ? error : new Error(String(error)));
-      });
+      this.centralManager
+        .scanForPeripherals([MeshProvisioningService.uuid.fullUuidString.toLowerCase()])
+        .catch((error) => {
+          this.$clearScan();
+          const normalizedError = error instanceof Error ? error : new Error(String(error));
+          this.emit("ble:error", normalizedError);
+          if (settled) return;
+          reject(normalizedError);
+        });
 
-    if (timeout) {
-      this.$scanTimer = new BackgroundTimer(timeout / 1000, false, () => {
-        this.stopScan();
-        this.emit("ble:error", ScanError.ScanTimeout);
-      });
-    }
+      if (options?.timeout) {
+        this.$scanTimer = new BackgroundTimer(options.timeout / 1000, false, () => {
+          this.stopScan().catch((error) => {
+            console.error("error stopping scan", error);
+          });
+          this.emit("ble:error", ScanError.ScanTimeout);
+          if (settled) return;
+          reject(ScanError.ScanTimeout);
+        });
+      }
+    });
   };
 
-  public scan = (options: ProxyScanOptions) => {
-    this.stopScan();
-
+  public scan = async (options?: ProvisionScanOptions) => {
+    await this.stopScan();
     if (this.centralManager.state === CBCentralManagerState.poweredOn) {
-      this.performScan(options);
+      return this.performScan(options);
     } else {
       this.emit("ble:error", ScanError.BleUnready);
+      throw ScanError.BleUnready;
     }
   };
 
@@ -272,43 +282,33 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     this.$scanTimer = undefined;
   };
 
-  public stopScan = () => {
-    this.$clearScan();
-    this.centralManager
-      .stopScan()
-      .catch((error) =>
-        this.emit("ble:error", error instanceof Error ? error : new Error(String(error))),
-      );
+  public stopScan = async () => {
+    try {
+      this.$clearScan();
+      await this.centralManager.stopScan();
+    } catch (error) {
+      this.emit("ble:error", error instanceof Error ? error : new Error(String(error)));
+      throw error;
+    }
   };
 
-  public connect = (peripheral: DiscoveredUnprovisionedPeripheral) => {
-    this.stopScan();
+  public connect = async (peripheral: DiscoveredUnprovisionedPeripheral): Promise<void> => {
+    await this.stopScan();
     this.$discoveredPeripheral = peripheral;
     // TODO: we should support multiple bearers, but for now we can just use the first one.
     const bearer = this.$discoveredPeripheral.bearer[0];
-
     if (hasMixin(bearer, PBGattBearer)) {
       this.centralManager.bindAllEvents(bearer);
-      bearer.centralManagerDidUpdateState(this.centralManager, this.centralManager.state);
     }
-
     bearer.bindAllEvents(this.$provisioningBearerHandler);
-    const error = bearer.open();
-    if (error) {
-      this.emit("provision:error", error);
-      return;
-    }
     this.emit("provision:status", "connecting");
+    return bearer.open();
   };
 
-  public disconnect = () => {
+  public disconnect = async () => {
     // TODO: we should support multiple bearers, but for now we can just use the first one.
     const bearer = this.$discoveredPeripheral?.bearer[0];
-
-    const error = bearer?.close();
-    if (error) {
-      this.emit("provision:error", error);
-    }
+    await bearer?.close();
     bearer?.unbindAllEvents(this.$provisioningBearerHandler);
     if (bearer && hasMixin(bearer, PBGattBearer)) {
       this.centralManager.unbindAllEvents(bearer);
@@ -319,113 +319,123 @@ export class ProvisioningManager extends BindableTinyEmitter<RNProvisionEvents> 
     this.emit("provision:status", "disconnected");
   };
 
-  public identify = (attentionTimer: number) => {
+  public identify = async (attentionTimer: number) => {
     if (!this.$discoveredPeripheral) {
-      this.emit(
-        "provision:error",
-        new Error(
-          "You are not connected to any unprovisioned device. Please call connect() first.",
-        ),
+      throw new Error(
+        "You are not connected to any unprovisioned device. Please call connect() first.",
       );
-      return;
     }
     const pManager = CoreMeshNetworkManager.instance.provisionUnprovisionedDevice(
       this.$discoveredPeripheral.device,
       this.$discoveredPeripheral.bearer[0],
     );
     if (pManager instanceof Error) {
-      this.emit("provision:error", pManager);
-      return;
+      throw pManager;
     }
 
     this.$provisioningManager = pManager;
 
     pManager.bindAllEvents(this.$provisioningHandler);
     pManager.logger = CoreMeshNetworkManager.instance.logger;
-    pManager.identify(attentionTimer).catch((error: Error) => {
-      if (error !== undefined) this.emit("provision:error", error);
-    });
+    return pManager.identify(attentionTimer);
   };
 
-  public quick = (peripheral: DiscoveredUnprovisionedPeripheral): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const off = this.bindAllEvents({
-        "provision:status": (status) => {
-          switch (status) {
-            case "connected":
-              this.identify(6);
-              break;
-            case "capabilities-received":
-              this.start();
-              break;
-            case "complete":
-              CoreMeshNetworkManager.instance
-                .save()
-                .catch((error: Error) => {
-                  console.error("Error saving mesh configuration", error);
-                  this.emit("provision:error", MeshNetworkManagerError.SaveError);
-                })
-                .finally(() => {
+  public quick = async (
+    peripheral: DiscoveredUnprovisionedPeripheral,
+  ): Promise<DiscoveredProxyPeripheral> => {
+    return this.connect(peripheral)
+      .then(() => this.identify(6))
+      .then(() =>
+        Promise.race([
+          new Promise<void>((resolve, reject) => {
+            this.once("provision:status", (status, error) => {
+              switch (status) {
+                case "capabilities-received":
                   resolve();
-                  off();
-                });
-              break;
-            case "disconnected":
-              off();
-              break;
-          }
-        },
-        "provision:error": (error) => {
-          reject(error);
-          off();
-        },
-        "ble:error": (error) => {
-          reject(error);
-          off();
-        },
+                  break;
+                case "failed":
+                  reject(error ?? new Error("timeout waiting for capabilities"));
+              }
+            });
+          }),
+          new Promise((reject) => {
+            setTimeout(reject, 10000);
+          }),
+        ]),
+      )
+      .then(() => this.start())
+      .then(() => this.disconnect())
+      .then(() =>
+        CoreMeshNetworkManager.instance.save().catch((error: Error) => {
+          console.error("Error saving mesh configuration", error);
+        }),
+      )
+      .then(() => {
+        const bearer = peripheral.bearer[0]; // TODO: support multiple bearers
+        if (!hasMixin(bearer, PBGattBearer)) throw new Error("invalid bearer");
+        return {
+          rssi: 0,
+          device: new GattBearer(bearer.name, bearer.identifier, this.centralManager),
+        };
       });
-      this.connect(peripheral);
-    });
   };
 
-  public start = () => {
-    const provisioningManager = this.$provisioningManager;
-    if (!provisioningManager) {
-      this.emit(
-        "provision:error",
-        new Error("Provisioning manager is not initialized, please call identify() first."),
-      );
-      return;
-    }
-    const capabilities = provisioningManager.provisioningCapabilities;
-
-    if (!capabilities) return;
-
-    // TODO: support other public key types, but for now we can just use No OOB.
-    const publicKey = PublicKey.noOobPublicKey;
-
-    // TODO: support other authentication methods, but for now we can just use No OOB.
-    const authenticationMethod = AuthenticationMethod.noOob;
-
-    if (provisioningManager.networkKey === undefined) {
-      const network = CoreMeshNetworkManager.instance.meshNetwork!;
-      const networkKey = network.addNetworkKeyWithName(
-        Crypto.generateRandom(128),
-        "Primary Network Key",
-      );
-      if (networkKey instanceof Error) {
-        this.emit("provision:error", networkKey);
-        return;
+  public start = async () => {
+    try {
+      const provisioningManager = this.$provisioningManager;
+      if (!provisioningManager) {
+        throw new Error("Provisioning manager is not initialized, please call identify() first.");
       }
-      provisioningManager.networkKey = networkKey;
-    }
+      const capabilities = provisioningManager.provisioningCapabilities;
 
-    this.emit("provision:status", "provisioning");
-    provisioningManager
-      .provision(capabilities.algorithms.strongest, publicKey, authenticationMethod)
-      .catch((error: Error) => {
-        this.emit("provision:error", error);
-        this.disconnect();
+      if (!capabilities) return;
+
+      // TODO: support other public key types, but for now we can just use No OOB.
+      const publicKey = PublicKey.noOobPublicKey;
+
+      // TODO: support other authentication methods, but for now we can just use No OOB.
+      const authenticationMethod = AuthenticationMethod.noOob;
+
+      if (provisioningManager.networkKey === undefined) {
+        const network = CoreMeshNetworkManager.instance.meshNetwork!;
+        const networkKey = network.addNetworkKeyWithName(
+          Crypto.generateRandom(128),
+          "Primary Network Key",
+        );
+        if (networkKey instanceof Error) {
+          throw networkKey;
+        }
+        provisioningManager.networkKey = networkKey;
+      }
+
+      this.emit("provision:status", "provisioning");
+      await provisioningManager.provision(
+        capabilities.algorithms.strongest,
+        publicKey,
+        authenticationMethod,
+      );
+
+      return Promise.race([
+        new Promise<void>((resolve, reject) => {
+          this.once("provision:status", (status, error) => {
+            switch (status) {
+              case "complete":
+                resolve();
+                break;
+              case "failed":
+                reject(error ?? new Error("timeout provisioning"));
+            }
+          });
+        }),
+        new Promise((reject) => {
+          setTimeout(reject, 20000);
+        }),
+      ]);
+    } catch (error) {
+      this.disconnect().catch((error) => {
+        console.error("error disconnecting", error);
       });
+      throw error;
+    }
   };
 }

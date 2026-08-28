@@ -6,7 +6,7 @@ export async function createMesh<T extends MeshNetworkManager = MeshNetworkManag
   meshNetworkManager = MeshNetworkManager.instance as T,
 }: {
   meshNetworkManager?: T;
-}): Promise<T> {
+} = {}): Promise<T> {
   meshNetworkManager.init(WebCBCentralManager.instance, new BrowserStorage());
   await meshNetworkManager.setup();
   return meshNetworkManager;
