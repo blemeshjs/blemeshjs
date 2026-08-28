@@ -37,7 +37,7 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProvider>
             <Toast.Provider />
-            <MeshProvider>{children}</MeshProvider>
+            {children}
           </QueryProvider>
         </ThemeProvider>
       </body>
