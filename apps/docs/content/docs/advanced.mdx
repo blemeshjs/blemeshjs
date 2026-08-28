@@ -34,7 +34,7 @@ await mesh.setup();
 Use short, explicit scan windows and connect on user intent:
 
 ```ts
-mesh.connection.scan({ timeout: 8_000, notifyOnWaitingForAdvertisements: true });
+mesh.connection.scan({ timeout: 8_000 });
 ```
 
 Then stop scans as soon as you have a candidate:

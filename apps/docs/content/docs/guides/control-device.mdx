@@ -28,7 +28,7 @@ const proxy = await new Promise((resolve, reject) => {
     reject(error);
   });
 
-  mesh.connection.scan({ timeout: 10_000, notifyOnWaitingForAdvertisements: true });
+  mesh.connection.scan({ timeout: 10_000 });
 });
 
 await mesh.connection.connect(proxy);

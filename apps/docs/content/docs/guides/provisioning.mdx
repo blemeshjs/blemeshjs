@@ -33,7 +33,7 @@ const candidate = await new Promise<DiscoveredUnprovisionedPeripheral>((resolve,
     reject(error);
   });
 
-  mesh.provision.scan({ timeout: 15_000, notifyOnWaitingForAdvertisements: true });
+  mesh.provision.scan({ timeout: 15_000 });
 });
 ```
 
