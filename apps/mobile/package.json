@@ -3,12 +3,13 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android --device",
     "ios": "expo run:ios --device",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "reset-project": "node ./scripts/reset-project.js",
+    "start": "expo start --dev-client",
+    "types:check": "tsc --noEmit",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@blemeshjs/core": "workspace:^",
@@ -62,7 +63,8 @@
     "@types/react-native-get-random-values": "^1",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
   },
   "private": true
 }

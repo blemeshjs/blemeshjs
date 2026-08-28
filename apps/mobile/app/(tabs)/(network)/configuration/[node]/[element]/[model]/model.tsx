@@ -38,9 +38,9 @@ export default observer(function ModelScreen() {
   const deleteKey = (appKey: ApplicationKey) => {
     setAlert({ title: "Status", message: "Unbinding Application Key..." });
     model
-      ?.unbindApplicationKey(appKey.name)
+      ?.unbindApplicationKey(appKey)
       .then(() => setAlert(null))
-      .catch((error) => {
+      .catch((error: Error) => {
         setAlert({ title: "Error", message: error.message });
       });
   };

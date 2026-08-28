@@ -31,6 +31,7 @@ export class InternalModel {
         "modelIdentifier",
         "isGenericOnOffServer",
         "boundApplicationKeys",
+        "relatedModels",
       ]),
     );
   }

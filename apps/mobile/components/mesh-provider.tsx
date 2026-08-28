@@ -29,3 +29,12 @@ export const useMesh = () => {
   if (!ctx) throw new Error("Mesh not initialized");
   return ctx;
 };
+
+/**
+ * The SDK builds nodes, elements and models out of mixins and proxies, so the
+ * concrete shapes are not exported under stable names. Deriving them from the
+ * manager keeps these aliases correct as the SDK changes.
+ */
+export type MeshNode = MeshNetworkManager["allNodes"][number];
+export type MeshElement = MeshNode["elements"][number];
+export type MeshModel = MeshElement["models"][number];
