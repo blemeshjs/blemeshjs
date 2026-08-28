@@ -1,14 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { MeshNetworkManager } from "./mesh-network-manager.js";
 import { MeshData } from "./mesh-data.js";
-import {
-  Data,
-  KeyIndex,
-  MeshNetworkError,
-  SigModelId,
-  Storage,
-  Location,
-} from "@blemeshjs/utils";
+import { Data, KeyIndex, MeshNetworkError, SigModelId, Storage, Location } from "@blemeshjs/utils";
 import { Element } from "./element.js";
 import { Model } from "./model.js";
 import { stringToUint8Array, uint8ArrayToString } from "uint8array-extras";

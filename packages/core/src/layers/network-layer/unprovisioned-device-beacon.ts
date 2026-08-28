@@ -60,7 +60,7 @@ export class UnprovisionedDeviceBeaconDecoder {
    */
   static decode(pdu: Data): UnprovisionedDeviceBeacon | undefined {
     if (pdu.length <= 1) return undefined;
-    const beaconType = isEnumCase(pdu[0], BeaconType) ? (pdu[0] as BeaconType) : undefined;
+    const beaconType = isEnumCase(pdu[0], BeaconType) ? pdu[0] : undefined;
     if (typeof beaconType === "undefined") return undefined;
     switch (beaconType) {
       case BeaconType.unprovisionedDevice:

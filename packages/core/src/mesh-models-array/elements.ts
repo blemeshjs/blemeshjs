@@ -48,7 +48,7 @@ export class ElementData {
     }
     // Is Location valid?
     const rawValue: UInt16 = readUInt16LE(compositionData.slice(offset));
-    const location = isEnumCase(rawValue, Location) ? (rawValue as Location) : undefined;
+    const location = isEnumCase(rawValue, Location) ? rawValue : undefined;
     if (location === undefined) {
       return;
     }

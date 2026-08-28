@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   BindableTinyEmitter,
-  CBCentralManager,
   CBCentralManagerHandler,
   CBCentralManagerState,
   CBPeripheralState,
@@ -30,7 +29,7 @@ function createBearer() {
       identifier: UUID.random(),
       state: CBPeripheralState.disconnected,
     } as never,
-    centralManager as unknown as CBCentralManager,
+    centralManager,
   );
   return { bearer, centralManager };
 }
@@ -43,10 +42,7 @@ describe("BaseGattProxyBearer", () => {
       bearer.on("bearerDidClose", onClose);
       (bearer as unknown as { isOpened: boolean }).isOpened = true;
 
-      bearer.centralManagerDidUpdateState(
-        centralManager as unknown as CBCentralManager,
-        CBCentralManagerState.poweredOff,
-      );
+      bearer.centralManagerDidUpdateState(centralManager, CBCentralManagerState.poweredOff);
 
       expect(onClose).toHaveBeenCalledWith(bearer, BearerError.centralManagerNotPoweredOn);
       expect((bearer as unknown as { isOpened: boolean }).isOpened).toBe(false);
@@ -57,10 +53,7 @@ describe("BaseGattProxyBearer", () => {
       const onClose = vi.fn();
       bearer.on("bearerDidClose", onClose);
 
-      bearer.centralManagerDidUpdateState(
-        centralManager as unknown as CBCentralManager,
-        CBCentralManagerState.poweredOff,
-      );
+      bearer.centralManagerDidUpdateState(centralManager, CBCentralManagerState.poweredOff);
 
       expect(onClose).not.toHaveBeenCalled();
     });
@@ -71,10 +64,7 @@ describe("BaseGattProxyBearer", () => {
       bearer.on("bearerDidClose", onClose);
       (bearer as unknown as { isOpened: boolean }).isOpened = true;
 
-      bearer.centralManagerDidUpdateState(
-        centralManager as unknown as CBCentralManager,
-        CBCentralManagerState.poweredOn,
-      );
+      bearer.centralManagerDidUpdateState(centralManager, CBCentralManagerState.poweredOn);
 
       expect(onClose).not.toHaveBeenCalled();
       expect((bearer as unknown as { isOpened: boolean }).isOpened).toBe(true);
