@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, lint and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        # Full history: `changeset status` diffs against main, and the default
+        # shallow clone does not fetch it.
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build public packages
+        run: yarn build
+
+      - name: Lint
+        run: yarn lint:check
+
+      - name: Test
+        run: yarn test
+
+      - name: Type-check the docs app
+        run: yarn workspace docs types:check
+
+      - name: Verify the generated API reference is current
+        run: |
+          yarn workspace docs api:generate
+          if ! git diff --quiet -- apps/docs/content/docs/api; then
+            echo "::error::The committed API reference is stale."
+            echo "Run 'yarn workspace docs api:generate' and commit the result."
+            git diff --stat -- apps/docs/content/docs/api
+            exit 1
+          fi
+
+      - name: Check changeset status
+        if: github.event_name == 'pull_request'
+        # On a pull_request event the checkout leaves no local `main`, so
+        # changesets cannot find where HEAD diverged. Fetch it and compare
+        # against the remote-tracking ref explicitly.
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          yarn changeset status --since=origin/main
