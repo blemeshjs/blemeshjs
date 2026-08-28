@@ -27,7 +27,8 @@ export function ProvisioningModal() {
 
   const startScan = () => {
     setStatus("scanning");
-    mesh.provision.scan({ notifyOnWaitingForAdvertisements: true });
+    // Rejections are already surfaced through the "ble:error" handler below.
+    mesh.provision.scan().catch(() => {});
     const off = mesh.provision.on("scan:new-peripheral", (proxy) => {
       setStatus("ready");
       mesh.provision.stopScan();
@@ -57,10 +58,7 @@ export function ProvisioningModal() {
             toastError(error);
         }
       },
-      "provision:error": (error) => {
-        toastError(error);
-      },
-      "provision:status": (status) => {
+      "provision:status": (status, error) => {
         switch (status) {
           case "waiting-for-advertisements":
             setStatus("initializing");
@@ -84,6 +82,17 @@ export function ProvisioningModal() {
                 variant: "success",
                 description: `${name} has been added to the network.`,
               });
+            }
+            break;
+          case "failed":
+            toastError(error ?? new Error("Provisioning failed"));
+            setStatus("idle");
+            break;
+          case "disconnected":
+            // A disconnect without an error is the normal teardown after provisioning.
+            if (error) {
+              toastError(error);
+              setStatus("idle");
             }
             break;
         }
