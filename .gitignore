@@ -35,3 +35,6 @@ packages/sdk-pro
 
 # macOS
 .DS_Store
+
+# mise
+mise.toml
