@@ -149,7 +149,7 @@ export class NetworkPdu {
         continue;
       }
 
-      const type = ctl as LowerTransportPduType;
+      const type = ctl;
       const ttl = deobfuscatedData[0] & 0x7f;
       // Multiple octet values use Big Endian.
       const sequence =

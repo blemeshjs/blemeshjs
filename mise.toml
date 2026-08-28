@@ -1,0 +1,6 @@
+# Pins the toolchain so a local shell matches CI. Without this, `yarn` may not
+# be on PATH at all and a bare `yarn` can exit 0 while doing nothing.
+# mise config is hierarchical, so this covers every workspace.
+[tools]
+node = "24"
+yarn = "4"

@@ -5,8 +5,9 @@ and app map; this file covers how to work in the repo.
 
 ## Running commands
 
-`yarn` is not always on PATH — use **`corepack yarn <script>`**. A bare `yarn`
-can exit 0 while doing nothing, so a failure looks like a pass.
+`mise.toml` pins node 24 and yarn 4 to match CI. If mise is not activating in
+your shell, `yarn` will not be on PATH — use **`corepack yarn <script>`**. A
+bare `yarn` can exit 0 while doing nothing, so a failure looks like a pass.
 
 | Task | Command |
 | --- | --- |
@@ -23,6 +24,17 @@ Prefer package-scoped commands while iterating:
 
 `coverage` is non-interactive. `coverage:ui` opens the Vitest UI and does not
 exit — never call it from a script.
+
+## Toolchain
+
+One version of each tool across the repo: TypeScript 6.0.3, prettier 3.8.2,
+typescript-eslint 8.68.0.
+
+ESLint is the exception and deliberately so. Packages and the shared config in
+`eslint.package.config.mjs` are on 10.x; the three apps are pinned to 9.x
+because `eslint-config-next` and `eslint-config-expo` pull an
+`eslint-plugin-react` that crashes under ESLint 10. Do not "fix" that drift by
+bumping the apps — check whether those configs support 10 first.
 
 ## Layering
 

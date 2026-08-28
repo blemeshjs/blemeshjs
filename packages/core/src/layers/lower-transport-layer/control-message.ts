@@ -1,11 +1,4 @@
-import {
-  Address,
-  Data,
-  IvIndex,
-  ProxyConfigurationMessage,
-  UInt32,
-  UInt8,
-} from "@blemeshjs/utils";
+import { Address, Data, IvIndex, ProxyConfigurationMessage, UInt32, UInt8 } from "@blemeshjs/utils";
 import { LowerTransportPdu, LowerTransportPduType } from "./lower-transport-pdu.js";
 import { NetworkKey } from "../../mesh-models/index.js";
 import { concatUint8Arrays, uint8ArrayToHex } from "uint8array-extras";

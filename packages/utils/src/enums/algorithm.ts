@@ -19,8 +19,8 @@ export namespace Algorithm {
     }
   }
 
-  export function from(pdu: ProvisioningPdu) {
-    return isEnumCase(pdu[1], Algorithm) ? (pdu[1] as Algorithm) : undefined;
+  export function from(pdu: ProvisioningPdu): Algorithm | undefined {
+    return isEnumCase(pdu[1], Algorithm) ? pdu[1] : undefined;
   }
 
   export function length(algorithm: Algorithm): Int32 {
