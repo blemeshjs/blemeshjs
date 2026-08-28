@@ -18,6 +18,7 @@
     "@ai-sdk/react": "^3.0.170",
     "@blemeshjs/sdk-react-native": "workspace:*",
     "@blemeshjs/sdk-web": "workspace:*",
+    "@blemeshjs/sdk-react-native": "workspace:*",
     "@openrouter/ai-sdk-provider": "^2.8.0",
     "@radix-ui/react-presence": "^1.1.5",
     "@radix-ui/react-tabs": "^1.1.13",
