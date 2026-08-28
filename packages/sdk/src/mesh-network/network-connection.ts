@@ -61,6 +61,7 @@ class CBCentralManagerHandlerAdapter implements Partial<CBCentralManagerHandler>
               ),
             );
         }
+        break;
       case CBCentralManagerState.poweredOff:
       case CBCentralManagerState.resetting:
         this.$networkConnection.proxies
@@ -69,10 +70,14 @@ class CBCentralManagerHandlerAdapter implements Partial<CBCentralManagerHandler>
             (promise, proxy) => promise.then(() => proxy.close()),
             Promise.resolve(),
           )
-          .catch((error) => {
-            console.error("error closing proxy", error);
-          });
+          .catch((error: Error) =>
+            this.$networkConnection.logger?.d(
+              LogCategory.bearer,
+              `Error closing proxy: ${error.message}`,
+            ),
+          );
         this.$networkConnection.proxies.clear();
+        break;
       default:
         break;
     }
@@ -500,9 +505,9 @@ export class NetworkConnection extends Mixin(BindableTinyEmitter<NetworkConnecti
 
       if (options?.timeout) {
         this.$scanTimer = new BackgroundTimer(options.timeout / 1000, false, () => {
-          this.stopScan().catch((error) => {
-            console.error("error stopping scan", error);
-          });
+          this.stopScan().catch((error: Error) =>
+            this.logger?.d(LogCategory.bearer, `Error stopping scan: ${error.message}`),
+          );
           this.emit("ble:error", ScanError.ScanTimeout);
           if (settled) return;
           reject(ScanError.ScanTimeout);
