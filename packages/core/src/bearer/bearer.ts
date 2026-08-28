@@ -140,12 +140,12 @@ export abstract class Bearer extends Mixin(
   /**
    * This method opens the Bearer.
    */
-  public abstract open(): Error | void;
+  public abstract open(): Promise<void>;
 
   /**
    * This method closes the Bearer.
    */
-  public abstract close(): Error | void;
+  public abstract close(): Promise<void>;
 
   /**
    * Returns whether the Bearer supports the given message type.

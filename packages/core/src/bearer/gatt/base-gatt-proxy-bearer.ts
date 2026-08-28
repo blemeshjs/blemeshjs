@@ -14,7 +14,6 @@ import {
   CBService,
   Data,
   DispatchQueue,
-  Int64,
   LogCategory,
   LoggerHandler,
   MeshProvisioningService,
@@ -98,14 +97,6 @@ export class BaseGattProxyBearer<
   private dataInCharacteristic?: CBCharacteristic;
   private dataOutCharacteristic?: CBCharacteristic;
 
-  // NOTE: - Public API
-
-  /**
-   * Creates the Gatt Proxy Bearer object. Call `BaseGattProxyBearer.open()`
-   * to open connection to the proxy.
-   *
-   * @param uuid The UUID associated with the peer.
-   */
   public constructor(
     name: string | undefined,
     uuid: UUID,
@@ -119,7 +110,22 @@ export class BaseGattProxyBearer<
     this.protocolHandler = new ProxyProtocolHandler();
   }
 
-  public open() {
+  public async open() {
+    if (this.isOpened) return;
+    this.isOpened = true;
+
+    const peripheral = this.centralManager.retrievePeripherals([this.identifier])[0];
+    if (typeof peripheral === "undefined") {
+      this.logger?.w(
+        LogCategory.bearer,
+        `Device with identifier ${this.identifier.uuidString} not found`,
+      );
+      this.isOpened = false;
+      return;
+    }
+    this.basePeripheral = peripheral;
+    this.basePeripheral?.bindAllEvents(this);
+
     if (
       this.centralManager.state == CBCentralManagerState.poweredOn &&
       this.basePeripheral?.state == CBPeripheralState.disconnected
@@ -128,28 +134,70 @@ export class BaseGattProxyBearer<
         LogCategory.bearer,
         `Connecting to ${this.basePeripheral.name ?? "Unknown Device"}...`,
       );
-      this.centralManager
+      return this.centralManager
         .connect(this.basePeripheral)
-        .catch((error: Error) =>
-          this.logger?.d(LogCategory.bearer, `Connection error: ${error.message}`),
-        );
+        .then(() => {
+          this.logger?.i(
+            LogCategory.bearer,
+            `Connected to ${this.basePeripheral.name ?? "Unknown Device"}`,
+          );
+          this.emit("bearerDidConnect", this);
+        })
+        .then(() => this.discoverServices())
+        .then((services) => {
+          return services.reduce<Promise<void>>(
+            (promise, service) =>
+              promise.then(() => {
+                if (this.service.matches(service)) {
+                  this.logger?.v(LogCategory.bearer, "Service found");
+                  return this.discoverCharacteristics(service).then((characteristics) => {
+                    // Look for required characteristics.
+                    for (const characteristic of characteristics) {
+                      if (this.service.dataInUuid.equals(characteristic.uuid)) {
+                        this.logger?.v(LogCategory.bearer, "Data In characteristic found");
+                        this.dataInCharacteristic = characteristic;
+                      } else if (this.service.dataOutUuid.equals(characteristic.uuid)) {
+                        this.logger?.v(LogCategory.bearer, "Data Out characteristic found");
+                        this.dataOutCharacteristic = characteristic;
+                      }
+                    }
+
+                    // Ensure all required characteristics were found.
+                    if (
+                      typeof this.dataOutCharacteristic === "undefined" ||
+                      typeof this.dataInCharacteristic === "undefined" ||
+                      !this.dataOutCharacteristic.properties.includes(
+                        CBCharacteristicProperties.notify,
+                      )
+                    ) {
+                      this.logger?.e(LogCategory.bearer, "Device not supported");
+                      return this.close();
+                    }
+                    this.emit("bearerDidDiscoverServices", this);
+                    return this.enableNotifications(this.dataOutCharacteristic).then(() => {
+                      this.logger?.v(LogCategory.bearer, "Data Out notifications enabled");
+                      this.logger?.i(LogCategory.bearer, "GATT Bearer open and ready");
+                      this.emit("bearerDidOpen", this);
+                    });
+                  });
+                }
+              }),
+            Promise.resolve(),
+          );
+        });
     }
-    this.isOpened = true;
   }
 
-  public close() {
+  public async close() {
+    if (!this.isOpened) return;
+    this.isOpened = false;
     if (
       this.basePeripheral?.state === CBPeripheralState.connected ||
       this.basePeripheral?.state == CBPeripheralState.connecting
     ) {
       this.logger?.v(LogCategory.bearer, "Cancelling connection...");
-      this.centralManager
-        .cancelPeripheralConnection(this.basePeripheral)
-        .catch((error: Error) =>
-          this.logger?.d(LogCategory.bearer, `Disconnection error: ${error.message}`),
-        );
+      return this.centralManager.cancelPeripheralConnection(this.basePeripheral);
     }
-    this.isOpened = false;
   }
 
   public send(data: Data, type: PduType) {
@@ -192,7 +240,7 @@ export class BaseGattProxyBearer<
     if (this.basePeripheral.state !== CBPeripheralState.connected) {
       return;
     }
-    this.basePeripheral.readRSSI();
+    return this.basePeripheral.readRSSI();
   }
 
   // NOTE: - Implementation
@@ -202,7 +250,7 @@ export class BaseGattProxyBearer<
    */
   private discoverServices() {
     this.logger?.v(LogCategory.bearer, "Discovering services...");
-    this.basePeripheral.discoverServices([this.service.uuid]);
+    return this.basePeripheral.discoverServices([this.service.uuid]);
   }
 
   /**
@@ -212,7 +260,7 @@ export class BaseGattProxyBearer<
    */
   private discoverCharacteristics(service: CBService) {
     this.logger?.v(LogCategory.bearer, "Discovering characteristics...");
-    this.basePeripheral.discoverCharacteristics(
+    return this.basePeripheral.discoverCharacteristics(
       [this.service.dataInUuid, this.service.dataOutUuid],
       service,
     );
@@ -225,59 +273,12 @@ export class BaseGattProxyBearer<
    */
   private enableNotifications(characteristic: CBCharacteristic) {
     this.logger?.v(LogCategory.bearer, "Enabling notifications...");
-    this.basePeripheral.setNotifyValue(true, characteristic);
+    return this.basePeripheral.setNotifyValue(true, characteristic);
   }
 
   // NOTE: - CentralManagerHandler
-
-  public centralManagerDidDiscoverPeripheral(
-    central: CBCentralManager,
-    peripheral: CBPeripheral,
-    rssi?: number,
-    _advertisementData?: unknown,
-  ): void {
-    this.logger?.v(
-      LogCategory.bearer,
-      `Discovered ${peripheral.name ?? "Unknown Device"} with RSSI ${rssi}`,
-    );
-  }
-
-  public centralManagerDidFailConnect(
-    central: CBCentralManager,
-    peripheral: CBPeripheral,
-    error: Error,
-  ): void {
-    this.logger?.e(LogCategory.bearer, `Failed to connect: ${error.message}`);
-  }
-
   public centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState) {
     this.logger?.i(LogCategory.bearer, `Central Manager state changed to ${state}`);
-    if (state === CBCentralManagerState.poweredOn) {
-      const peripheral = this.centralManager.retrievePeripherals([this.identifier])[0];
-      if (typeof peripheral === "undefined") {
-        this.logger?.w(
-          LogCategory.bearer,
-          `Device with identifier ${this.identifier.uuidString} not found`,
-        );
-        this.isOpened = false;
-        return;
-      }
-      this.basePeripheral = peripheral;
-      this.basePeripheral?.bindAllEvents(this);
-      if (this.isOpened) {
-        this.open();
-      }
-    } else {
-      this.emit("bearerDidClose", this, BearerError.centralManagerNotPoweredOn);
-    }
-  }
-
-  public centralManagerDidConnect(_: CBCentralManager, peripheral: CBPeripheral) {
-    if (peripheral.equal(this.basePeripheral)) {
-      this.logger?.i(LogCategory.bearer, `Connected to ${peripheral.name ?? "Unknown Device"}`);
-      this.emit("bearerDidConnect", this);
-      this.discoverServices();
-    }
   }
 
   public centralManagerDidDisconnectPeripheral(
@@ -323,85 +324,31 @@ export class BaseGattProxyBearer<
     }
   }
 
-  // NOTE: - PeripheralHandler
+  public centralManagerDidDiscoverPeripheral(
+    _central: CBCentralManager,
+    peripheral: CBPeripheral,
+    rssi?: number,
+    _advertisementData?: unknown,
+  ): void {
+    this.logger?.v(
+      LogCategory.bearer,
+      `Discovered ${peripheral.name ?? "Unknown Device"} with RSSI ${rssi}`,
+    );
+  }
 
+  // NOTE: - PeripheralHandler
   public didDisconnect(_peripheral: CBPeripheral): void {
     this.logger?.v(LogCategory.bearer, "Peripheral disconnected");
   }
+
   public didUpdateState(_peripheral: CBPeripheral): void {
     this.logger?.v(LogCategory.bearer, "Peripheral state changed");
   }
 
-  public didDiscoverServices(peripheral: CBPeripheral, _?: Error) {
-    const services = peripheral.services;
-    if (typeof services !== "undefined") {
-      for (const service of services) {
-        if (this.service.matches(service)) {
-          this.logger?.v(LogCategory.bearer, "Service found");
-          this.discoverCharacteristics(service);
-          return;
-        }
-      }
-    }
-    // Required service not found.
-    this.logger?.e(LogCategory.bearer, "Device not supported");
-    this.close();
-  }
-
-  public didDiscoverCharacteristicsForService(_: CBPeripheral, service: CBService, __?: Error) {
-    // Look for required characteristics.
-    const characteristics = service.characteristics;
-    if (typeof characteristics !== "undefined") {
-      for (const characteristic of characteristics) {
-        if (this.service.dataInUuid.equals(characteristic.uuid)) {
-          this.logger?.v(LogCategory.bearer, "Data In characteristic found");
-          this.dataInCharacteristic = characteristic;
-        } else if (this.service.dataOutUuid.equals(characteristic.uuid)) {
-          this.logger?.v(LogCategory.bearer, "Data Out characteristic found");
-          this.dataOutCharacteristic = characteristic;
-        }
-      }
-    }
-
-    // Ensure all required characteristics were found.
-    if (
-      typeof this.dataOutCharacteristic === "undefined" ||
-      typeof this.dataInCharacteristic === "undefined" ||
-      !this.dataOutCharacteristic.properties.includes(CBCharacteristicProperties.notify)
-    ) {
-      this.logger?.e(LogCategory.bearer, "Device not supported");
-      this.close();
-      return;
-    }
-
-    this.emit("bearerDidDiscoverServices", this);
-    this.enableNotifications(this.dataOutCharacteristic);
-  }
-
-  public didUpdateNotificationStateForCharacteristic(
-    _: CBPeripheral,
-    characteristic: CBCharacteristic,
-    __?: Error,
-  ) {
-    if (!characteristic.equal(this.dataOutCharacteristic) || !characteristic.isNotifying) {
-      return;
-    }
-
-    this.logger?.v(LogCategory.bearer, "Data Out notifications enabled");
-    this.logger?.i(LogCategory.bearer, "GATT Bearer open and ready");
-    this.emit("bearerDidOpen", this);
-  }
-
   public didUpdateValueForCharacteristic(
-    _: CBPeripheral,
+    _peripheral: CBPeripheral,
     characteristic: CBCharacteristic,
-    error: Error,
   ) {
-    if (error) {
-      this.logger?.e(LogCategory.bearer, "Characteristic value update error: " + error.message);
-      return;
-    }
-
     if (!characteristic.equal(this.dataOutCharacteristic)) return;
 
     const data = characteristic.value;
@@ -412,14 +359,5 @@ export class BaseGattProxyBearer<
     if (typeof message !== "undefined") {
       this.emit("bearerDidDeliverData", this, message.data, message.messageType);
     }
-  }
-
-  public didWriteValueForCharacteristic(_: CBPeripheral, __: CBCharacteristic) {
-    // Data is sent without response.
-    // This method will not be called.
-  }
-
-  public didReadRSSI(_: CBPeripheral, RSSI: Int64, __?: Error) {
-    this.emit("bearerDidReadRSSI", this, RSSI);
   }
 }

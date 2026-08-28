@@ -1289,7 +1289,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blemeshjs/sdk-web@workspace:^, @blemeshjs/sdk-web@workspace:packages/sdk-web":
+"@blemeshjs/sdk-web@workspace:*, @blemeshjs/sdk-web@workspace:^, @blemeshjs/sdk-web@workspace:packages/sdk-web":
   version: 0.0.0-use.local
   resolution: "@blemeshjs/sdk-web@workspace:packages/sdk-web"
   dependencies:
@@ -9958,6 +9958,7 @@ __metadata:
   resolution: "docs@workspace:apps/docs"
   dependencies:
     "@ai-sdk/react": "npm:^3.0.170"
+    "@blemeshjs/sdk-web": "workspace:*"
     "@openrouter/ai-sdk-provider": "npm:^2.8.0"
     "@radix-ui/react-presence": "npm:^1.1.5"
     "@tailwindcss/postcss": "npm:^4.2.4"

@@ -56,6 +56,15 @@ describe("BindableTinyEmitter", () => {
     expect(calls).toEqual([5]);
   });
 
+  it("once works", () => {
+    const emitter = new BindableTinyEmitter<Events>();
+    const calls: number[] = [];
+    emitter.once("foo", (x) => calls.push(x));
+    emitter.emit("foo", 5);
+    emitter.emit("foo", 6);
+    expect(calls).toEqual([5]);
+  });
+
   it("listen and off works without listener", () => {
     const emitter = new BindableTinyEmitter<Events>();
     const calls: number[] = [];
