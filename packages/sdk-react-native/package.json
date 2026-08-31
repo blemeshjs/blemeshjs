@@ -12,7 +12,6 @@
     "url": "https://github.com/blemeshjs/blemeshjs/issues"
   },
   "homepage": "https://github.com/blemeshjs/blemeshjs/tree/main/packages/sdk-react-native#readme",
-  "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "type": "module",
@@ -32,7 +31,9 @@
   },
   "dependencies": {
     "@blemeshjs/sdk": "workspace:^",
-    "@blemeshjs/utils": "workspace:^"
+    "@blemeshjs/utils": "workspace:^",
+    "long": "^5.3.2",
+    "uint8array-extras": "^1.5.0"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "~2.2.0",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@react-native-async-storage/async-storage": "~2.2.0",
+    "@types/node": "^24.1.0",
     "eslint": "^10.2.0",
     "prettier": "^3.8.2",
     "react-native-ble-plx": "^3.5.1",

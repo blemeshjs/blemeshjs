@@ -112,7 +112,7 @@ This API section is package-oriented and auto-generated from the public TypeScri
 ## How this flow works
 
 1. Add or update comments in the package source under the relevant \`src/**\` tree.
-2. Run \`yarn workspace docs api:generate\` if you want to refresh the API pages directly.
+2. Run \`pnpm --filter docs api:generate\` if you want to refresh the API pages directly.
 3. Any docs \`dev\`, \`build\`, or \`types:check\` run also regenerates the API pages first.
 
 ## Package reference map
@@ -175,7 +175,7 @@ icon: ${config.icon}
 
 This page is auto-generated from \`${config.sourceLabel}\` and the public exports exposed by \`${config.packageName}\`.
 
-> Update TSDoc comments in source, then run \`yarn workspace docs api:generate\`. Normal docs \`dev\`, \`build\`, and \`types:check\` runs regenerate these pages automatically.
+> Update TSDoc comments in source, then run \`pnpm --filter docs api:generate\`. Normal docs \`dev\`, \`build\`, and \`types:check\` runs regenerate these pages automatically.
 
 ## Package overview
 

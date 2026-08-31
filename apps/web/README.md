@@ -9,8 +9,8 @@ This app lives inside the monorepo and exists mostly so we can poke at [`@blemes
 From the repo root:
 
 ```sh
-yarn install
-yarn workspace web dev
+pnpm install
+pnpm --filter web dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).

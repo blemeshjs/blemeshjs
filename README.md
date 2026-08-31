@@ -123,9 +123,9 @@ There are also two private companion packages — `@blemeshjs/pro` and `@blemesh
 This repo is a Yarn 4 + Turbo monorepo. If you'd like to hack on it locally:
 
 ```sh
-yarn install
-yarn build
-yarn test
+pnpm install
+pnpm build
+pnpm test
 ```
 
 Most changes only need the package-level scripts — no need to rebuild the entire world. PRs and issues are welcome.
