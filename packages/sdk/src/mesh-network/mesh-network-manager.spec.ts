@@ -47,7 +47,7 @@ describe("MeshNetworkManager", () => {
 
     const coreManager = {
       createNewMeshNetworkWithNameAndProvisioner: vi.fn(() => network),
-      save: vi.fn(async () => undefined),
+      save: vi.fn(() => Promise.resolve(undefined)),
     };
 
     (manager as unknown as { $coreMeshNetworkManager: unknown }).$coreMeshNetworkManager = coreManager;
@@ -67,7 +67,7 @@ describe("MeshNetworkManager", () => {
 
     const coreManager = {
       createNewMeshNetworkWithNameAndProvisioner: vi.fn(() => MeshNetworkError.noNetworkKey),
-      save: vi.fn(async () => undefined),
+      save: vi.fn(() => Promise.resolve(undefined)),
     };
 
     (manager as unknown as { $coreMeshNetworkManager: unknown }).$coreMeshNetworkManager = coreManager;

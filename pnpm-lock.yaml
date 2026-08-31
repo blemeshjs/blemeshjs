@@ -307,12 +307,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@blemeshjs/core':
+        specifier: workspace:^
+        version: link:../../packages/core
       '@blemeshjs/sdk':
         specifier: workspace:^
         version: link:../../packages/sdk
       '@blemeshjs/sdk-web':
         specifier: workspace:^
         version: link:../../packages/sdk-web
+      '@blemeshjs/utils':
+        specifier: workspace:^
+        version: link:../../packages/utils
       '@heroui/react':
         specifier: ^3.0.1
         version: 3.0.1(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.2.4)

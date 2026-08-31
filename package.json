@@ -10,7 +10,7 @@
     "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
     "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "clean": "turbo run clean",
-    "test": "vitest run",
+    "test": "turbo run test",
     "coverage": "vitest --ui --coverage",
     "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
     "release:status": "changeset status",
