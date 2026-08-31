@@ -16,11 +16,11 @@ This repository publishes the public SDK packages to npm:
 
 ## Normal release flow
 
-1. Add a changeset with `yarn changeset`.
+1. Add a changeset with `pnpm changeset`.
 2. Merge the generated release PR created by `.github/workflows/release.yml`.
 3. The same workflow publishes the versioned packages to npm.
 
 ## Manual publish fallback
 
 - Run the `Release` GitHub Actions workflow with `workflow_dispatch`.
-- For a local verification without publishing, run `yarn release:publish:dry-run`.
+- For a local verification without publishing, run `pnpm release:publish:dry-run`.

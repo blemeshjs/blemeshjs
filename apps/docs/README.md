@@ -9,8 +9,8 @@ Built with [Next.js](https://nextjs.org) and [Fumadocs](https://fumadocs.dev). M
 From the repo root:
 
 ```sh
-yarn install
-yarn workspace docs dev
+pnpm install
+pnpm --filter docs dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000).
@@ -30,4 +30,4 @@ Frontmatter and other content options are configured in `source.config.ts`. See 
 
 ## Contributing docs
 
-If you're adding or editing pages, just drop MDX files into `content/` — Fumadocs will pick them up. Run `yarn workspace docs types:check` before opening a PR to catch type errors in the site code.
+If you're adding or editing pages, just drop MDX files into `content/` — Fumadocs will pick them up. Run `pnpm --filter docs types:check` before opening a PR to catch type errors in the site code.
