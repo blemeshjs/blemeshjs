@@ -224,7 +224,9 @@ export class MeshNetworkManager {
    * so that it starts scanning for devices advertising the new Network ID.
    */
   public meshNetworkDidChange = () => {
-    this.$connection?.close();
+    this.$connection?.close().catch((error: Error) =>
+      this.logger?.log(error.message, LogCategory.network, LogLevel.application),
+    );
 
     const meshNetwork = this.$coreMeshNetworkManager.meshNetwork!;
 
@@ -250,7 +252,9 @@ export class MeshNetworkManager {
     this.$connection.on("bearerDidDeliverData", this.$coreMeshNetworkManager.bearerDidDeliverData);
     this.$connection.logger = logger;
     this.$coreMeshNetworkManager.transmitter = this.$connection;
-    this.$connection.open();
+    this.$connection.open().catch((error: Error) =>
+      this.logger?.log(error.message, LogCategory.network, LogLevel.application),
+    );
   };
 
   public createNewMeshNetwork = async (): Promise<MeshNetwork> => {
