@@ -1,0 +1,20 @@
+packages:
+  - packages/utils
+  - packages/crypto
+  - packages/core
+  - packages/sdk
+  - packages/sdk-web
+  - packages/sdk-react-native
+  - apps/web
+  - apps/mobile
+  - apps/docs
+
+# Yarn ran dependency build scripts via `enableScripts: true`; pnpm blocks them
+# unless approved explicitly. These three ship native binaries.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+
+patchedDependencies:
+  sjcl@1.0.8: patches/sjcl@1.0.8.patch

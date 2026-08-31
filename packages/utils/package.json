@@ -12,7 +12,6 @@
     "url": "https://github.com/blemeshjs/blemeshjs/issues"
   },
   "homepage": "https://github.com/blemeshjs/blemeshjs/tree/main/packages/utils#readme",
-  "packageManager": "yarn@4.9.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "type": "module",
@@ -45,7 +44,7 @@
     "byte-data": "^19.0.1",
     "long": "^5.3.2",
     "serializr": "^3.0.5",
-    "sjcl": "patch:sjcl@npm%3A1.0.8#~/.yarn/patches/sjcl-npm-1.0.8-091d731e4f.patch",
+    "sjcl": "1.0.8",
     "tiny-emitter": "https://github.com/Simon-Laux/tiny-emitter",
     "ts-mixer": "^6.0.4",
     "uint8array-extras": "^1.5.0",
