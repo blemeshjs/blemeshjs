@@ -12,7 +12,6 @@
     "url": "https://github.com/blemeshjs/blemeshjs/issues"
   },
   "homepage": "https://github.com/blemeshjs/blemeshjs/tree/main/packages/sdk-web#readme",
-  "packageManager": "yarn@4.9.2",
   "type": "module",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -37,6 +36,7 @@
     "uint8array-extras": "^1.5.0"
   },
   "devDependencies": {
+    "@types/node": "^24.1.0",
     "@types/web-bluetooth": "^0.0.21",
     "eslint": "^10.2.0",
     "prettier": "^3.8.2",

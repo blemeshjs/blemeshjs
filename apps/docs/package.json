@@ -7,11 +7,11 @@
     "dev": "next dev",
     "start": "next start",
     "api:generate": "node ./scripts/generate-api-docs.mjs",
-    "prebuild": "yarn api:generate",
-    "predev": "yarn api:generate",
-    "pretypes:check": "yarn api:generate",
+    "prebuild": "pnpm run api:generate",
+    "predev": "pnpm run api:generate",
+    "pretypes:check": "pnpm run api:generate",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
-    "postinstall": "yarn api:generate && fumadocs-mdx",
+    "postinstall": "pnpm run api:generate && fumadocs-mdx",
     "lint": "eslint"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "@blemeshjs/sdk-web": "workspace:*",
     "@openrouter/ai-sdk-provider": "^2.8.0",
     "@radix-ui/react-presence": "^1.1.5",
+    "@radix-ui/react-tabs": "^1.1.13",
     "ai": "^6.0.168",
     "class-variance-authority": "^0.7.1",
     "flexsearch": "^0.8.212",

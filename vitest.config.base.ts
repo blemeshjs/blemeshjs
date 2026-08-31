@@ -1,6 +1,6 @@
 import { defineConfig } from "vitest/config";
 
-const sharedExclude = ["node_modules", "dist", "**/dist/**"];
+const sharedExclude = ["node_modules", "dist", "**/dist/**", "**/node_modules/**"];
 
 export const nodeBrowserConfig = defineConfig({
   test: {
@@ -10,7 +10,7 @@ export const nodeBrowserConfig = defineConfig({
         test: {
           name: "node",
           include: ["**/*.spec.ts"],
-          exclude: ["**/*.browser.spec.ts"],
+          exclude: [...sharedExclude, "**/*.browser.spec.ts"],
           environment: "node",
         },
       },
@@ -18,7 +18,7 @@ export const nodeBrowserConfig = defineConfig({
         test: {
           name: "browser",
           include: ["**/*.spec.ts"],
-          exclude: ["**/*.node.spec.ts"],
+          exclude: [...sharedExclude, "**/*.node.spec.ts"],
           environment: "jsdom",
         },
       },
@@ -35,6 +35,7 @@ export const browserConfig = defineConfig({
         test: {
           name: "browser",
           include: ["**/*.spec.ts"],
+          exclude: sharedExclude,
           environment: "jsdom",
         },
       },

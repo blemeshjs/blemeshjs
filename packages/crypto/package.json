@@ -12,7 +12,6 @@
     "url": "https://github.com/blemeshjs/blemeshjs/issues"
   },
   "homepage": "https://github.com/blemeshjs/blemeshjs/tree/main/packages/crypto#readme",
-  "packageManager": "yarn@4.11.0",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "type": "module",

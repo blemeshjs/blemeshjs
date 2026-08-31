@@ -9,15 +9,15 @@ This is the React Native counterpart to `apps/web`: a small playground we use du
 From the repo root:
 
 ```sh
-yarn install
-yarn workspace mobile start
+pnpm install
+pnpm --filter mobile start
 ```
 
 Or jump straight to a platform:
 
 ```sh
-yarn workspace mobile ios
-yarn workspace mobile android
+pnpm --filter mobile ios
+pnpm --filter mobile android
 ```
 
 You'll need the usual React Native / Expo toolchain installed (Xcode, Android Studio, simulators or a physical device with BLE).
