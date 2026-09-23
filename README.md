@@ -120,7 +120,7 @@ There are also two private companion packages — `@blemeshjs/pro` and `@blemesh
 
 ## Contributing
 
-This repo is a Yarn 4 + Turbo monorepo. If you'd like to hack on it locally:
+This repo is a pnpm + Turbo monorepo. If you'd like to hack on it locally:
 
 ```sh
 pnpm install
