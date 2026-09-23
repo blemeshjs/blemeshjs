@@ -36,32 +36,32 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
 
       - name: Build public packages
-        run: yarn build
+        run: pnpm build
 
       - name: Lint
-        run: yarn lint:check
+        run: pnpm lint:check
 
       - name: Test
-        run: yarn test
+        run: pnpm test
 
       - name: Type-check the docs app
-        run: yarn workspace docs types:check
+        run: pnpm --filter docs types:check
 
       - name: Type-check the web app
-        run: yarn workspace web types:check
+        run: pnpm --filter web types:check
 
       - name: Type-check the mobile app
-        run: yarn workspace mobile types:check
+        run: pnpm --filter mobile types:check
 
       - name: Verify the generated API reference is current
         run: |
-          yarn workspace docs api:generate
+          pnpm --filter docs api:generate
           if ! git diff --quiet -- apps/docs/content/docs/api; then
             echo "::error::The committed API reference is stale."
-            echo "Run 'yarn workspace docs api:generate' and commit the result."
+            echo "Run 'pnpm --filter docs api:generate' and commit the result."
             git diff --stat -- apps/docs/content/docs/api
             exit 1
           fi
@@ -73,4 +73,4 @@ jobs:
         # against the remote-tracking ref explicitly.
         run: |
           git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
-          yarn changeset status --since=origin/main
+          pnpm changeset status --since=origin/main

@@ -2,7 +2,7 @@
 
 ## Repository Overview
 
-- Yarn 4 monorepo with Turbo workspaces.
+- pnpm monorepo with Turbo workspaces.
 - Root workspaces live under `packages/*` and `apps/*`.
 - Primary SDK code is TypeScript and published from package-level `src/` directories.
 - Do not edit generated outputs in `dist/` or coverage artifacts under `coverage/` unless the task explicitly targets them.
@@ -34,19 +34,19 @@
 
 ## Commands
 
-- Root install: `yarn install`
-- Root build: `yarn build`
-- Root lint: `yarn lint`
-- Root format: `yarn format`
-- Root tests: `yarn test`
-- Root coverage: `yarn coverage`
+- Root install: `pnpm install`
+- Root build: `pnpm build`
+- Root lint: `pnpm lint`
+- Root format: `pnpm format`
+- Root tests: `pnpm test`
+- Root coverage: `pnpm coverage`
 
 ## Command Notes
 
 - Root `build`, `lint`, and `format` intentionally exclude `apps/mobile`, `apps/docs`, and `packages/sdk-react-native`.
 - Most packages expose `build`, `lint`, `format`, `test`, and `coverage` scripts.
 - `apps/docs` also exposes `types:check`.
-- `apps/mobile` uses Expo commands such as `yarn workspace mobile start`, `android`, and `ios`.
+- `apps/mobile` uses Expo commands such as `pnpm --filter mobile start`, `android`, and `ios`.
 
 ## Validation Preference
 

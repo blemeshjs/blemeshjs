@@ -2,17 +2,17 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(corepack yarn build)",
-      "Bash(corepack yarn test)",
-      "Bash(corepack yarn test:*)",
-      "Bash(corepack yarn lint:check)",
-      "Bash(corepack yarn lint)",
-      "Bash(corepack yarn format)",
-      "Bash(corepack yarn release:status)",
-      "Bash(corepack yarn workspace:*)",
-      "Bash(corepack yarn vitest:*)",
-      "Bash(corepack yarn changeset:*)",
-      "Bash(corepack yarn install)",
+      "Bash(pnpm build)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm lint:check)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm format)",
+      "Bash(pnpm release:status)",
+      "Bash(pnpm --filter:*)",
+      "Bash(pnpm exec vitest:*)",
+      "Bash(pnpm changeset:*)",
+      "Bash(pnpm install)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
@@ -35,13 +35,13 @@
       "Bash(git push:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr merge:*)",
-      "Bash(corepack yarn release:publish)",
-      "Bash(corepack yarn release:version)"
+      "Bash(pnpm release:publish)",
+      "Bash(pnpm release:version)"
     ],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
-      "Bash(corepack yarn release:publish:*)",
+      "Bash(pnpm release:publish:*)",
       "Bash(npm publish:*)"
     ]
   },

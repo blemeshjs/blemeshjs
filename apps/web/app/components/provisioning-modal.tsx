@@ -63,7 +63,7 @@ export function ProvisioningModal() {
             toastError(error);
         }
       },
-      "provision:status": (status) => {
+      "provision:status": (status, error) => {
         switch (status) {
           case "waiting-for-advertisements":
             setStatus("initializing");
@@ -87,6 +87,17 @@ export function ProvisioningModal() {
                 variant: "success",
                 description: `${name} has been added to the network.`,
               });
+            }
+            break;
+          case "failed":
+            toastError(error ?? new Error("Provisioning failed"));
+            setStatus("idle");
+            break;
+          case "disconnected":
+            // A disconnect without an error is the normal teardown after provisioning.
+            if (error) {
+              toastError(error);
+              setStatus("idle");
             }
             break;
         }

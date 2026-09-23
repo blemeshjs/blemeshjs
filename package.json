@@ -1,17 +1,6 @@
 {
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "pnpm@11.21.0",
   "private": true,
-  "workspaces": [
-    "packages/utils",
-    "packages/crypto",
-    "packages/core",
-    "packages/sdk",
-    "packages/sdk-web",
-    "packages/sdk-react-native",
-    "apps/web",
-    "apps/mobile",
-    "apps/docs"
-  ],
   "name": "blemeshjs",
   "version": "1.0.0",
   "description": "TypeScript BLE Mesh monorepo for shared utilities, core layers, and SDK packages.",
@@ -23,12 +12,12 @@
     "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
     "lint:check": "turbo run lint:check --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
+    "test": "turbo run test",
     "release:publish": "node ./scripts/publish-public-packages.mjs",
     "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run",
     "release:status": "changeset status",
-    "release:test": "yarn test",
-    "release:version": "changeset version && yarn install --mode=skip-build",
-    "test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native"
+    "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
+    "release:version": "changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
@@ -38,7 +27,7 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^29.0.0",
     "prettier": "^3.8.2",
-    "turbo": "^2.5.4",
+    "turbo": "^2.10.12",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0",
     "vitest": "^3.2.4"

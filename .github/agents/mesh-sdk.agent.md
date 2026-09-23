@@ -20,7 +20,7 @@ Your role is to assist with SMALL, FOCUSED implementation tasks — not to gener
 ## Project Context
 
 This repository:
-- Is a Yarn 4 + Turbo monorepo with shared packages under `packages/` and apps under `apps/`
+- Is a pnpm + Turbo monorepo with shared packages under `packages/` and apps under `apps/`
 - Contains the SDK layers in `packages/sdk`, `packages/sdk-web`, and `packages/sdk-react-native`
 - Uses shared lower-level code from `packages/core`, `packages/crypto`, and `packages/utils`
 - Also contains private `packages/pro` and `packages/sdk-pro` layers used by the apps
