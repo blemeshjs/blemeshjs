@@ -74,9 +74,7 @@ export class ConfigModelAppStatus extends Mixin(
     if (parameters.length !== 7 && parameters.length !== 9) {
       return;
     }
-    const status = isEnumCase(parameters[0], ConfigMessageStatus)
-      ? (parameters[0] as ConfigMessageStatus)
-      : undefined;
+    const status = isEnumCase(parameters[0], ConfigMessageStatus) ? parameters[0] : undefined;
     if (status === undefined) return;
     const elementAddress = new Address(readUInt16LE(parameters.slice(1)));
     const applicationKeyIndex = new KeyIndex(readUInt16LE(parameters.slice(3)));

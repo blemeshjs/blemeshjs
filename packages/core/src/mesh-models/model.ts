@@ -43,7 +43,7 @@ export class Model {
       return "Vendor Model";
     }
     const identifier = isEnumCase(this.modelIdentifier, SigModelId)
-      ? (this.modelIdentifier as SigModelId)
+      ? this.modelIdentifier
       : undefined;
     switch (identifier) {
       // Foundation, from Mesh Profile 1.0.1

@@ -24,10 +24,12 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "clean": "rm -rf dist",
-    "lint": "eslint --config ./eslint.config.mjs . --fix",
+    "coverage": "vitest run --coverage",
+    "coverage:ui": "vitest --ui --coverage",
     "format": "prettier --ignore-path ../../.prettierignore --write .",
-    "test": "vitest run",
-    "coverage": "vitest --ui --coverage"
+    "lint": "eslint --config ./eslint.config.mjs . --fix",
+    "lint:check": "eslint --config ./eslint.config.mjs .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@blemeshjs/sdk": "workspace:^",
@@ -36,10 +38,11 @@
     "uint8array-extras": "^1.5.0"
   },
   "peerDependencies": {
-    "@react-native-async-storage/async-storage": "~2.2.0",
-    "react-native": "~0.74.1",
-    "react-native-ble-plx": "~3.5.0",
-    "react-native-get-random-values": "~1.11.0"
+    "@react-native-async-storage/async-storage": ">=2.0.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.74.0",
+    "react-native-ble-plx": ">=3.5.0",
+    "react-native-get-random-values": ">=1.11.0"
   },
   "devDependencies": {
     "@react-native-async-storage/async-storage": "~2.2.0",
@@ -47,7 +50,7 @@
     "eslint": "^10.2.0",
     "prettier": "^3.8.2",
     "react-native-ble-plx": "^3.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^3.2.4"
   }
 }

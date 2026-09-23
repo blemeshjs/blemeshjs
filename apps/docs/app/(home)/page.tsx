@@ -40,14 +40,15 @@ const stats = [
   },
 ];
 
-const quickStartCode = `import { createMesh } from "@blemeshjs/sdk"
+const quickStartCode = `import { createMesh } from "@blemeshjs/sdk-web"
 
-const mesh = await createMesh({ platform: "react-native" })
-const devices = await mesh.scan({ timeout: 10_000 })
-const device = await mesh.connect(devices[0].uuid)
+// one call wires up Web Bluetooth and browser storage
+const mesh = await createMesh()
+await mesh.createNewMeshNetwork()
 
-await device.provision({ appKey: "home-app" })
-await device.light.on()`;
+// find an unprovisioned device and bring it into the network
+const device = await mesh.provision.scan({ timeout: 10_000 })
+await mesh.provision.quick(device)`;
 
 export default function HomePage() {
   return (

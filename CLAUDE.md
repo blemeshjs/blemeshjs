@@ -8,22 +8,25 @@ Package manager is **pnpm 11.21.0** (pinned in `mise.toml` and `packageManager`)
 
 ```sh
 pnpm install
-pnpm build      # turbo build, public packages only (utils, crypto, core, sdk, sdk-web, sdk-react-native)
-pnpm test       # turbo test across all workspaces
-pnpm lint       # excludes apps/mobile, apps/docs, apps/web
-pnpm format     # excludes apps/mobile, apps/docs
-pnpm coverage   # vitest UI + coverage
+pnpm build        # public packages only (utils, crypto, core, sdk, sdk-web, sdk-react-native)
+pnpm test         # turbo test across all workspaces
+pnpm lint         # rewrites files (eslint --fix); excludes apps/mobile, apps/docs, apps/web
+pnpm lint:check   # reports only, no rewrites — this is what CI runs
+pnpm format       # excludes apps/mobile, apps/docs
+pnpm coverage     # non-interactive, public packages
 ```
 
-Prefer package-scoped runs over root runs — root `build`/`lint`/`format` deliberately exclude some workspaces:
+`coverage` is non-interactive. A package's `coverage:ui` opens the Vitest UI and never exits — never call it from a script.
+
+Prefer package-scoped runs while iterating — root `build`/`lint`/`format` deliberately exclude some workspaces:
 
 ```sh
 pnpm --filter @blemeshjs/core test
 pnpm --filter @blemeshjs/core build
-pnpm --filter @blemeshjs/core lint     # note: package lint scripts run eslint with --fix
+pnpm --filter @blemeshjs/core lint:check
 ```
 
-Run a single test file or a single test name (vitest is not exposed as a package script, so use `exec`):
+Run a single test file or test name (vitest is not exposed as a package script, so use `exec`):
 
 ```sh
 pnpm --filter @blemeshjs/utils exec vitest run src/types/uuid.spec.ts
@@ -40,13 +43,7 @@ pnpm --filter web dev
 pnpm --filter mobile start        # Expo; also `android`, `ios`
 ```
 
-Release (changesets; see `RELEASING.md`):
-
-```sh
-pnpm changeset
-pnpm release:status
-pnpm release:publish:dry-run
-```
+Release (changesets; see `RELEASING.md`): `pnpm changeset`, `pnpm release:status`, `pnpm release:publish:dry-run`.
 
 ## Architecture
 
@@ -61,42 +58,84 @@ sdk-web  /  sdk-react-native      platform transport + storage
       utils  +  crypto            primitives, abstractions, enums; mesh cryptography
 ```
 
-`packages/sdk-web/src/index.ts` and `packages/sdk-react-native/src/index.ts` both export a function named **`createMesh()`** (not `createBrowserMesh`/`createRNMesh` — those names appear in stale docs) and re-export all of `@blemeshjs/sdk`, which in turn re-exports all of `@blemeshjs/utils`. A consumer therefore reaches nearly the whole public surface through one platform import.
+Both platform packages expose **exactly the same entry point** — keep these two signatures identical, they have drifted before:
+
+```ts
+createMesh({ meshNetworkManager? }?): Promise<MeshNetworkManager>
+```
+
+Each re-exports all of `@blemeshjs/sdk`, which re-exports all of `@blemeshjs/utils`, so a consumer reaches nearly the whole public surface through one platform import.
 
 ### The platform seam
 
 The only thing separating web from React Native is two abstract classes in `@blemeshjs/utils`:
 
 - `CBCentralManager` (+ `CBPeripheral`, and their `*Handler` event classes) in `src/constants/mesh-constants.ts` — BLE transport.
-- `Storage` in `src/types/storage.ts` — persistence, with sync-or-async return types (`Value | Promise<Value>`) so both platforms fit.
+- `Storage` in `src/types/storage.ts` — persistence, with sync-or-async return types so both platforms fit.
 
-Each platform package implements those two, and `createMesh()` does `meshNetworkManager.init(centralManager, storage)` followed by `await meshNetworkManager.setup()`. **Keep transport and storage code in `sdk-web`/`sdk-react-native`; keep platform-agnostic orchestration in `sdk`.** Nothing below `sdk` may reference a browser or React Native API.
+Each platform package implements those two; `createMesh()` calls `init(centralManager, storage)` then `await setup()`. **Keep transport and storage in `sdk-web`/`sdk-react-native`; keep platform-agnostic orchestration in `sdk`.** Nothing below `sdk` may reference a browser or React Native API.
+
+### Async contract
+
+Every transport and connection operation returns a promise and rejects on failure. There are no delegate callbacks reporting results, and no methods that return an error value instead of throwing.
+
+`CBPeripheralHandler` and `CBCentralManagerHandler` carry only genuinely unsolicited events — value updates, state changes, disconnections, discovery. If you are adding an event to report the outcome of something a caller asked for, return a promise instead.
+
+Never leave a promise floating. In a synchronous context (an event handler, a React callback), attach a `.catch` that reports through the SDK logger — an unhandled rejection is a redbox on React Native.
 
 ### Message pipeline
 
-`packages/core/src/layers/network-manager.ts` constructs the four mesh spec layers in order — `NetworkLayer`, `LowerTransportLayer`, `UpperTransportLayer`, `AccessLayer` — and owns send/receive (`handle`, `publish`, `sendMeshMessage`, `sendAcknowledgedMeshMessage`, `waitForMessageWithOpCode`, and the `notifyAbout*` callbacks). Bearers live in `packages/core/src/bearer` (`gatt-bearer`, `pb-gatt-bearer`, `proxy-protocol-handler`); provisioning is a separate state machine under `packages/core/src/provisioning`.
+`packages/core/src/layers/network-manager.ts` constructs the four mesh spec layers in order — `NetworkLayer`, `LowerTransportLayer`, `UpperTransportLayer`, `AccessLayer` — and owns send/receive (`handle`, `publish`, `sendMeshMessage`, `sendAcknowledgedMeshMessage`, `waitForMessageWithOpCode`, and the `notifyAbout*` callbacks). Bearers live in `packages/core/src/bearer`; provisioning is a separate state machine under `packages/core/src/provisioning`.
 
-`packages/sdk` wraps this: `CoreMeshNetworkManager` adapts core, `MeshNetworkManager` is the public facade (a subclassable singleton via `static getInstance()`/`instance`), `NetworkConnection` handles connectivity, and `ProvisioningManager` is exposed as `mesh.provision`.
+`packages/sdk` wraps this: `CoreMeshNetworkManager` adapts core, `MeshNetworkManager` is the public facade (a subclassable singleton via `static getInstance()`/`instance`), `NetworkConnection` handles connectivity, `ProvisioningManager` is exposed as `mesh.provision`.
 
 ### Two patterns that appear everywhere
 
-**MobX** — mesh domain objects (`MeshNetwork`, `Node`, `Element`, `Model`, and the managers) call `makeObservable`, so app UIs observe them directly. Mutations must go through `action`s, and new state on those classes needs to be registered as `observable`.
+**MobX** — mesh domain objects (`MeshNetwork`, `Node`, `Element`, `Model`, and the managers) call `makeObservable`, so app UIs observe them directly. Mutations go through `action`s; new state needs registering as `observable`.
 
-**ts-mixer** — mesh messages are composed from mixins rather than a single inheritance chain (~35 files). Dispatch is done with `hasMixin(message, GenericOnOffStatus)` rather than `instanceof`; use `hasMixin` when matching message types.
+**ts-mixer** — mesh messages are composed from mixins rather than a single inheritance chain (~35 files). Dispatch with `hasMixin(message, GenericOnOffStatus)`, never `instanceof`.
 
-**Model extensions** (`packages/sdk/src/model-extensions/`) are the pattern for exposing a mesh model to apps: an `Object.assign`'d factory taking `(model, coreMeshNetworkManager)` that returns an observable object holding `state`/`targetState`/`remainingTime` plus message-sending methods. `generic-on-off.ts` is the reference implementation, with `helper.ts` providing `sendMessageToModel`/`addMessageListeners`. Server/client message handlers live alongside in `mesh-model-handlers/`.
+## Adding a model extension
 
-## Repo conventions
+The road to 1.0 is Generic Level, Lighting (Lightness / CTL / HSL) and Sensor. Every `SigModelId` already exists in `packages/utils/src/enums/sig-model-id.ts`; what is missing is the messages and the developer-facing extension. Each model is one PR, built in this order:
 
-- **ESM with NodeNext.** `"type": "module"`, `moduleResolution: NodeNext`, `strict: true`, `composite: true`. Relative imports generally carry the `.js` extension. Each package builds with `tsc --project tsconfig.build.json` to `dist/`, and `tsconfig.build.json` excludes `*.spec.ts`.
-- **Tests sit next to sources** as `*.spec.ts` under `src/`, not in a separate `tests/` tree. Every package's `vitest.config.ts` re-exports a shared config from `vitest.config.base.ts`: `utils`, `crypto` and `core` use `nodeBrowserConfig`, which runs **every spec twice** (node and jsdom projects); `sdk`, `sdk-web` and `sdk-react-native` use `browserConfig` (jsdom only). Name a file `*.node.spec.ts` or `*.browser.spec.ts` to restrict it to one environment.
-- **No `any` in public API surfaces.** Where the codebase needs an escape hatch it uses a narrowly scoped `eslint-disable-next-line` (see `MeshNetworkManager.getInstance`), not a loosened config.
-- **`packages/pro` and `packages/sdk-pro` are gitignored private checkouts**, not workspace members — they are absent in CI and on a fresh clone. Never assume they exist, and never add them to `pnpm-workspace.yaml`.
-- **Generated API docs are committed**: `apps/docs/content/docs/api/*.mdx` is produced by typedoc via `apps/docs/scripts/generate-api-docs.mjs` from package `src/index.ts` entry points. It is wired to `prebuild`/`predev`/`pretypes:check`/`postinstall`, so it reruns automatically — regenerate and commit after any TSDoc or public-export change.
+1. **Messages** in `packages/core/src/mesh-messages/<group>/` — one class per opcode (`...Get`, `...Set`, `...Status`), mirroring `mesh-messages/generic/generic-on-off-*.ts`. Export them from that directory's `index.ts`.
+2. **PDU round-trip tests**, using the vectors in the Bluetooth Mesh Model Specification. Encode a known message, compare bytes; decode known bytes, compare fields.
+3. **The extension** in `packages/sdk/src/model-extensions/<model>.ts`, built with `Object.assign` over a `makeObservable` state bag, exactly like `generic-on-off.ts`. Observable state, a `get()` that resolves when the status arrives, and a `set()` taking `{ acknowledged }`. Export it from `model-extensions/index.ts`.
+4. **Extension tests** beside it, following `generic-on-off.spec.ts`.
+5. **A changeset**, then regenerate the API reference.
+
+Reach a model from an element with `element.models.find(...)` and attach the extension with `model.use(TheExtension)`. `get()` resolves `void`; read the value from the extension's observable state afterwards.
+
+Do not add a model to `packages/sdk` without the `core` messages underneath it — transport and protocol concerns stay in `core`.
+
+## Testing
+
+Vitest, one config per package, each re-exporting a shared config from `vitest.config.base.ts`. Specs live beside their source as `*.spec.ts` under `src/`, not in a separate `tests/` tree.
+
+`utils`, `crypto` and `core` use `nodeBrowserConfig`, which runs **every spec twice** (node and jsdom projects); `sdk`, `sdk-web` and `sdk-react-native` use `browserConfig` (jsdom only). Name a file `*.node.spec.ts` or `*.browser.spec.ts` to restrict it to one environment.
+
+`react-native-ble-plx` ships untranspiled sources Vite cannot parse — mock the module surface (see `packages/sdk-react-native/src/transport/peripheral.spec.ts`).
+
+When fixing a bug, verify the test fails without the fix before committing it.
+
+## Generated files
+
+`apps/docs/content/docs/api/**` is generated from each package's `src/index.ts` by `apps/docs/scripts/generate-api-docs.mjs` (typedoc + typedoc-plugin-markdown) and **committed**. After changing a public entry point *or any TSDoc comment on one*, run `pnpm --filter docs api:generate` and commit the result in the same commit — CI fails the PR if it is stale. Fix wrong prose in the generator template, not in the output; the output is overwritten.
+
+It is also wired to `prebuild`/`predev`/`pretypes:check`/`postinstall`, so a plain `pnpm install` can dirty the working tree.
+
+`apps/docs/content/examples/**` holds real, type-checked `.ts` files embedded into the docs by `<FileCodeBlock>`. Put example code there rather than in a fenced block, so it cannot drift.
+
+Do not edit `dist/` or `coverage/` output.
+
+## Conventions
+
+- **ESM with NodeNext.** `"type": "module"`, `moduleResolution: NodeNext`, `strict: true`, `composite: true`. Relative imports generally carry the `.js` extension. Each package builds with `tsc --project tsconfig.build.json` to `dist/`, excluding `*.spec.ts`.
+- **No `any` in public API surfaces.** `@ts-expect-error` is acceptable where a setter writes a readonly field; that pattern is established in `core`. Narrowly scoped `eslint-disable-next-line` over a loosened config.
+- **`packages/pro` and `packages/sdk-pro` are gitignored private checkouts**, not workspace members — absent in CI and on a fresh clone. Never assume they exist, and never add them to `pnpm-workspace.yaml`.
 - **`.npmrc` settings are load-bearing** and documented inline: `node-linker=hoisted` (Metro/autolinking break on isolated symlinks), `link-workspace-packages=true`, and `enable-pre-post-scripts=true` (without it the docs API-doc regeneration silently stops running).
-- **ESLint is deliberately split**: packages and `eslint.package.config.mjs` use ESLint 10 with `typescript-eslint` type-checked rules; `apps/web` and `apps/mobile` stay on ESLint 9 because `eslint-config-next`/`eslint-config-expo` pull a react plugin that breaks on 10. Don't unify them.
-- Do not edit `dist/` or `coverage/` output.
-
-## Related files
-
-`AGENTS.md` and `.github/agents/mesh-sdk.agent.md` cover similar ground for other tools; both still describe the repo as a Yarn 4 monorepo and reference the old `createBrowserMesh`/`createRNMesh` names.
+- **One toolchain version across the repo**, except ESLint: packages and the shared `eslint.package.config.mjs` are on 10.x; `apps/web`, `apps/mobile` and `apps/docs` are pinned to 9.x because `eslint-config-next` and `eslint-config-expo` pull an `eslint-plugin-react` that crashes under ESLint 10. Do not "fix" that drift by bumping the apps.
+- Conventional commits, scoped to the package: `fix(@blemeshjs/sdk): ...`.
+- Any change to a published package needs a changeset (`pnpm changeset`). CI checks this on pull requests.
+- Branch and open a PR for every change. Nothing lands on `main` directly.

@@ -7,28 +7,29 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
-    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
-    "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
     "clean": "turbo run clean",
+    "coverage": "turbo run coverage --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
+    "format": "turbo run format --filter=!./apps/mobile --filter=!./apps/docs",
+    "lint": "turbo run lint --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
+    "lint:check": "turbo run lint:check --filter=!./apps/mobile --filter=!./apps/docs --filter=!./apps/web",
     "test": "turbo run test",
-    "coverage": "vitest --ui --coverage",
-    "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
-    "release:status": "changeset status",
-    "release:version": "changeset version && pnpm install --lockfile-only",
     "release:publish": "node ./scripts/publish-public-packages.mjs",
-    "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run"
+    "release:publish:dry-run": "node ./scripts/publish-public-packages.mjs --dry-run",
+    "release:status": "changeset status",
+    "release:test": "turbo run test --filter=@blemeshjs/utils --filter=@blemeshjs/crypto --filter=@blemeshjs/core --filter=@blemeshjs/sdk --filter=@blemeshjs/sdk-web --filter=@blemeshjs/sdk-react-native",
+    "release:version": "changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
-    "eslint": "^9.25.0",
+    "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^29.0.0",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "turbo": "^2.10.12",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0",
     "vitest": "^3.2.4"
   }
 }

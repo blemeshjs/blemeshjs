@@ -24,9 +24,11 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "clean": "rm -rf dist",
-    "coverage": "vitest --ui --coverage",
-    "lint": "eslint --config ./eslint.config.mjs . --fix",
+    "coverage": "vitest run --coverage",
+    "coverage:ui": "vitest --ui --coverage",
     "format": "prettier --ignore-path ../../.prettierignore --write .",
+    "lint": "eslint --config ./eslint.config.mjs . --fix",
+    "lint:check": "eslint --config ./eslint.config.mjs .",
     "test": "vitest run"
   },
   "devDependencies": {
@@ -35,7 +37,7 @@
     "@types/sjcl": "^1",
     "eslint": "^10.2.0",
     "prettier": "^3.8.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^3.2.4"
   },
   "dependencies": {

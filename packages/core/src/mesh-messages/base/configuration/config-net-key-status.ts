@@ -58,9 +58,7 @@ export class ConfigNetKeyStatus extends Mixin(
     if (parameters.length !== 3) {
       return;
     }
-    const status = isEnumCase(parameters[0], ConfigMessageStatus)
-      ? (parameters[0] as ConfigMessageStatus)
-      : undefined;
+    const status = isEnumCase(parameters[0], ConfigMessageStatus) ? parameters[0] : undefined;
     if (status === undefined) return;
 
     const networkKeyIndex = this.decodeNetKeyIndex(parameters, 1);

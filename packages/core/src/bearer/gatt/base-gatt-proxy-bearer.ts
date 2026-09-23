@@ -279,6 +279,15 @@ export class BaseGattProxyBearer<
   // NOTE: - CentralManagerHandler
   public centralManagerDidUpdateState(_central: CBCentralManager, state: CBCentralManagerState) {
     this.logger?.i(LogCategory.bearer, `Central Manager state changed to ${state}`);
+    if (state === CBCentralManagerState.poweredOn) return;
+
+    // The radio went away underneath us. The peripheral will not report a
+    // disconnection, so the bearer has to close itself.
+    if (!this.isOpened) return;
+    this.isOpened = false;
+    this.dataInCharacteristic = undefined;
+    this.dataOutCharacteristic = undefined;
+    this.emit("bearerDidClose", this, BearerError.centralManagerNotPoweredOn);
   }
 
   public centralManagerDidDisconnectPeripheral(

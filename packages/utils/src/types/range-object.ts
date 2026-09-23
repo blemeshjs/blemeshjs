@@ -57,7 +57,7 @@ export class RangeObject<T extends Number = UInt16> {
    * Returns a Boolean value indicating whether this range and the given
    * range contain a common element.
    *
-   * @parameter other A range to check for elements in common.
+   * @param other A range to check for elements in common.
    * @returns `True` if this range and other have at least one element in common; otherwise, `false`.
    */
   public overlaps(other: RangeObject<T>): boolean {

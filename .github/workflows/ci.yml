@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, lint and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        # Full history: `changeset status` diffs against main, and the default
+        # shallow clone does not fetch it.
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build public packages
+        run: pnpm build
+
+      - name: Lint
+        run: pnpm lint:check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Type-check the docs app
+        run: pnpm --filter docs types:check
+
+      - name: Type-check the web app
+        run: pnpm --filter web types:check
+
+      - name: Type-check the mobile app
+        run: pnpm --filter mobile types:check
+
+      - name: Verify the generated API reference is current
+        run: |
+          pnpm --filter docs api:generate
+          if ! git diff --quiet -- apps/docs/content/docs/api; then
+            echo "::error::The committed API reference is stale."
+            echo "Run 'pnpm --filter docs api:generate' and commit the result."
+            git diff --stat -- apps/docs/content/docs/api
+            exit 1
+          fi
+
+      - name: Check changeset status
+        if: github.event_name == 'pull_request'
+        # On a pull_request event the checkout leaves no local `main`, so
+        # changesets cannot find where HEAD diverged. Fetch it and compare
+        # against the remote-tracking ref explicitly.
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          pnpm changeset status --since=origin/main

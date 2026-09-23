@@ -112,29 +112,27 @@ export default observer(function AppKeysScreen() {
   const generate = useCallback(
     (numberOfKeys: number) => {
       setShowGenerateAppKeyDialog(false);
-      const addApplicationKeys = mesh.addApplicationKeys;
-      const error = addApplicationKeys(numberOfKeys);
-      if (error) {
+      // addApplicationKeys is async and throws now; it no longer returns the error.
+      mesh.addApplicationKeys(numberOfKeys).catch((error: Error) => {
         setAlert({
           title: "Error",
           message: error.message,
         });
-      }
+      });
     },
-    [mesh.addApplicationKeys, setAlert, setShowGenerateAppKeyDialog],
+    [mesh, setAlert, setShowGenerateAppKeyDialog],
   );
 
   const deleteKey = useCallback(
     (key: ApplicationKey) => {
-      const deleteApplicationKey = mesh.removeApplicationKeyAt;
-      deleteApplicationKey(key.index).catch((err) => {
+      mesh.removeApplicationKey(key).catch((error: Error) => {
         setAlert({
           title: "Error",
-          message: err.message,
+          message: error.message,
         });
       });
     },
-    [mesh.removeApplicationKeyAt, setAlert],
+    [mesh, setAlert],
   );
 
   // effects

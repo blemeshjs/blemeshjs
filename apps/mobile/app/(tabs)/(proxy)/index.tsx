@@ -22,12 +22,11 @@ export default observer(function ProxyScreen() {
   const mesh = useMesh();
   const connectedTo = useMemo(() => {
     return mesh.connection.isOpen
-      ? (mesh.connectedProxy?.name ?? mesh.connection.name ?? "UnknownDevice")
+      ? (mesh.connection.name ?? "UnknownDevice")
       : mesh.connection.isConnectionAutomatic
         ? "Connecting..."
         : "Not selected";
   }, [
-    mesh.connectedProxy?.name,
     mesh.connection.isConnectionAutomatic,
     mesh.connection.isOpen,
     mesh.connection.name,
@@ -75,8 +74,7 @@ export default observer(function ProxyScreen() {
                   mesh.connection.isConnectionAutomatic
                 }
                 onPress={() => {
-                  const disconnect = mesh.connection.disconnect;
-                  disconnect();
+                  void mesh.connection.close();
                 }}
               >
                 <AppText
@@ -106,7 +104,7 @@ export default observer(function ProxyScreen() {
     [
       setAutoConnect,
       connectedTo,
-      mesh.connection.disconnect,
+      mesh.connection,
       mesh.connection.isConnectionAutomatic,
       mesh.connection.isOpen,
       router.navigate,

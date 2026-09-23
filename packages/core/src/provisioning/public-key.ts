@@ -20,8 +20,8 @@ export enum PublicKeyMethod {
 }
 
 export namespace PublicKeyMethod {
-  export function from(pdu: ProvisioningPdu) {
-    return isEnumCase(pdu[2], PublicKeyMethod) ? (pdu[2] as PublicKeyMethod) : undefined;
+  export function from(pdu: ProvisioningPdu): PublicKeyMethod | undefined {
+    return isEnumCase(pdu[2], PublicKeyMethod) ? pdu[2] : undefined;
   }
 }
 
